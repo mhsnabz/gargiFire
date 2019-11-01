@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:id="@+id/rating_tv"
+        android:fontFamily="@font/nunito_sans_semibold"
+        android:textColor="@color/colorPrimaryDark"
+        />
+    <com.willy.ratingbar.ScaleRatingBar
+
+        android:layout_marginTop="4dp"
+        android:layout_centerHorizontal="true"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rate"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:srb_numStars="5"
+        app:srb_minimumStars="0"
+        app:srb_rating="0"
+        app:srb_starWidth="30dp"
+        app:srb_starHeight="30dp"
+        app:srb_starPadding="8dp"
+        app:srb_stepSize="1"
+        app:srb_isIndicator="false"
+        app:srb_clickable="true"
+        app:srb_scrollable="true"
+        app:srb_clearRatingEnabled="true"
+        android:layout_below="@id/rating_tv"
+        >
+        ></com.willy.ratingbar.ScaleRatingBar>
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:id="@+id/onayla"
+        android:background="@drawable/button_back"
+        android:layout_below="@id/rate"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:text="@string/onayla"
+        android:textSize="16sp"
+        android:fontFamily="@font/nunito_sans_semibold"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        />
+</RelativeLayout>

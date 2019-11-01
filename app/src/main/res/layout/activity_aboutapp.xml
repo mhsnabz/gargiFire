@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingEdit.aboutapp">
+
+
+    <RelativeLayout
+        android:id="@+id/rel"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/big_logo"
+            android:layout_width="250dp"
+            android:layout_height="250dp">
+
+        </ImageView>
+        <TextView
+            android:id="@+id/name"
+            android:text="GARGII "
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:textSize="22sp"
+            android:textStyle="italic"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ></TextView>
+        <TextView
+            android:id="@+id/version"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:layout_below="@id/name"
+            android:layout_centerHorizontal="true"
+            android:text="version : 1.0.10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TextView>
+        <TextView
+            android:id="@+id/website"
+            android:layout_marginTop="10dp"
+            android:text="www.gargii.com"
+            android:layout_below="@id/version"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:textColor="@color/linkColo"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+    </RelativeLayout>
+</RelativeLayout>

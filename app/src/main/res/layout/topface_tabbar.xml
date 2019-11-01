@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/tab_back"
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:src="@drawable/man_selected"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/tab_selected"
+            android:id="@+id/man"
+            android:layout_margin="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:gravity="center_horizontal"
+            android:padding="4dp"
+            android:text="ERKEK"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16dp" />
+        <ImageView
+            android:layout_margin="3dp"
+            android:src="@drawable/woman_unselected"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/woman"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:gravity="center_horizontal"
+            android:padding="4dp"
+            android:text="KADIN"
+            android:textColor="@color/white"
+            android:textSize="10dp" />
+
+        <!-- <ImageView
+             android:id="@+id/rates"
+             android:layout_width="match_parent"
+             android:layout_height="26dp"
+             android:layout_gravity="center_vertical"
+             android:layout_margin="3dp"
+             android:layout_weight="1"
+             android:fontFamily="@font/nunito_sans_semibold"
+             android:gravity="center_horizontal"
+             android:padding="4dp"
+             android:src="@drawable/topface_white"
+             android:textColor="@color/white"
+             android:textSize="10dp" />
+         <ImageView
+             android:layout_margin="3dp"
+             android:src="@drawable/seen_white"
+             android:layout_gravity="center_vertical"
+             android:id="@+id/views"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:fontFamily="@font/nunito_sans_semibold"
+             android:gravity="center_horizontal"
+             android:padding="4dp"
+             android:textColor="@color/white"
+             android:textSize="10dp" />-->
+    </LinearLayout>
+</RelativeLayout>

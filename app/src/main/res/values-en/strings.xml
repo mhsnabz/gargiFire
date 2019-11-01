@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ <string name="giris_yap">Login </string>
+ <string name="hesap_olustur">Sing Up </string>
+ <string name="sifre">Password </string>
+ <string name="sifremi_unuttum">Forgot Password </string>
+ <string name="e_mail_adresiniz">E-mail Address </string>
+ <string name="app_name">Gargii </string>
+ <string name="adiniz">Name </string>
+ <string name="sifrenizi_tekrar_giriniz">Re-enter Your Password </string>
+ <string name="yasiniz">Your Age </string>
+ <string name="erkek">MAN </string>
+ <string name="kadin">WOMAN </string>
+ <string name="ana_sayfa">Home </string>
+ <string name="top_yuz">Top Face </string>
+ <string name="sohbet">Chat </string>
+ <string name="profil">Profile </string>
+ <string name="anladim">I UNDERSTAND </string>
+ <string name="profilini_duzenle">Edit Profile </string>
+ <string name="kendinden_bahset_bize">Tell Us About Yourself </string>
+ <string name="okudugun_okul">School </string>
+ <string name="belki_arkadaslarinla_karsilasirsin">Maybe You Will Meet Your Friends </string>
+ <string name="ne_is_yapiyorsun">What is Your Job? </string>
+ <string name="bu_devirde_onemli_bir_kriter">An important criterion in this period </string>
+ <string name="sosyal_medya_kullanici_adlarin">Social Media User Names </string>
+ <string name="belki_biri_hikayene_yanit_veriri">Maybe Someone Responds to Your Story </string>
+ <string name="tekrar_oynatilabilen_snaplar_alirsin">Maybe Get Replayable Snaps </string>
+ <string name="evet_hala_kullaniliyor">Yes Still Used </string>
+ <string name="karakter_hala_cok_az">280 Characters Still Too Less </string>
+ <string name="sorun_nedir">What is the problem ? </string>
+ <string name="gonder">SEND </string>
+ <string name="ayarlar">Settings </string>
+ <string name="mesajlar">MESSAGES </string>
+ <string name="yeni_bir_mesaj_var">You have a new message </string>
+ <string name="yeni_arkadas">NEW MATCH </string>
+ <string name="yeni_bir_eslesmen_var">New Match </string>
+ <string name="goruntulenme">Views </string>
+ <string name="oy_verenler">Voters </string>
+ <string name="kisi_goruntuledi">People Viewed </string>
+ <string name="e_posta_ayarlari">Email Settings </string>
+ <string name="onaylamak_icin_buraya_tiklayiniz">Click here to confirm </string>
+ <string name="sifre_ayarlari">Password Settings </string>
+ <string name="sifremi_degistir">Change Password </string>
+ <string name="sifreni_degistir">Change Password</string>
+
+ <string name="bildirim_ayarlari">Notification Settings </string>
+ <string name="anlik_bildirimler">Instant Notifications </string>
+ <string name="bize_ulas">Contact Us </string>
+ <string name="sorun_bildirin">Report a Problem! </string>
+ <string name="bizi_degerlendirin">Rate Us </string>
+ <string name="yasal">Legal </string>
+ <string name="lisanslar">Licensing </string>
+ <string name="hizmet_kosullari">Terms of Service </string>
+ <string name="hakkinda">About </string>
+ <string name="cikis">Log Out </string>
+ <string name="sifrenizi_giriniz">Enter your password </string>
+ <string name="yeni_sifresinizi_giriniz">Enter your new password </string>
+ <string name="yeni_sifrenizi_tekrar_giriniz">Re-enter your new password </string>
+ <string name="yeni_bir_mesaj_yaz">Write a new message </string>
+ <string name="degerlendir">Evaluate </string>
+ <string name="sosyal_medya_hesaplarim">My Social Media Accounts </string>
+ <string name="sikayet_et">Report </string>
+ <string name="bu_sohbeti_bitirmek_istiyor_musunuz">Do you want to finish the chat? </string>
+ <string name="evet">YES </string>
+ <string name="hayir">NO </string>
+ <string name="secenekler">OPTIONS </string>
+ <string name="eslesmeyi_kaldir">Remove Match </string>
+ <string name="vazgec">CANCEL </string>
+ <string name="aktif_sohbetler">Active Chats </string>
+ <string name="eski_sohbetler">Old Chats </string>
+ <string name="lutfen_internet_baglantinizi_kontrol_edin">PLEASE CHECK YOUR INTERNET CONNECTION </string>
+ <string name="onayla">Approve </string>
+ <string name="dk_sonra_eslesmeyi_kaldirabilirsiniz">You Can Remove After Min </string>
+ <string name="sikayetiniz_degerlendirmeye_alinmisitir">Your complaint has been evaluated </string>
+ <string name="tamam">OKAY </string>
+ <string name="uygunsuz_ciplaklik">Inappropriate - Nudity </string>
+ <string name="hakaret_ve_kufur">Insult - Swearing </string>
+ <string name="sahte_hesap">Fake ccount </string>
+ <string name="diger">Other </string>
+ <string name="sikayet_etme_nedenizi_seciniz">Select Reason to Complain </string>
+ <string name="gunluk_eslesme_limitiniz_doldurdunuz">You Have Filled Your Daily Match Limit </string>
+ <string name="saat_sonra_tekrar_eslebilirsiniz">You Can Match Again After Hours </string>
+
+
+ <string name="en_cok_puan_alan_kullanicilar">Most Rated Users </string>
+ <string name="rastgele_kullanici">Random Users </string>
+ <string name="en_pupuler_kullanicilar">Most Popular User</string>
+ <string name="konum_bilgisi_yok">No Location Information</string>
+
+
+ <string name="en_populer">Most Popular </string>
+ <string name="top_yuzz">Top 100</string>
+ <string name="karistir">Mix</string>
+
+
+ <string name="lutfen_gecerli_bir_email_adresi_giriniz">Please enter a valid e-mail address</string>
+ <string name="lutfen_eposta_adresinizi_giriniz">Please enter your e-mail address</string>
+ <string name="lutfen_sifrenizi_giriniz">Please enter your password</string>
+ <string name="lutfen_bekleyiniz">Please Wait</string>
+ <string name="giris_yapiliyor">Logging In</string>
+ <string name="eposta_yada_sifre_hatali">E-mail or password is incorrect</string>
+
+ <string name="onsekiz_yasindan_buyuk_olmanız_gerekmeketedir">You must be over 18</string>
+ <string name="lutfen_adinizi_giriniz">Please enter your name</string>
+ <string name="lutfen_sifreinizi_belirleyin">Please Set Your Password</string>
+ <string name="sifreler_ayni_degil">Passwords are not the same</string>
+ <string name="lutfen_yasinizi_giriniz">Please enter your age</string>
+ <string name="lutfen_cinisinizyetiniz_giriniz">Please enter your gender</string>
+
+ <string name="bir_kac_dk_once">a few minutes ago</string>
+ <string name="simdi">now</string>
+ <string name="dk_once">minute ago</string>
+ <string name="bir_saat_once">1 hour ago</string>
+ <string name="saat_once">hour ago</string>
+ <string name="dun">yesterday</string>
+ <string name="gun_once">days ago</string>
+ <string name="yeterince_eslesmen_var">Tienes suficientes matches</string>
+
+
+</resources>
+

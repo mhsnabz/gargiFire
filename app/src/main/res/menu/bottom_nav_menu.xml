@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home_icon"
+        android:title="@string/ana_sayfa"
+
+        ></item>
+
+    <item
+        android:id="@+id/topface"
+        android:icon="@drawable/topface_icon"
+        android:title="@string/top_yuz"
+        ></item>
+
+    <item
+        android:id="@+id/chat"
+        android:icon="@drawable/chat_icon"
+        android:title="@string/sohbet"
+        ></item>
+
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile_icon"
+        android:title="@string/profil"
+        ></item>
+</menu>
