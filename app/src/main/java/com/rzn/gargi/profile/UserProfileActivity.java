@@ -201,7 +201,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                  )
     {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference user = db.document("MAN"+"/"+userId);
+        DocumentReference user = db.document(gender+"/"+userId);
         listener = user.addSnapshotListener(UserProfileActivity.this, MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -478,8 +478,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     }
-    private void updateTotalRate(long totalRate,long size){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private void updateTotalRate(final long totalRate, final long size){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String,Object> newRate = new HashMap<>();
         newRate.put("count",size);
@@ -489,7 +489,15 @@ public class UserProfileActivity extends AppCompatActivity {
         .update(newRate).addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    double rating = (double) totalRate/size;
+                    Map<String ,Object> rate = new HashMap<>();
+                    rate.put("rate",rating);
+                    db.collection(getIntent().getStringExtra("gender"))
+                            .document(getIntent().getStringExtra("userId"))
+                            .update(rate);
 
+                }
             }
         });
 
@@ -508,6 +516,7 @@ public class UserProfileActivity extends AppCompatActivity {
         loadImages();
         getOldRate();
         getTotalRate();
+        System.gc();
     }
 
     public void back(View view)

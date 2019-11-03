@@ -407,4 +407,10 @@ public class RegisterFragment extends Fragment implements DatePickerDialog.OnDat
         });
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.gc();
+    }
 }

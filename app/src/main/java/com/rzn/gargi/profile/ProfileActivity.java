@@ -233,6 +233,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onDestroy();
         viewersCount.remove();
         userListener.remove();
+        System.gc();
     }
 
     ListenerRegistration viewersCount;

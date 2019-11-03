@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -134,6 +135,13 @@ public class ChatActivity extends AppCompatActivity {
         Log.d(TAG, "changeTabs: ");
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent i = new Intent(ChatActivity.this,OneToOneChat.class);
+        startActivity(i);
+    }
+
     private void setNavigation(String gender){
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
@@ -160,5 +168,11 @@ public class ChatActivity extends AppCompatActivity {
             finishAffinity();
             System.exit(0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
     }
 }

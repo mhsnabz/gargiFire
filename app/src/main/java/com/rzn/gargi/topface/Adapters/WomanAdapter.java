@@ -8,15 +8,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,15 +23,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.helper.ModelUser;
-import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.profile.UserProfileActivity;
-import com.rzn.gargi.topface.TopFaceActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -48,19 +42,22 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.ViewHoder > {
+public class WomanAdapter extends FirestoreRecyclerAdapter<ModelUser,WomanAdapter.ViewHoder > {
+
     Dialog dialog;
     FirebaseAuth auth = FirebaseAuth.getInstance();
+    Context context;
+
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
      */
-    Context context;
-    public ManAdapter(@NonNull FirestoreRecyclerOptions<ModelUser> options, Context context) {
+    public WomanAdapter(@NonNull FirestoreRecyclerOptions<ModelUser> options, Context context) {
         super(options);
         this.context=context;
+
     }
 
     @Override
@@ -70,7 +67,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
         holder.getClick(model.getClick());
         holder.getAge(model.getAge());
         holder.getBurc(model.getBurc());
-      //  holder.getCityName(model.getLat(),model.getLongLat());
+     //   holder.getCityName(model.getLat(),model.getLongLat());
         holder.calculateRate(model.getCount(),model.getTotalRate());
         int totalCount = getItemCount();
         TextView tv = holder.view.findViewById(R.id.number);
@@ -89,14 +86,13 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
                     holder.setClik(model.getClick(),userId);
                     Intent i = new Intent(context, UserProfileActivity.class);
                     i.putExtra("userId",userId);
-                    i.putExtra("gender","MAN");
+                    i.putExtra("gender","WOMAN");
                     dialog.dismiss();
                     context.startActivity(i);
                 }
 
             }
         });
-
     }
 
     @NonNull
@@ -106,7 +102,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
                 .inflate(R.layout.topface_single_layout, parent, false);
         dialog = new Dialog(context);
 
-        return new ManAdapter.ViewHoder(itemView);
+        return new WomanAdapter.ViewHoder(itemView);
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
@@ -238,16 +234,16 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
             Map<String,Object> map = new HashMap<>();
             map.put("clik",1);
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference ref = db.collection("MAN")
+            DocumentReference ref = db.collection("WOMAN")
                     .document(userId)
                     .collection("view")
                     .document(auth.getUid());
             ref.set(map, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    ubdateClik(clik,userId);
-                }
+                    if (task.isSuccessful()){
+                        ubdateClik(clik,userId);
+                    }
                 }
             });
 
@@ -256,7 +252,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String,Object> map = new HashMap<>();
             map.put("click",click+1);
-            db.document("MAN"+"/"+userId)
+            db.document("WOMAN"+"/"+userId)
                     .set(map,SetOptions.merge());
         }
     }

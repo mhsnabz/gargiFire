@@ -40,7 +40,7 @@ public class TopFaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_face);
         gender=getIntent().getStringExtra("gender");
-        if (gender.isEmpty()){
+        if (gender==null){
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("allUser").document(currentUser);
             ref.get().addOnSuccessListener(TopFaceActivity.this, new OnSuccessListener<DocumentSnapshot>() {
@@ -159,5 +159,9 @@ public class TopFaceActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
+    }
 }

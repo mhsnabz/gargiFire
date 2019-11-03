@@ -748,5 +748,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onDestroy();
         listenerRegistration.remove();
         taskUserInfo.isComplete();
+        System.gc();
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".chat.OneToOneChat">
+    <include layout="@layout/toolbar" android:id="@+id/toolbar"></include>
+    <RelativeLayout
+        android:layout_below="@id/toolbar"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/mgs_bar"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/messeges_list"
+            ></androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
+  <RelativeLayout
+      android:layout_marginTop="2dp"
+      android:id="@+id/mgs_bar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      >
+      <include layout="@layout/msg_bar"  ></include>
+
+  </RelativeLayout>
+
+</RelativeLayout>

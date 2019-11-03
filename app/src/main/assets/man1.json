@@ -1,0 +1,1633 @@
+{
+    "MAN":[
+        {
+          "age" : 887274722218,
+            "burc" : "balık",
+            "click" : 11,
+            "count" : 3,
+            "email" : "yldzerkan12@gmail.com",
+            "gender" : "MAN",
+            "id" : "zjkL3ftLetYHFoIrJT9ZzyqJQfn2",
+            "name" : "ERKAN ",
+            "rate" : 10,
+            "reg_time" : 1568967129850,
+            "totalPoint" : 3.3333332538604736
+            
+          },
+          {
+            "age" : 779413724897,
+            "burc" : "basak",
+            "click" : 7,
+            "count" : 4,
+            "email" : "furkankzl75@gmail.com",
+            "gender" : "MAN",
+            "id" : "zPzLS3cH0ISkotYanLKPT0jrIlS2",
+            "lat" : 41.04504504504504,
+            "longLat" : 28.692421523091895,
+            "name" : "furkan",
+            "rate" : 11,
+            "reg_time" : 1568332130660,
+            "totalPoint" : 2.75
+            
+          },
+          {
+      "age" : 840085159100,
+      "burc" : "basak",
+      "click" : 7,
+      "count" : 3,
+      "email" : "alagoz.76.1996@gmail.com",
+      "gender" : "MAN",
+      "id" : "xuD1jEhEhKRMoMeCyUUZ3Y6Ca2j1",
+      "name" : "erhayat",
+      "rate" : 9,
+      "reg_time" : 1569387563523,
+      "totalPoint" : 3
+      
+    },{
+      "age" : 810926485216,
+      "burc" : "basak",
+      "click" : 3,
+      "count" : 3,
+      "email" : "erendurmazz35@hotmail.com",
+      "gender" : "MAN",
+      "id" : "xOoVUAnHqQNjjCTWFSDmt0zwh093",
+      "lat" : 38.468468468468465,
+      "longLat" : 27.224341614665292,
+      "name" : "Eren",
+      "rate" : 7,
+      "reg_time" : 1568308888620,
+      "totalPoint" : 2.3333332538604736
+      
+    },{
+      "age" : 779465435284,
+      "burc" : "basak",
+      "click" : 6,
+      "count" : 3,
+      "email" : "taner345641@gmail.com",
+      "gender" : "MAN",
+      "id" : "xKxFdN1vaJeF1HUgu3DjZnJG27m1",
+      
+      "lat" : 37.04504504504504,
+      "longLat" : 37.33803050911725,
+      "name" : "Taner ",
+      "profileImage" : "null",
+      "rate" : 7,
+      "reg_time" : 1568383839141,
+      "totalPoint" : 2.3333332538604736
+      
+    },{
+      "age" : 860867143090,
+      "burc" : "koc",
+      "click" : 6,
+      "count" : 3,
+      "email" : "ismlky97@gmail.com",
+      "gender" : "MAN",
+      "id" : "wbCJMJxHuhYMSrE0MJEqDu5MTfR2",
+      "lat" : 40.55855855855856,
+      "longLat" : 39.297371270412114,
+      "name" : "ismail",
+      "rate" : 7,
+      "reg_time" : 1568310346867,
+      "totalPoint" : 2.3333332538604736
+      
+    },{
+      "age" : 882282848707,
+      "burc" : "yay",
+      "click" : 9,
+      "count" : 2,
+      "email" : "kulhuseyin46@gmail.com",
+      "gender" : "MAN",
+      "id" : "voQC6fr1XWVoWNlnKdaw6RGn6Rg1",
+      "lat" : 41.171171171171174,
+      "longLat" : 32.60134595891071,
+      "name" : "Hüseyin Kul ",
+      "rate" : 6,
+      "reg_time" : 1568295253278,
+      "totalPoint" : 3
+      
+    },
+    {
+      "age" : 771861880232,
+      "burc" : "ikizler",
+      "click" : 28,
+      "count" : 4,
+      "email" : "celaleren.yilmazer@gmail.com",
+      "gender" : "MAN",
+      "id" : "vSzkcryfJ1fWJkOPxwJWEw42Mi92",
+      
+      "lat" : 41.04504504504504,
+      "longLat" : 29.07466860416556,
+      "name" : "eren",
+      "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/vSzkcryfJ1fWJkOPxwJWEw42Mi92%2Fimages%2F1.jpg?alt=media&token=29252e55-cdd7-4f23-aada-28c77cced69e",
+      "rate" : 12,
+      "reg_time" : 1568210684736,
+      "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/vSzkcryfJ1fWJkOPxwJWEw42Mi92%2Fimages%2Fthumb%2F1.jpg?alt=media&token=5468d69d-61d1-47e0-b1ef-0c3cf5929f93",
+      "totalPoint" : 3
+      
+    },{
+      "age" : 1568293534247,
+      "burc" : "balik",
+      "click" : 5,
+      "count" : 2,
+      "email" : "Yasin.Uysal-33@outlook.com",
+      "gender" : "MAN",
+      "id" : "v6ZHD8tiHnMTkEFQkOLnruMyB3g2",
+      "lat" : 36.108108108108105,
+      "longLat" : 32.96251575838794,
+      "name" : "yasin",
+      "rate" : 6,
+      "reg_time" : 1568293543977,
+      "totalPoint" : 3
+      
+    },{
+      "about" : "Öğretmenim .Ardahan da görev  yapıyorum. ",
+      "age" : 757450077540,
+      "burc" : "oglak",
+      "click" : 4,
+      "count" : 2,
+      "email" : "sulakyurt_75@windowslive.com",
+      "gender" : "MAN",
+      "id" : "uF6ChCk1dmbisu6UiBWqJztz8Nh2",
+      "job" : "öğretmen ",
+      "lat" : 41.13513513513514,
+      "longLat" : 43.133571580118925,
+      "name" : "Yalnız ",
+      "rate" : 6,
+      "reg_time" : 1568224090694,
+      "totalPoint" : 3
+      
+    },
+{
+      "about" : "Eğlenceli dans ve müziği seven, aktif biriyim",
+      "age" : 575883825363,
+      "burc" : "koc",
+      "click" : 5,
+      "count" : 4,
+      "email" : "tahsinatomikateknik@gmail.com",
+      "gender" : "MAN",
+      "id" : "u9U9rOR77yQsF820f58nNILxE7B3",
+     
+      "job" : "Ankara/Teknik Satış Temsilcisi",
+      "lat" : 39.927927927927925,
+      "longLat" : 32.80051451843053,
+      "name" : "Teoman",
+      "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/u9U9rOR77yQsF820f58nNILxE7B3%2Fimages%2F1.jpg?alt=media&token=250b465c-0ad3-491c-b5db-b600461c38fa",
+      "rate" : 11,
+      "reg_time" : 1568274228746,
+      "school" : "Mersin üniversitesi",
+      "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/u9U9rOR77yQsF820f58nNILxE7B3%2Fimages%2Fthumb%2F1.jpg?alt=media&token=7ffed15a-6717-4728-bf7d-f42995a89039",
+      "totalPoint" : 2.75
+      
+    },{
+      "age" : 915206852805,
+      "burc" : "oglak",
+      "click" : 5,
+      "count" : 2,
+      "email" : "rkoyunsever7@gmail.com",
+      "gender" : "MAN",
+      "id" : "tFK1YucybpSc6gjgMdw1QRhQQo53",
+      "name" : "Remzi Koyunsever",
+      "rate" : 6,
+      "reg_time" : 1568300873580,
+      "totalPoint" : 3
+      
+    },{
+      "age" : 978380439744,
+      "burc" : "oglak",
+      "click" : 2,
+      "count" : 3,
+      "email" : "mertcanpolat2014@hotmail.com",
+      "gender" : "MAN",
+      "id" : "sznFIxInjthbNZ3n96wf2UbDerU2",
+      "name" : "morti",
+      "rate" : 7,
+      "reg_time" : 1568402443241,
+      "totalPoint" : 2.3333332538604736
+    
+    }, {
+      "about" : "Hatay / İskenderun",
+      "age" : 740796504647,
+      "burc" : "ikizler",
+      "click" : 8,
+      "count" : 4,
+      "email" : "kapanfirat311@gmail.com",
+      "gender" : "MAN",
+      "id" : "rxYrEmjXsCRK9JEEDwVevEFDazH3",
+      "job" : "GASTRONOMI ",
+      "lat" : 36.57657657657658,
+      "longLat" : 36.16791185847539,
+      "name" : "Fırat ",
+      "rate" : 11,
+      "reg_time" : 1568335718146,
+      "school" : " ",
+      "totalPoint" : 2.75
+      
+    },{
+      "age" : 858189409414,
+      "burc" : "balik",
+      "click" : 3,
+      "count" : 2,
+      "email" : "musvartolukoc@hotmail.com",
+      "gender" : "MAN",
+      "id" : "qetmQ0fPOJbFzoKz1sKEISKuaUv2",
+      "name" : "Bülent",
+      "rate" : 6,
+      "reg_time" : 1568307418726,
+      "totalPoint" : 3
+      
+    },
+    {
+        "age" : 779496305513,
+        "burc" : "basak",
+        "click" : 7,
+        "count" : 2,
+        "email" : "devriye001@yandex.com",
+        "gender" : "MAN",
+        "id" : "ocr9NjWC1hP6IeczTJf6vxqAtv72",
+        "name" : "ali",
+        "rate" : 6,
+        "reg_time" : 1568414713132,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 981778002634,
+        "burc" : "kova",
+        "click" : 6,
+        "count" : 4,
+        "email" : "kayamuhammed1405@gmail.com",
+        "gender" : "MAN",
+        "id" : "oM90zEXIgSUEDjlftZZ91aDnpBg1",
+        
+        "job" : "öğrenci + güllüoğlu baklavacılık",
+        "lat" : 37.08108108108108,
+        "longLat" : 37.378356598864755,
+        "name" : "Muhammed ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/oM90zEXIgSUEDjlftZZ91aDnpBg1%2Fimages%2F1.jpg?alt=media&token=0082be32-885e-4614-95b9-78172718873c",
+        "rate" : 11,
+        "reg_time" : 1568430408812,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/oM90zEXIgSUEDjlftZZ91aDnpBg1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=0b3629b7-c1bd-4fb7-a5a7-a2bf29bd3e94",
+        "totalPoint" : 2.75
+        
+      }, {
+        "age" : 767253007520,
+        "burc" : "koc",
+        "click" : 4,
+        "count" : 2,
+        "email" : "uymaksuayip97@gmail.com",
+        "gender" : "MAN",
+        "id" : "oCLwD8W38jeIG6pepMxAPgg1oL13",
+        
+        "lat" : 41.27927927927928,
+        "longLat" : 36.323614984972274,
+        "name" : "suayip",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/oCLwD8W38jeIG6pepMxAPgg1oL13%2Fimages%2F1.jpg?alt=media&token=5c253e51-6669-4ffa-9aa6-4e1b856df3f6",
+        "rate" : 6,
+        "reg_time" : 1568181011105,
+        
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/oCLwD8W38jeIG6pepMxAPgg1oL13%2Fimages%2Fthumb%2F1.jpg?alt=media&token=78587c61-a548-4b37-90a0-aa19f55c5817",
+        "totalPoint" : 3
+        
+      },{
+        "age" : 868465552098,
+        "burc" : "yengec",
+        "click" : 3,
+        "count" : 2,
+        "email" : "yelomer60@gmail.com",
+        "gender" : "MAN",
+        "id" : "o6TF0OQGrGNlB2YONQLpHmh4oyI3",
+        
+        "name" : "ömer",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/o6TF0OQGrGNlB2YONQLpHmh4oyI3%2Fimages%2F1.jpg?alt=media&token=e11a5ceb-c564-423d-af22-fb2568dbe5b3",
+        "rate" : 6,
+        "reg_time" : 1568910355829,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/o6TF0OQGrGNlB2YONQLpHmh4oyI3%2Fimages%2Fthumb%2F1.jpg?alt=media&token=1d032c05-d257-42e9-8aa2-24ea23947334",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 645479527841,
+        "burc" : "ikizler",
+        "click" : 3,
+        "count" : 2,
+        "email" : "korayyildirim54@windowslive.com",
+        "gender" : "MAN",
+        "id" : "ntiqkzZKeoYjQbdBuoo3DgE63SJ2",
+        
+        "lat" : 40.972972972972975,
+        "longLat" : 29.114476542453527,
+        "name" : "Koray Yıldırım",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/ntiqkzZKeoYjQbdBuoo3DgE63SJ2%2Fimages%2F1.jpg?alt=media&token=a2976c95-b18f-4ed5-8de6-9b33e38d9443",
+        "rate" : 6,
+        "reg_time" : 1568317932969,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/ntiqkzZKeoYjQbdBuoo3DgE63SJ2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=90dd56aa-2d37-4ce5-b29b-48d261f621e5",
+        "totalPoint" : 3
+       
+      },{
+        "about" : "Founder of Gargi",
+        "age" : 698274000000,
+        "burc" : "kova",
+        "click" : 145,
+        "count" : 15,
+        "email" : "mhsnabz@yahoo.com.tr",
+        "id" : "ml20r64rnmXBpPHNpO8tbSW5Y8v1",
+        "job" : "Bilgisayar Mühendisi",
+        "lat" : 37.39313249297999,
+        "longLat" : -122.08710098013304,
+        "name" : "Mahsun A.",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/ml20r64rnmXBpPHNpO8tbSW5Y8v1%2Fimages%2F1.jpg?alt=media&token=3eb31880-738e-47cc-a284-92942d38e04b",
+        "rate" : 57,
+        "reg_time" : 604800000,
+        "school" : "İskenderun Teknik Üniversitesi ",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/ml20r64rnmXBpPHNpO8tbSW5Y8v1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=dad1cd0a-545c-4f73-8b87-6a9d20abf07c",
+        "totalPoint" : 3.799999952316284
+        
+      },{
+        "about" : "asosyal ( halısaha hariç )",
+        "age" : 776792420433,
+        "burc" : "aslan",
+        "click" : 13,
+        "count" : 2,
+        "email" : "ahmetaykut78@hotmail.com",
+        "gender" : "MAN",
+        "id" : "mevSv4dRf9ZeG978O7hMymayI3U2",
+        
+        "job" : "memur",
+        "name" : "Ahmet Aykut",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/mevSv4dRf9ZeG978O7hMymayI3U2%2Fimages%2F1.jpg?alt=media&token=45fe2047-8c06-467a-b2e4-12e4ad49c416",
+        "rate" : 6,
+        "reg_time" : 1568302826311,
+        "school" : "hacettepe / ergoterapi",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/mevSv4dRf9ZeG978O7hMymayI3U2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=effb7e3a-7a78-4096-bf2f-928b37e5da68",
+        "totalPoint" : 3
+        
+      },{
+        "age" : 871683396352,
+        "burc" : "aslan",
+        "click" : 4,
+        "count" : 2,
+        "email" : "cr_7onur@hotmail.com",
+        "gender" : "MAN",
+        "id" : "maYVRQNbI0R3ykx8MKzCQWTlpVB2",
+        "name" : "Onur",
+        "rate" : 6,
+        "reg_time" : 1568672207181,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 605369673723,
+        "burc" : "balik",
+        "click" : 7,
+        "count" : 2,
+        "email" : "jiyanek.azad7373@gmail.com",
+        "gender" : "MAN",
+        "id" : "lzrpgd9ATbP6IwoBWBgZjtvXOgf1",
+        
+        "lat" : 37.45945945945946,
+        "longLat" : 42.719322907814124,
+        "name" : "Meso ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/lzrpgd9ATbP6IwoBWBgZjtvXOgf1%2Fimages%2F1.jpg?alt=media&token=31a7ebf6-9e4f-431e-a1bf-90c6243409a5",
+        "rate" : 6,
+        "reg_time" : 1568726076496,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/lzrpgd9ATbP6IwoBWBgZjtvXOgf1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=f057281b-2385-4b9b-b662-53654da862f7",
+        "totalPoint" : 3
+        
+      },{
+        "age" : 713605652451,
+        "burc" : "aslan",
+        "click" : 9,
+        "count" : 4,
+        "email" : "harunkula@gmail.com",
+        "gender" : "MAN",
+        "id" : "llHQTWZBg1dxuBVTu2a0rraOXZg2",
+       
+        "lat" : 38.468468468468465,
+        "longLat" : 27.109276772676008,
+        "name" : "harunkula",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/llHQTWZBg1dxuBVTu2a0rraOXZg2%2Fimages%2F1.jpg?alt=media&token=7549853d-a9f1-4c27-94fd-009d069c7ace",
+        "rate" : 12,
+        "reg_time" : 1568188057840,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/llHQTWZBg1dxuBVTu2a0rraOXZg2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=6414f498-011c-4a63-a685-50088966f52f",
+        "totalPoint" : 3
+        
+      },{
+        "age" : 923406927371,
+        "burc" : "koc",
+        "click" : 2,
+        "count" : 2,
+        "email" : "dnmz.slymn04@gmail.com",
+        "gender" : "MAN",
+        "id" : "liaTmekKL3RWmg8u1faSgnsEdSl2",
+        "lat" : 36.5945945945946,
+        "longLat" : 36.1539134701577,
+        "name" : "Süleyman",
+        "rate" : 6,
+        "reg_time" : 1568296533854,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 752520132863,
+        "burc" : "akrep",
+        "click" : 15,
+        "count" : 5,
+        "email" : "scr4bie@gmail.com",
+        "gender" : "MAN",
+        "id" : "kie9IZlGTEPqLY2V4UUvA9we0Gq1",
+        "lat" : 37.06306306306306,
+        "longLat" : 37.34689704555607,
+        "name" : "Ali Yenigün",
+        "rate" : 12,
+        "reg_time" : 1568046139090,
+        "totalPoint" : 2.4000000953674316
+        
+      },{
+        "age" : 930563375332,
+        "burc" : "ikizler",
+        "click" : 10,
+        "count" : 6,
+        "email" : "yagizdemirtas15@gmail.com",
+        "gender" : "MAN",
+        "id" : "iiWebnmLqWVABDXbjUzhaD6aJoo2",
+        
+        "lat" : 36.55855855855856,
+        "longLat" : 36.15947585459712,
+        "name" : "Yağız",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/iiWebnmLqWVABDXbjUzhaD6aJoo2%2Fimages%2F1.jpg?alt=media&token=d4b8222a-02df-4a49-9789-cd7ff338c20b",
+        "rate" : 15,
+        "reg_time" : 1568368179291,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/iiWebnmLqWVABDXbjUzhaD6aJoo2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=2fa2974b-5a8b-49da-9bff-1445ca56eadb",
+        "totalPoint" : 2.5
+        
+      },{
+        "age" : 746793864014,
+        "burc" : "aslan",
+        "click" : 10,
+        "count" : 5,
+        "email" : "ebuzeyitoglu-866@hotmail.com",
+        "gender" : "MAN",
+        "id" : "iAArrjdSE6UTOnOH43OXFd7qUx83",
+        
+        "lat" : 37.45945945945946,
+        "longLat" : 42.69662401147629,
+        "name" : "Sadık",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/iAArrjdSE6UTOnOH43OXFd7qUx83%2Fimages%2F1.jpg?alt=media&token=32920db3-0f79-485e-b418-139f8cbc768b",
+        "rate" : 13,
+        "reg_time" : 1568025896310,
+        "totalPoint" : 2.5999999046325684
+        
+      },{
+        "age" : 912298142289,
+        "burc" : "akrep",
+        "click" : 11,
+        "count" : 6,
+        "email" : "ogrlokman24@gmail.com",
+        "gender" : "MAN",
+        "id" : "i7R8xY9rbWMeBAGGw1MzmoX2VKt1",
+        "lat" : 39.945945945945944,
+        "longLat" : 32.87965832837437,
+        "name" : "Atilla",
+        "rate" : 17,
+        "reg_time" : 1567897745899,
+        "totalPoint" : 2.8333332538604736
+        
+      },{
+        "age" : 767252417008,
+        "burc" : "koc",
+        "click" : 7,
+        "count" : 4,
+        "email" : "koboy.1990_@hotmail.com",
+        "gender" : "MAN",
+        "id" : "gx5SzNMAw6THAWGy8HJPLcqfGau2",
+        
+        "name" : "suayip",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/gx5SzNMAw6THAWGy8HJPLcqfGau2%2Fimages%2F1.jpg?alt=media&token=c2f23b23-5421-42b7-886c-20cd9005b9d5",
+        "rate" : 9,
+        "reg_time" : 1568180424476,
+       
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/gx5SzNMAw6THAWGy8HJPLcqfGau2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=78f62712-6ace-4301-b1e6-f8e45ae08a9f",
+        "totalPoint" : 2.25
+      
+      },{
+        "about" : "iskenderunda yaşıyorum 31 70 190 profil kuaförüm ",
+        "age" : 562256375427,
+        "burc" : "terazi",
+        "click" : 23,
+        "count" : 3,
+        "email" : "ozantotay19071907@gmail.com",
+        "gender" : "MAN",
+        "id" : "gUboAEcw6HOHJ2i2s3FOtcDMll72",
+       
+        "job" : "kuaför/masör /",
+        "lat" : 36.57657657657658,
+        "longLat" : 36.16791185847539,
+        "name" : "Ozan Totay",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/gUboAEcw6HOHJ2i2s3FOtcDMll72%2Fimages%2F1.jpg?alt=media&token=92ea7b85-bcb7-4299-86d9-546c79ad8f34",
+        "rate" : 9,
+        "reg_time" : 1570368001332,
+        "school" : "meslek okulu ",
+       
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/gUboAEcw6HOHJ2i2s3FOtcDMll72%2Fimages%2Fthumb%2F1.jpg?alt=media&token=c507d4f2-fc54-4c3d-9957-153d4a105046",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 810223987455,
+        "burc" : "basak",
+        "click" : 1,
+        "count" : 2,
+        "email" : "dnzbirgul@gmail.com",
+        "gender" : "MAN",
+        "id" : "gI4tEOpQJvQ7LlZ8x69equdiRMF2",
+        "name" : "Deniz ",
+        "rate" : 6,
+        "reg_time" : 1568297596601,
+        "totalPoint" : 3
+        
+      },{
+        "about" : "fazla soze gerek yok.",
+        "age" : 652908304568,
+        "burc" : "basak",
+        "click" : 7,
+        "count" : 4,
+        "email" : "ebuzeyit_20@hotmail.com",
+        "gender" : "MAN",
+        "id" : "gGpJaSoxRReNl5UGzR68MPIA8Kl2",
+        
+        "job" : "para sayiyorum",
+        "name" : "titanic",
+        "rate" : 12,
+        "reg_time" : 1568057107827,
+        "school" : "okumanin bir degeri olsa yazardim",
+        "totalPoint" : 3
+       
+      }, {
+        "about" : "hatay iskenderun ",
+        "age" : 765668416981,
+        "burc" : "koc",
+        "click" : 8,
+        "count" : 4,
+        "email" : "yeminimvar@live.com",
+        "gender" : "MAN",
+        "id" : "f90lHssALZSgdMN9flABIxerGr72",
+        
+        "lat" : 36.55855855855856,
+        "longLat" : 36.114612981328385,
+        "name" : "nihat",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/f90lHssALZSgdMN9flABIxerGr72%2Fimages%2F1.jpg?alt=media&token=1dd7a6ca-f3de-48fe-b27c-043cc9a690cf",
+        "rate" : 12,
+        "reg_time" : 1568497239403,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/f90lHssALZSgdMN9flABIxerGr72%2Fimages%2Fthumb%2F1.jpg?alt=media&token=ed2d4c21-342a-4e73-b804-0da9151b0678",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 573151591538,
+        "burc" : "kova",
+        "click" : 14,
+        "count" : 5,
+        "email" : "zadedemir@gmail.com",
+        "gender" : "MAN",
+        "id" : "f1jNtthvRvUq1MaUY3SahsnfM6Z2",
+        "lat" : 37.513513513513516,
+        "longLat" : 42.45494481006721,
+        "name" : "Zade",
+        "rate" : 14,
+        "reg_time" : 1568044004741,
+        "totalPoint" : 2.799999952316284
+        
+      },{
+        "age" : 933086105449,
+        "burc" : "yengec",
+        "click" : 3,
+        "count" : 2,
+        "email" : "ihsnbrt1@gmail.com",
+        "gender" : "MAN",
+        "id" : "dkYCmJIuKKN5BHd1X9Ln0A2O4XH3",
+        "name" : "cnhsn",
+        "rate" : 6,
+        "reg_time" : 1568298910744,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 976580527198,
+        "burc" : "yay",
+        "click" : 11,
+        "count" : 4,
+        "email" : "bieber_lincoln@hotmail.com",
+        "gender" : "MAN",
+        "id" : "dj8xb8YjqyWLg1u8VFKeH6JLNlZ2",
+        
+        "lat" : 37.927927927927925,
+        "longLat" : 40.15757531714264,
+        "name" : "Akın",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/dj8xb8YjqyWLg1u8VFKeH6JLNlZ2%2Fimages%2F1.jpg?alt=media&token=92eeb6b2-60f2-4999-b0a6-5ad2b68216ec",
+        "rate" : 10,
+        "reg_time" : 1568330536221,
+        "school" : "İskenderun üniversitesi ",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/dj8xb8YjqyWLg1u8VFKeH6JLNlZ2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=daf849da-c0c0-4408-ab61-0c6b24209d48",
+        "totalPoint" : 2.5
+        
+      },{
+        "age" : 912885042531,
+        "burc" : "yay",
+        "click" : 15,
+        "count" : 5,
+        "email" : "akngllr@gmail.com",
+        "gender" : "MAN",
+        "id" : "dXdAl7z9nfaaP6T7gsBayxtAgxL2",
+        
+        "lat" : 36.5945945945946,
+        "longLat" : 36.1763553779604,
+        "name" : "akın",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/dXdAl7z9nfaaP6T7gsBayxtAgxL2%2Fimages%2F1.jpg?alt=media&token=25d967bd-b205-48fe-ab55-8a5ddba72740",
+        "rate" : 13,
+        "reg_time" : 1568398250179,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/dXdAl7z9nfaaP6T7gsBayxtAgxL2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=d7dafe2e-37bc-4a2b-b03d-df96b139ceaf",
+        "totalPoint" : 2.5999999046325684
+        
+      },{
+        "age" : 852757154452,
+        "burc" : "oglak",
+        "click" : 3,
+        "count" : 2,
+        "email" : "chaos3838@hotmail.com",
+        "gender" : "MAN",
+        "id" : "c5KZiHTTE2OUfugTuUAtVqBsAq53",
+        "lat" : 38.75675675675676,
+        "longLat" : 35.536461594551064,
+        "name" : "Chaos38",
+        "rate" : 6,
+        "reg_time" : 1568404761709,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 429961553046,
+        "burc" : "aslan",
+        "click" : 6,
+        "count" : 5,
+        "email" : "eminkadam01@hotmail.com",
+        "gender" : "MAN",
+        "id" : "bbyBQ5oFH0cDNg8FmpFSOtXbOK72",
+        
+        "name" : "siyamet",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/bbyBQ5oFH0cDNg8FmpFSOtXbOK72%2Fimages%2F1.jpg?alt=media&token=d939a6f2-d10d-4b06-830f-dbb98161498a",
+        "rate" : 10,
+        "reg_time" : 1568285166005,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/bbyBQ5oFH0cDNg8FmpFSOtXbOK72%2Fimages%2Fthumb%2F1.jpg?alt=media&token=7a6e6a00-4724-4df2-ad2c-3db8c635e60d",
+        "totalPoint" : 2
+       
+      },{
+        "age" : 772654928175,
+        "burc" : "ikizler",
+        "click" : 2,
+        "count" : 2,
+        "email" : "onur.duran35@yandex.com",
+        "gender" : "MAN",
+        "id" : "b6qnADJ05Zfs6heaAsqKKQkG9Z03",
+        "lat" : 38.34234234234234,
+        "longLat" : 26.326879137002813,
+        "name" : "onur",
+        "rate" : 6,
+        "reg_time" : 1568226133688,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 806247418581,
+        "burc" : "yengec",
+        "click" : 1,
+        "count" : 2,
+        "email" : "ibrahimbozkurt7911@gmail.com",
+        "gender" : "MAN",
+        "id" : "aMlVkKomSJdcp4NCNfhtnpzkJ4O2",
+        "name" : "ibrahim",
+        "rate" : 6,
+        "reg_time" : 1568986621771,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 780586425820,
+        "burc" : "terazi",
+        "click" : 3,
+        "count" : 2,
+        "email" : "celal.650@hotmail.com",
+        "gender" : "MAN",
+        "id" : "a5cgK3iL5gd6H1y3f3JEAtSHQv62",
+        "name" : "celal",
+        "rate" : 6,
+        "reg_time" : 1569760433762,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 473889929133,
+        "burc" : "oglak",
+        "click" : 7,
+        "count" : 3,
+        "email" : "fuaryapimersin33@gmail.com",
+        "gender" : "MAN",
+        "id" : "Zy7mbhmMM4WtnETKFwHCkGuJa2h2",
+       
+        "lat" : 36.792792792792795,
+        "longLat" : 34.604744410465436,
+        "name" : "mesut ağdin",
+        "profileImage" : "null",
+        "rate" : 8,
+        "reg_time" : 1568145935140,
+        "totalPoint" : 2.6666667461395264
+       
+      },{
+        "age" : 779455273843,
+        "burc" : "basak",
+        "click" : 5,
+        "count" : 3,
+        "email" : "pokemongooo31@gmail.com",
+        "gender" : "MAN",
+        "id" : "Z7qCiPX4GPPeQBBVIeZnuciR5ap1",
+        "lat" : 37.333333333333336,
+        "longLat" : 40.69867182824974,
+        "name" : "mkh",
+        "rate" : 9,
+        "reg_time" : 1568028078952,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 918436549091,
+        "burc" : "kova",
+        "click" : 6,
+        "count" : 4,
+        "email" : "ronaldocan2009@windowslive.com",
+        "gender" : "MAN",
+        "id" : "Z4sCPpX3QbPcyowXJnfcC6sZUP33",
+        "name" : "can",
+        "rate" : 11,
+        "reg_time" : 1568160954619,
+        "totalPoint" : 2.75
+       
+      },{
+        "about" : "HATAY/iskenderun#1.90#",
+        "age" : 698297445342,
+        "burc" : "terazi",
+        "click" : 10,
+        "count" : 6,
+        "email" : "erdm_44@outlook.com",
+        "gender" : "MAN",
+        "id" : "XzvK6AZT6cb6bF0lxbTYyK9lB3b2",
+       
+        "lat" : 36.55855855855856,
+        "longLat" : 36.15947585459712,
+        "name" : "Ersin",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/XzvK6AZT6cb6bF0lxbTYyK9lB3b2%2Fimages%2F1.jpg?alt=media&token=bd632751-3525-4998-8b8c-0a2569761824",
+        "rate" : 17,
+        "reg_time" : 1568029653011,
+        "totalPoint" : 2.8333332538604736
+       
+      },{
+        "age" : 825260269180,
+        "burc" : "kova",
+        "click" : 4,
+        "count" : 2,
+        "email" : "maliturkmenler@gmail.com",
+        "gender" : "MAN",
+        "id" : "XuSEd3nx70aNxhQVLNc5MOjwINP2",
+      
+        "lat" : 37.08108108108108,
+        "longLat" : 37.400941708592164,
+        "name" : "fareilaci",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/XuSEd3nx70aNxhQVLNc5MOjwINP2%2Fimages%2F1.jpg?alt=media&token=357ca3ef-fee6-4a0a-9525-bf5f11ae14d2",
+        "rate" : 6,
+        "reg_time" : 1568296675419,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/XuSEd3nx70aNxhQVLNc5MOjwINP2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=31333b19-c203-4ec2-a799-7b0489705e0f",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 837635423319,
+        "burc" : "yengec",
+        "click" : 2,
+        "count" : 2,
+        "email" : "alperen.cakirogluu@hotmail.com",
+        "gender" : "MAN",
+        "id" : "XbsencUEGMQvKmZOUfUlCRAS4Z43",
+        "lat" : 39.945945945945944,
+        "longLat" : 32.64463575276054,
+        "name" : "Alp",
+        "rate" : 6,
+        "reg_time" : 1568233844677,
+        "totalPoint" : 3
+        
+      },{
+        "about" : "24 yaşında - spor yapmayı, müzik dinlemeyi seven stajyer kişi ",
+        "age" : 810644268356,
+        "burc" : "basak",
+        "click" : 21,
+        "count" : 6,
+        "email" : "ogurfatih91@gmail.com",
+        "gender" : "MAN",
+        "id" : "XNnyDaIqYNO88ejEEgeBATSJ5aK2",
+       
+        "job" : "stajyer avukat",
+        "lat" : 39.927927927927925,
+        "longLat" : 32.87100273014636,
+        "name" : "akilleus",
+        "profileImage" : "null",
+        "rate" : 18,
+        "reg_time" : 1568026673889,
+        "school" : "Ankara Üniversitesi",
+        "totalPoint" : 3
+      
+        
+      },{
+        "age" : 628240000886,
+        "burc" : "akrep",
+        "click" : 9,
+        "count" : 4,
+        "email" : "gonulyorgunu422@gmail.com",
+        "gender" : "MAN",
+        "id" : "WUAskoV8tdghTv6JqpGxpRWP2Ck1",
+      
+        "name" : "Dogan",
+        "profileImage" : "null",
+        "rate" : 12,
+        "reg_time" : 1568182010978,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 748283463852,
+        "burc" : "basak",
+        "click" : 12,
+        "count" : 6,
+        "email" : "selim@selim.com",
+        "gender" : "MAN",
+        "id" : "VW0xePoWe2MJU4vbRM5KTlydBj23",
+        "lat" : 36.34234234234234,
+        "longLat" : 36.19304151238693,
+        "name" : "Selim",
+        "rate" : 17,
+        "reg_time" : 1567787468454,
+        "totalPoint" : 2.8333332538604736
+        
+      },{
+        "age" : 670881544673,
+        "burc" : "koc",
+        "click" : 1,
+        "count" : 2,
+        "email" : "dlrzgar35@gmail.com",
+        "gender" : "MAN",
+        "id" : "UUTvOdSvL9hGreAQ6a66JpB97UD3",
+        "lat" : 36.55855855855856,
+        "longLat" : 36.15947585459712,
+        "name" : "İbrahim",
+        "rate" : 6,
+        "reg_time" : 1569009554700,
+        "totalPoint" : 3
+        
+      },{
+        "age" : 782573829231,
+        "burc" : "terazi",
+        "click" : 69,
+        "count" : 11,
+        "email" : "mervandemir0049@gmail.com",
+        "gender" : "MAN",
+        "id" : "T90d3cr3mDYR1KZVljSzOigwGY13",
+        "lat" : 36.32432432432432,
+        "longLat" : 36.18467154651124,
+        "name" : "Mervan",
+        "profileImage" : "https://scontent-atl3-1.cdninstagram.com/vp/94f7a81a3bec0c9753b340a7672245ff/5E0E4F3B/t51.2885-19/41227585_633375653723146_7634683807525765120_n.jpg?_nc_ht=scontent-atl3-1.cdninstagram.com",
+        "rate" : 39,
+        "reg_time" : 1567773448306,
+        "totalPoint" : 3.545454502105713
+       
+      },{
+        "age" : 684958370741,
+        "burc" : "basak",
+        "click" : 7,
+        "count" : 4,
+        "email" : "bariskocaslan34@gmail.com",
+        "gender" : "MAN",
+        "id" : "T4xaQ3CiJRb3ack6iFFZYhfqBrt1",
+        "lat" : 41.009009009009006,
+        "longLat" : 28.652846323611712,
+        "name" : "barış",
+        "rate" : 11,
+        "reg_time" : 1568571176092,
+        "totalPoint" : 2.75
+       
+      },{
+        "about" : "Biraz sohbet edelim :)",
+        "age" : 859250713063,
+        "burc" : "balik",
+        "click" : 4,
+        "count" : 2,
+        "email" : "necatitns@gmail.com",
+        "gender" : "MAN",
+        "id" : "S73qDYt8ihaogeDQdAu2rRXhsPv2",
+        
+        "job" : "teknisyen",
+        "lat" : 39.945945945945944,
+        "longLat" : 32.856156070812986,
+        "name" : "j3yhaylazz ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/S73qDYt8ihaogeDQdAu2rRXhsPv2%2Fimages%2F1.jpg?alt=media&token=7ae865e0-ef62-4201-86a8-0424ec6a29a1",
+        "rate" : 6,
+        "reg_time" : 1568591118547,
+        "school" : "lise",
+       
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/S73qDYt8ihaogeDQdAu2rRXhsPv2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=cc560589-66a6-4944-a942-425b98e1d07a",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 463903571077,
+        "burc" : "terazi",
+        "click" : 1,
+        "count" : 1,
+        "email" : "greesirnak@gmail.com",
+        "gender" : "MAN",
+        "id" : "QgcPgoDkO1TnlUtuhjhMogy6GBO2",
+        
+        "lat" : 37.513513513513516,
+        "longLat" : 42.43222948379109,
+        "name" : "FARUK ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/QgcPgoDkO1TnlUtuhjhMogy6GBO2%2Fimages%2F1.jpg?alt=media&token=5eefe6bb-39c8-4062-be0c-b832b0d465f0",
+        "rate" : 5,
+        "reg_time" : 1572242774702,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/QgcPgoDkO1TnlUtuhjhMogy6GBO2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=62000691-5892-4bf3-8ce0-d0afd9180394",
+        "totalPoint" : 5
+       
+      },{
+        "age" : 696384044757,
+        "burc" : "oglak",
+        "click" : 3,
+        "count" : 2,
+        "email" : "saritasdursun@gmail.com",
+        "gender" : "MAN",
+        "id" : "QRP5dC7Mo4bKrkL3fhiUWxE4i1p1",
+        
+        "lat" : 41.06306306306306,
+        "longLat" : 29.010941970772592,
+        "name" : "seroo",
+        "profileImage" : "null",
+        "rate" : 6,
+        "reg_time" : 1568415669721,
+        "totalPoint" : 3
+       
+      },{
+        "about" : "Eğlenceli bi insanımdır.. ",
+        "age" : 879427490957,
+        "burc" : "akrep",
+        "click" : 2,
+        "count" : 2,
+        "email" : "someoneua5@gmail.com",
+        "gender" : "MAN",
+        "id" : "Q3k52O4Q4tXrAZp8cE9uEI6yQf92",
+        
+        "lat" : 39.945945945945944,
+        "longLat" : 32.59763123763778,
+        "name" : "UMUT ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/Q3k52O4Q4tXrAZp8cE9uEI6yQf92%2Fimages%2F1.jpg?alt=media&token=631fe062-8c79-41e4-a936-1a9cf912f6f4",
+        "rate" : 6,
+        "reg_time" : 1568636694626,
+        "school" : "Hacettepe Üniversitesi ",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/Q3k52O4Q4tXrAZp8cE9uEI6yQf92%2Fimages%2Fthumb%2F1.jpg?alt=media&token=e50190c3-d549-4cbe-9b87-48248ca193a9",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 653187877914,
+        "burc" : "basak",
+        "click" : 6,
+        "count" : 4,
+        "email" : "kardesler7990@gmail.com",
+        "gender" : "MAN",
+        "id" : "PUfshvGfrnOxiQzae62s2Bu1XPJ2",
+        "name" : "ercan",
+        "rate" : 11,
+        "reg_time" : 1568336687811,
+        "totalPoint" : 2.75
+      
+      },{
+        "about" : "only support",
+        "age" : 737226970424,
+        "burc" : "boga",
+        "click" : 13,
+        "count" : 5,
+        "email" : "cantekin.savas@gmail.com",
+        "gender" : "MAN",
+        "id" : "NlgjbbGMyXZ2oE0VkNdXlB9tSnN2",
+       
+        "job" : "full time student",
+        "lat" : 36.5045045045045,
+        "longLat" : 36.02213404336444,
+        "name" : "cantekin savaş",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/NlgjbbGMyXZ2oE0VkNdXlB9tSnN2%2Fimages%2F1.jpg?alt=media&token=9cd6138d-2522-4a08-a020-ee0e7041a01c",
+        "rate" : 20,
+        "reg_time" : 1569086177686,
+        "school" : "İskenderun teknik üniversitesi",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/NlgjbbGMyXZ2oE0VkNdXlB9tSnN2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=82cc55c4-6567-432e-b230-ce92b78c8307",
+        "totalPoint" : 4
+       
+      },{
+        "age" : 842630821997,
+        "burc" : "basak",
+        "click" : 1,
+        "count" : 2,
+        "email" : "ahsicandar@gmail.com",
+        "gender" : "MAN",
+        "id" : "MqikVcsKySgdiBAhhnoi5vOqA6o1",
+        "name" : "Ahsi Candar",
+        "rate" : 6,
+        "reg_time" : 1568390825749,
+        "totalPoint" : 3
+      
+      },{
+        "age" : 847805087225,
+        "burc" : "akrep",
+        "click" : 4,
+        "count" : 3,
+        "email" : "sonmiralay@gmail.com",
+        "gender" : "MAN",
+        "id" : "MguS5O4A7lavAvgKc818ZTiKisO2",
+        "name" : "Oğuz",
+        "rate" : 6,
+        "reg_time" : 1568377494666,
+        "totalPoint" : 2
+      
+      },{
+        "age" : 973356165907,
+        "burc" : "akrep",
+        "click" : 2,
+        "count" : 2,
+        "email" : "tarikbugra9171@gmail.com",
+        "gender" : "MAN",
+        "id" : "LGhhhFAjIWhOLdPIPPfrXvKGLK22",
+        "lat" : 36.55855855855856,
+        "longLat" : 36.15947585459712,
+        "name" : "Ragnar Lothbrok",
+        "rate" : 6,
+        "reg_time" : 1568302969838,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 591021865115,
+        "burc" : "basak",
+        "click" : 2,
+        "count" : 2,
+        "email" : "erdem.tekin@yandex.com.tr",
+        "gender" : "MAN",
+        "id" : "LD9IpHnAFOUQ5B4AetDm1NSt4513",
+     
+        "job" : "Mühendis",
+        "lat" : 39.891891891891895,
+        "longLat" : 32.80674751421391,
+        "name" : "Erdem",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/LD9IpHnAFOUQ5B4AetDm1NSt4513%2Fimages%2F1.jpg?alt=media&token=fe562c6d-8b6f-4ec6-859b-a5b7e03a6a8d",
+        "rate" : 6,
+        "reg_time" : 1568465068777,
+        "school" : "ODTÜ",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/LD9IpHnAFOUQ5B4AetDm1NSt4513%2Fimages%2Fthumb%2F1.jpg?alt=media&token=3bbfefd2-6391-428a-ba9a-8a789cba4a94",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 868990602467,
+        "burc" : "yengec",
+        "click" : 5,
+        "count" : 3,
+        "email" : "harunmihyaz13@gmail.com",
+        "gender" : "MAN",
+        "id" : "KiIuWHgqdZYnkp5XBZN9vvU1Sep1",
+        
+        "lat" : 36.57657657657658,
+        "longLat" : 36.16791185847539,
+        "name" : "Harun",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/KiIuWHgqdZYnkp5XBZN9vvU1Sep1%2Fimages%2F1.jpg?alt=media&token=1ca5c567-76d3-4229-a53c-268d47016338",
+        "rate" : 8,
+        "reg_time" : 1568053035790,
+        "totalPoint" : 2.6666667461395264
+       
+      },{
+        "about" : "\nİskenderun",
+        "age" : 885822175625,
+        "burc" : "oglak",
+        "click" : 6,
+        "count" : 3,
+        "email" : "eshabil-gunduz@hotmail.com",
+        "gender" : "MAN",
+        "id" : "KR1I5fXm2KQTQqLaaL4MpF1Tnwk1",
+       
+        "name" : "Eshabil",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/KR1I5fXm2KQTQqLaaL4MpF1Tnwk1%2Fimages%2F1.jpg?alt=media&token=360e0b1a-bfe5-401c-8945-381ba57fbcaf",
+        "rate" : 9,
+        "reg_time" : 1568378585358,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/KR1I5fXm2KQTQqLaaL4MpF1Tnwk1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=be167167-2ddb-4ee1-9ff9-909ef616e962",
+        "totalPoint" : 3
+        
+      },{
+        "age" : 506607588683,
+        "burc" : "oglak",
+        "click" : 3,
+        "count" : 4,
+        "email" : "zeyt_73@hotmail.com",
+        "gender" : "MAN",
+        "id" : "JjdqwOwC4dbbw9M5j2Ilo7LECMb2",
+        "name" : "Ebuzeyit ",
+        "rate" : 12,
+        "reg_time" : 1568546398700,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 758634218654,
+        "burc" : "oglak",
+        "click" : 5,
+        "count" : 4,
+        "email" : "ufukeroglu27@gmail.com",
+        "gender" : "MAN",
+        "id" : "JZ9OD6wpwdfmUkYLioKVExbj2RG2",
+       
+        "lat" : 40.828828828828826,
+        "longLat" : 29.408281567906364,
+        "name" : "Ufuk Eroğlu",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/JZ9OD6wpwdfmUkYLioKVExbj2RG2%2Fimages%2F1.jpg?alt=media&token=09230e1f-e659-4bf8-a3ab-49fc8815b70c",
+        "rate" : 11,
+        "reg_time" : 1568371423790,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/JZ9OD6wpwdfmUkYLioKVExbj2RG2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=4d86a6b5-197c-4240-9213-3a7dfa82e933",
+        "totalPoint" : 2.75
+        
+      },{
+        "about" : "Şişli etfal\n",
+        "age" : 819978340748,
+        "burc" : "yay",
+        "click" : 18,
+        "count" : 5,
+        "email" : "hakimakin.7395@gmail.com",
+        "gender" : "MAN",
+        "id" : "JWAgAMRp8uc00M945vndORhvc5p1",
+       
+        "job" : "Hemşire ",
+        "lat" : 41.153153153153156,
+        "longLat" : 29.026844159861763,
+        "name" : "Hakim Akın ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/JWAgAMRp8uc00M945vndORhvc5p1%2Fimages%2F1.jpg?alt=media&token=007378c7-4cb4-4862-b9ba-0e6a9e9cbef6",
+        "rate" : 13,
+        "reg_time" : 1568025945583,
+        "school" : "Mersin üniversitesi ",
+        "totalPoint" : 2.5999999046325684
+      
+      }, {
+        "age" : 930157197450,
+        "burc" : "ikizler",
+        "click" : 11,
+        "count" : 4,
+        "email" : "atast99@gmail.com",
+        "gender" : "MAN",
+        "id" : "Hn9EyHLq70T2mDuINEGKPotthzo1",
+        
+        "lat" : 40.828828828828826,
+        "longLat" : 29.26540732547119,
+        "name" : "Ata",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/Hn9EyHLq70T2mDuINEGKPotthzo1%2Fimages%2F1.jpg?alt=media&token=22a547ed-94b3-4aad-bde6-13a596aef11a",
+        "rate" : 9,
+        "reg_time" : 1568221202616,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/Hn9EyHLq70T2mDuINEGKPotthzo1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=a9c88468-d9c5-452a-ac61-0d402dc1fb84",
+        "totalPoint" : 2.25
+        
+      },{
+        "age" : 999303308417,
+        "burc" : "basak",
+        "click" : 6,
+        "count" : 2,
+        "email" : "a_111asd@hotmail.com",
+        "gender" : "MAN",
+        "id" : "H7YDiP8JpqQbbl6t7qshifXzUwK2",
+        "name" : "Serdar",
+        "rate" : 6,
+        "reg_time" : 1568247311703,
+        "totalPoint" : 3
+      
+      },{
+        "age" : 1004279880456,
+        "burc" : "akrep",
+        "click" : 0,
+        "count" : 1,
+        "email" : "erhan@erhan.com",
+        "gender" : "MAN",
+        "id" : "ESNmOxVmB0MGsx4XboSU0U41Ca22",
+        "lat" : 37.39257238328904,
+        "longLat" : -122.05335176793889,
+        "name" : "Erhan",
+        "rate" : 5,
+        "reg_time" : 1572269885853,
+        "totalPoint" : 5
+      },{
+        "age" : 477142391835,
+        "burc" : "kova",
+        "click" : 17,
+        "count" : 5,
+        "email" : "cancansoy85@gmail.com",
+        "gender" : "MAN",
+        "id" : "EOHtGdxnV5MfFmEXmouIUauC1GA2",
+      
+        "lat" : 36.57657657657658,
+        "longLat" : 29.167670853609184,
+        "name" : "Ccihan",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/EOHtGdxnV5MfFmEXmouIUauC1GA2%2Fimages%2F1.jpg?alt=media&token=6d478c70-daa1-400f-842a-9c142e22d9dd",
+        "rate" : 15,
+        "reg_time" : 1568201597707,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/EOHtGdxnV5MfFmEXmouIUauC1GA2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=583de991-b4dc-4f85-b0dc-d294ea9b822e",
+        "totalPoint" : 3
+      
+      },{
+        "age" : 925544993223,
+        "burc" : "boga",
+        "click" : 33,
+        "count" : 7,
+        "email" : "muhammedt351@gmail.com",
+        "gender" : "MAN",
+        "id" : "E6oxf3oMNeWhMOlGTi2msvKuloW2",
+        
+        "job" : "Darmadağın yine sahil",
+        "lat" : 36.57657657657658,
+        "longLat" : 36.16791185847539,
+        "name" : "muhammed",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/E6oxf3oMNeWhMOlGTi2msvKuloW2%2Fimages%2F1.jpg?alt=media&token=61f5fbe1-f63d-48ae-8de3-61a8f7bafe15",
+        "rate" : 18,
+        "reg_time" : 1568361001417,
+        "school" : "iskenderun teknik üniversitesi",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/E6oxf3oMNeWhMOlGTi2msvKuloW2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=a32827e2-5e42-45ff-809f-36c6497a0c89",
+        "totalPoint" : 2.5714285373687744
+       
+      },{
+        "age" : 884191839503,
+        "burc" : "oglak",
+        "click" : 13,
+        "count" : 4,
+        "email" : "demirci_9100@hotmail.com",
+        "gender" : "MAN",
+        "id" : "DecxLQXIeCYGHbFlJYIax5gaGh33",
+        
+        "lat" : 36.5945945945946,
+        "longLat" : 36.1763553779604,
+        "name" : "Can Demirci",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/DecxLQXIeCYGHbFlJYIax5gaGh33%2Fimages%2F1.jpg?alt=media&token=cd661591-ba23-4be8-b89b-664f485d30f2",
+        "rate" : 11,
+        "reg_time" : 1568562652578,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/DecxLQXIeCYGHbFlJYIax5gaGh33%2Fimages%2Fthumb%2F1.jpg?alt=media&token=38aaac94-a34a-48c9-949c-cb6f66796b22",
+        "totalPoint" : 2.75
+      
+      },{
+        "age" : 800898271590,
+        "burc" : "boga",
+        "click" : 4,
+        "count" : 3,
+        "email" : "buyukokuz@gmail.com",
+        "gender" : "MAN",
+        "id" : "DdWcSb4RODbvE0yn3pBPHOYs0rb2",
+        "lat" : 36.846846846846844,
+        "longLat" : 28.73007221714127,
+        "name" : "mehmet ali çapar",
+        "rate" : 7,
+        "reg_time" : 1568389502138,
+        "totalPoint" : 2.3333332538604736
+       
+      },{
+        "age" : 968761759591,
+        "burc" : "basak",
+        "click" : 2,
+        "count" : 2,
+        "email" : "lawyer0606@gmail.com",
+        "gender" : "MAN",
+        "id" : "DKa1PuZFKPTl2RZMoEGUxCIEZCF3",
+        "name" : "lawyer",
+        "rate" : 6,
+        "reg_time" : 1568291363197,
+        "totalPoint" : 3
+      
+      },{
+        "age" : 532325365370,
+        "burc" : "akrep",
+        "click" : 1,
+        "count" : 2,
+        "email" : "osmanercedogan84@gmail.com",
+        "gender" : "MAN",
+        "id" : "C7Nbl9xX1YhbZypYPk9RMxB7KSG2",
+        "lat" : 37.927927927927925,
+        "longLat" : 40.15757531714264,
+        "name" : "osman",
+        "rate" : 6,
+        "reg_time" : 1568516978629,
+        "totalPoint" : 3
+      
+      },{
+        "about" : "ben yavuz bayan arkadaş arıyorum",
+        "age" : 263652340900,
+        "burc" : "boga",
+        "click" : 5,
+        "count" : 3,
+        "email" : "yauzalbay27@gmail.com",
+        "gender" : "MAN",
+        "id" : "BoRlFNqV5GexjltualfmT88FbY22",
+       
+        "lat" : 37.06306306306306,
+        "longLat" : 37.32431730127218,
+        "name" : "yavuz",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/BoRlFNqV5GexjltualfmT88FbY22%2Fimages%2F1.jpg?alt=media&token=6c69af2b-dd3c-46b7-95f1-e677ab953010",
+        "rate" : 7,
+        "reg_time" : 1568292348472,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/BoRlFNqV5GexjltualfmT88FbY22%2Fimages%2Fthumb%2F1.jpg?alt=media&token=801cced9-7c6c-41bc-8c56-b4347c16415b",
+        "totalPoint" : 2.3333332538604736
+     
+      },{
+        "age" : 643759284425,
+        "burc" : "boga",
+        "click" : 3,
+        "count" : 2,
+        "email" : "soner.gurlu@hotmail.com",
+        "gender" : "MAN",
+        "id" : "BkMEiRdxLITCRsW7s0ACZAoqhE82",
+       
+        "lat" : 41.009009009009006,
+        "longLat" : 29.01100690265686,
+        "name" : "soner",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/BkMEiRdxLITCRsW7s0ACZAoqhE82%2Fimages%2F1.jpg?alt=media&token=b790a493-b940-4771-bb11-a47a6cffe777",
+        "rate" : 6,
+        "reg_time" : 1568498487159,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/BkMEiRdxLITCRsW7s0ACZAoqhE82%2Fimages%2Fthumb%2F1.jpg?alt=media&token=2a183f28-2520-4d37-828c-a652328e593e",
+        "totalPoint" : 3
+     
+      },{
+        "about" : "samsun ",
+        "age" : 636310024509,
+        "burc" : "balik",
+        "click" : 4,
+        "count" : 4,
+        "email" : "cakram5555@gmail.com",
+        "gender" : "MAN",
+        "id" : "B0f9mcsSxOMvPgnipzmmy2eIphy1",
+        
+        "lat" : 41.27927927927928,
+        "longLat" : 36.323614984972274,
+        "name" : "selcuk",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/B0f9mcsSxOMvPgnipzmmy2eIphy1%2Fimages%2F1.jpg?alt=media&token=d8e8b329-d8f7-42de-b2fd-eee5b01f5c55",
+        "rate" : 11,
+        "reg_time" : 1568303232243,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/B0f9mcsSxOMvPgnipzmmy2eIphy1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=9e16b392-22bc-45a5-92ff-0432493f75a0",
+        "totalPoint" : 2.75
+      
+      },{
+        "age" : 648679658433,
+        "burc" : "yengec",
+        "click" : 4,
+        "count" : 2,
+        "email" : "kral_mehmettt_42@hotmail.com",
+        "gender" : "MAN",
+        "id" : "9zZdsRuqDzOk3voIPIGqGdNIbfQ2",
+        
+        "lat" : 37.927927927927925,
+        "longLat" : 32.528092862122364,
+        "name" : "Mehmet",
+        "profileImage" : "null",
+        "rate" : 6,
+        "reg_time" : 1568407669261,
+        "totalPoint" : 3
+      
+      },{
+        "age" : 724193014160,
+        "burc" : "oglak",
+        "click" : 2,
+        "count" : 2,
+        "email" : "fatihogur6576@gmail.com",
+        "gender" : "MAN",
+        "id" : "9YzwI3zKpzfODqf6RPkqt2jopSL2",
+        "name" : "fatih ",
+        "rate" : 6,
+        "reg_time" : 1569872618765,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 715433728288,
+        "burc" : "basak",
+        "click" : 3,
+        "count" : 2,
+        "email" : "kemal.ayd@outlook.com",
+        "gender" : "MAN",
+        "id" : "8u7ZAIXvyOVpdibDYqSnvHNJE6C2",
+        "lat" : 38.36036036036036,
+        "longLat" : 38.32823909530757,
+        "name" : "hakan",
+        "rate" : 6,
+        "reg_time" : 1568374533318,
+        "totalPoint" : 3
+     
+      },{
+        "age" : 648494236926,
+        "burc" : "yengec",
+        "click" : 8,
+        "count" : 4,
+        "email" : "eregon.skywalker@gmail.com",
+        "gender" : "MAN",
+        "id" : "8XExf7dptcafBd0kE14kKHcTVHJ3",
+        "lat" : 36.9009009009009,
+        "longLat" : 30.710666054188025,
+        "name" : "emir",
+        "rate" : 12,
+        "reg_time" : 1567790248215,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 810661789802,
+        "burc" : "basak",
+        "click" : 10,
+        "count" : 3,
+        "email" : "amine953306@gmail.com",
+        "gender" : "MAN",
+        "id" : "89Kfewox9DTdB9tTXhaTHwJKQI22",
+        "name" : "Ali",
+        "rate" : 8,
+        "reg_time" : 1568044193745,
+        "totalPoint" : 2.6666667461395264
+        
+      },{
+        "about" : "25 yaşındayım istanbulda yaşıyorum kayseriliyim \n",
+        "age" : 767470744528,
+        "burc" : "koc",
+        "click" : 1,
+        "count" : 2,
+        "email" : "tbalci934@gmail.com",
+        "gender" : "MAN",
+        "id" : "7cagxmf73iQ59rQF2l3rjSF2j382",
+        
+        "job" : "kabin memuru",
+        "lat" : 41.04504504504504,
+        "longLat" : 28.883545063628727,
+        "name" : "TANER",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/7cagxmf73iQ59rQF2l3rjSF2j382%2Fimages%2F1.jpg?alt=media&token=8377b1cf-b682-4259-b722-625412439b6c",
+        "rate" : 6,
+        "reg_time" : 1568312350637,
+        "school" : "Engincangüre orta okulu",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/7cagxmf73iQ59rQF2l3rjSF2j382%2Fimages%2Fthumb%2F1.jpg?alt=media&token=8287aace-0ef1-45de-abbd-4d97b830090e",
+        "totalPoint" : 3
+       
+      },{
+        "age" : 866055810930,
+        "burc" : "ikizler",
+        "click" : 7,
+        "count" : 4,
+        "email" : "47ozan47@gmail.com",
+        "gender" : "MAN",
+        "id" : "6cBhYYZ46Vf9kuqTDfG4ucJ39se2",
+        
+        "lat" : 37.189189189189186,
+        "longLat" : 40.575621039937445,
+        "name" : "ozan",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/6cBhYYZ46Vf9kuqTDfG4ucJ39se2%2Fimages%2F1.jpg?alt=media&token=e0af9c84-6a86-4693-a9ba-283c13c7a7eb",
+        "rate" : 11,
+        "reg_time" : 1568315019005,
+        "school" : "iskenderun teknik üniversitesi ",
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/6cBhYYZ46Vf9kuqTDfG4ucJ39se2%2Fimages%2Fthumb%2F1.jpg?alt=media&token=f31f006e-2c04-460d-81e2-3e5b9f66702d",
+        "totalPoint" : 2.75
+       
+      },{
+        "age" : 856487429276,
+        "burc" : "kova",
+        "click" : 1,
+        "count" : 2,
+        "email" : "sinanmertbyknacar12@gmail.com",
+        "gender" : "MAN",
+        "id" : "5uREowdk2sObCJDSogXV4dmGOCh1",
+        "name" : "Sinan Büyüknacar",
+        "rate" : 6,
+        "reg_time" : 1568506236328,
+        "totalPoint" : 3
+       
+      },{
+        "age" : 875493069810,
+        "burc" : "basak",
+        "click" : 1,
+        "count" : 2,
+        "email" : "denizgunusertan@gmail.com",
+        "gender" : "MAN",
+        "id" : "574COntZs4blGHzXoaYBKj6Z34M2",
+        "lat" : 38.37837837837838,
+        "longLat" : 27.19040609425336,
+        "name" : "Sertan",
+        "rate" : 6,
+        "reg_time" : 1568248296350,
+        "totalPoint" : 3
+      
+      },{
+        "age" : 800910427882,
+        "burc" : "boga",
+        "click" : 2,
+        "count" : 2,
+        "email" : "erkalahmetmete@gmail.com",
+        "gender" : "MAN",
+        "id" : "4yuyjlof8rZ0VOnE3ctHyO9ZZkr1",
+        "name" : "ahmet mete",
+        "rate" : 6,
+        "reg_time" : 1568747239047,
+        "totalPoint" : 3
+
+      },{
+        "age" : 742066914437,
+        "burc" : "yengec",
+        "click" : 7,
+        "count" : 3,
+        "email" : "alis_528@hotmail.com",
+        "gender" : "MAN",
+        "id" : "4iernbDLXvQKbKsVs87mkBSA1oI2",
+        "images" : [ null, {
+          "image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/4iernbDLXvQKbKsVs87mkBSA1oI2%2Fimages%2F1.jpg?alt=media&token=4c5f3c77-01ac-4b55-a3b0-dd7abec6b68c"
+        } ],
+        "name" : "Ali",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/4iernbDLXvQKbKsVs87mkBSA1oI2%2Fimages%2F1.jpg?alt=media&token=4c5f3c77-01ac-4b55-a3b0-dd7abec6b68c",
+        "rate" : 9,
+        "reg_time" : 1568050920099,
+        "totalPoint" : 3
+
+      },{
+        "age" : 804076446816,
+        "burc" : "ikizler",
+        "click" : 13,
+        "count" : 4,
+        "email" : "yesilirmakhalil@gmail.com",
+        "gender" : "MAN",
+        "id" : "4KB6f1ngiPZfugbXH9f5hMUsjHv1",
+        "images" : [ null, {
+          "image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/4KB6f1ngiPZfugbXH9f5hMUsjHv1%2Fimages%2F1.jpg?alt=media&token=cd1873ec-cbab-4631-a03d-0d604dfa86d7"
+        } ],
+        "lat" : 37.927927927927925,
+        "longLat" : 40.134732555301255,
+        "name" : "Halil",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/4KB6f1ngiPZfugbXH9f5hMUsjHv1%2Fimages%2F1.jpg?alt=media&token=cd1873ec-cbab-4631-a03d-0d604dfa86d7",
+        "rate" : 11,
+        "reg_time" : 1568025255853,
+        "totalPoint" : 2.75
+
+      },{
+        "age" : 766173337384,
+        "burc" : "koc",
+        "click" : 1,
+        "count" : 2,
+        "email" : "canxxx128@gmail.com",
+        "gender" : "MAN",
+        "id" : "2VJ8r8ypPbhhfpEaJ2opOAW5sCw1",
+
+        "lat" : 36.55855855855856,
+        "longLat" : 36.15947585459712,
+        "name" : "halef ",
+        "profileImage" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/2VJ8r8ypPbhhfpEaJ2opOAW5sCw1%2Fimages%2F1.jpg?alt=media&token=b7b2b03b-3052-4562-b2a4-0c7e66d90a99",
+        "rate" : 6,
+        "reg_time" : 1568310945426,
+        "thumb_image" : "https://firebasestorage.googleapis.com/v0/b/gargiirzn.appspot.com/o/2VJ8r8ypPbhhfpEaJ2opOAW5sCw1%2Fimages%2Fthumb%2F1.jpg?alt=media&token=8b51ee05-6648-4794-807b-3f87ea686744",
+        "totalPoint" : 3
+
+      }, {
+        "age" : 716489919167,
+        "burc" : "basak",
+        "click" : 1,
+        "count" : 2,
+        "email" : "sonsuz1993@hotmail.com",
+        "gender" : "MAN",
+        "id" : "1clkTBN1YBcoOSMsF0zRBmxW1Mu1",
+
+        "name" : "yusuf",
+        "rate" : 6,
+        "reg_time" : 1568480323115,
+        "totalPoint" : 3
+
+      },{
+        "age" : 1005477272863,
+        "burc" : "akrep",
+        "click" : 1,
+        "count" : 2,
+        "email" : "acikgozsukru211215@gmail.com",
+        "gender" : "MAN",
+        "id" : "12qzvDMPGSP7euqeZfh9ldItrVn2",
+        "lat" : 40.99099099099099,
+        "longLat" : 39.76882864047906,
+        "name" : "şükrü",
+        "rate" : 6,
+        "reg_time" : 1569064478420,
+        "totalPoint" : 3
+
+      },{
+        "age" : 777735430306,
+        "burc" : "aslan",
+        "click" : 1,
+        "count" : 2,
+        "email" : "alocan01@outlook.com",
+        "gender" : "MAN",
+        "id" : "0EspaLtRJhTTzlYvgy31Vd2J3rD3",
+        "name" : "hrn",
+        "rate" : 6,
+        "reg_time" : 1568295434446,
+        "totalPoint" : 3
+
+      }, {
+        "age" : 933772219176,
+        "burc" : "aslan",
+        "click" : 1,
+        "count" : 2,
+        "email" : "emirhan.kurt.27@outlook.com",
+        "gender" : "MAN",
+        "id" : "0Dx1YJLoPSgKp01rPrkCLP9RSdl1",
+        "lat" : 36.57657657657658,
+        "longLat" : 36.145475188587994,
+        "name" : "Emirhan ",
+        "rate" : 6,
+        "reg_time" : 1568293825787,
+        "totalPoint" : 3
+
+      }
+        ]
+}

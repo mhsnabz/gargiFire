@@ -98,5 +98,9 @@ public class LoginSignUp extends AppCompatActivity {
         Log.d(TAG, "changeTabs: ");
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.gc();
+    }
 }

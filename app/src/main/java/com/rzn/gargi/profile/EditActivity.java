@@ -337,6 +337,7 @@ public class EditActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         listener.remove();
+        System.gc();
     }
 
     public void back(View view) {

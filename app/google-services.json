@@ -1,34 +1,50 @@
 {
   "project_info": {
-    "project_number": "964554673648",
-    "firebase_url": "https://gargirznfirestore.firebaseio.com",
-    "project_id": "gargirznfirestore",
-    "storage_bucket": "gargirznfirestore.appspot.com"
+    "project_number": "496186787290",
+    "firebase_url": "https://gargiirzn.firebaseio.com",
+    "project_id": "gargiirzn",
+    "storage_bucket": "gargiirzn.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:964554673648:android:c346f23943f0c050932135",
+        "mobilesdk_app_id": "1:496186787290:android:5f98bbd8221a3e394dace3",
         "android_client_info": {
           "package_name": "com.rzn.gargi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "964554673648-a11fusgbt3n1lasp9te5msinhff5o2fe.apps.googleusercontent.com",
+          "client_id": "496186787290-q4ct86dto9efsm0gun73aqn3cp1tmkoj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rzn.gargi",
+            "certificate_hash": "4d344025f308304689e16fd156fc390d86016cfa"
+          }
+        },
+        {
+          "client_id": "496186787290-bst75qshf8av7n6ke7v61j8gu1ogl33k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rzn.gargi",
+            "certificate_hash": "91e579a3df345d1a65513984f053bec7ef3df251"
+          }
+        },
+        {
+          "client_id": "496186787290-mcvg0h0c2m0568aa9tsvjf14gr2bd78v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC7EMnNdBBlLidpYrAcRTiH47JTnphOz08"
+          "current_key": "AIzaSyCgrKKOjzGhtUgB2t2JI3VYhFnknX9VM3I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "964554673648-a11fusgbt3n1lasp9te5msinhff5o2fe.apps.googleusercontent.com",
+              "client_id": "496186787290-mcvg0h0c2m0568aa9tsvjf14gr2bd78v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

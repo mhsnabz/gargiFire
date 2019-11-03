@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:elevation="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="2dp"
+    app:cardCornerRadius="30dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+
+     >
+     <LinearLayout
+         android:weightSum="40"
+         android:orientation="horizontal"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+         <ImageButton
+             android:id="@+id/mikrofon"
+             android:background="@android:color/transparent"
+             android:src="@drawable/mikrofon"
+             android:layout_marginLeft="4dp"
+             android:layout_weight="1"
+             android:layout_gravity="center"
+             android:layout_width="40dp"
+             android:layout_height="40dp">
+         </ImageButton>
+
+         <com.google.android.material.textfield.TextInputEditText
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:layout_marginLeft="12dp"
+             android:layout_weight="38"
+             android:id="@+id/msg"
+             android:backgroundTint="@android:color/transparent"
+             android:fontFamily="@font/nunito_sans_semibold"
+             android:hint="@string/yeni_bir_mesaj_yaz"
+             android:textSize="14dp"></com.google.android.material.textfield.TextInputEditText>
+
+         <com.github.clans.fab.FloatingActionButton
+             android:layout_weight="1"
+             app:fab_size="mini"
+             android:id="@+id/send"
+             android:scaleType="fitXY"
+             app:fab_colorNormal="@color/colorAccent"
+             android:src="@drawable/ic_send_black_24dp"
+             android:layout_gravity="center"
+             android:layout_width="40dp"
+             android:layout_height="40dp">
+         </com.github.clans.fab.FloatingActionButton>
+     </LinearLayout>
+ </RelativeLayout>
+</androidx.cardview.widget.CardView>
