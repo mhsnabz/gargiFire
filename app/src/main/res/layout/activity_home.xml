@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.HomeActivity">
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+      <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relLayNavi"
@@ -15,34 +20,49 @@
             android:layout_height="match_parent"
             >
             <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/listRel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
                 >
-                <Button
-                    android:textColor="#fff"
-                    android:textStyle="bold"
-                    android:textSize="16dp"
-                    android:background="@drawable/button_back"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:id="@+id/startMacth"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:text="Yeni Bir Arkadaş Ara"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/nunito_sans_semibold"
 
-                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="8dp"
-                    android:layout_below="@id/startMacth"
                     android:id="@+id/macth_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                 </androidx.recyclerview.widget.RecyclerView>
+            </RelativeLayout>
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rippleBackground"
+                >
+                <com.skyfishjy.library.RippleBackground
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content"
+                app:rb_color="@color/colorAccent"
+                app:rb_radius="32dp"
+                app:rb_rippleAmount="4"
+                app:rb_duration="3000"
+                app:rb_scale="6">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/centerImage"
+                    android:src="@drawable/looking_for"
+
+                    />
+            </com.skyfishjy.library.RippleBackground>
+
             </RelativeLayout>
         </RelativeLayout>
 
@@ -55,4 +75,6 @@
         >
         <include layout="@layout/bottom_nav_layout"  ></include>
     </RelativeLayout>
-</RelativeLayout>
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_marginLeft="4dp"
+    android:layout_marginRight="12dp"
+    app:layout_goneMarginLeft="12dp"
+    android:background="#fff"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_centerVertical="true"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/profile_image"
+
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/upload_place_holder"
+            ></de.hdodenhof.circleimageview.CircleImageView>
+        <LinearLayout
+            android:id="@+id/linName"
+            android:layout_toEndOf="@id/profile_image"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/name"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:fontFamily="@font/nunito_sans_semibold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            <TextView
+                android:id="@+id/time"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:textSize="10sp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+        </LinearLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/relBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/badge"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            >
+            <TextView
+                android:id="@+id/tv_badge"
+                android:padding="4dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:fontFamily="@font/nunito_sans_semibold"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

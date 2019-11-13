@@ -55,7 +55,7 @@ public class setting_password extends AppCompatActivity {
         }
         if (_newPassAgain.isEmpty())
         {
-            newPassAgain.setError("Lütfen Yeni Şifrenizi Tekrar Giriniz ");
+            newPassAgain.setError(getString(R.string.sifrenizi_tekrar_giriniz));
             newPassAgain.requestFocus();
             return;
         }

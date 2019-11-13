@@ -92,6 +92,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
                     i.putExtra("gender","MAN");
                     dialog.dismiss();
                     context.startActivity(i);
+
                 }
 
             }

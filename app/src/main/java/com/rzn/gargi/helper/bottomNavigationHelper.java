@@ -26,7 +26,8 @@ public class bottomNavigationHelper {
                        home.putExtra("gender",gender);
                         home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(home);
+
+                       // context.startActivity(home);
 
                         break;
 
@@ -35,7 +36,8 @@ public class bottomNavigationHelper {
                       topFace.putExtra("gender",gender);
                         topFace.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         topFace.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(topFace);
+
+                       // context.startActivity(topFace);
 
                         break;
                     case R.id.chat:
@@ -43,7 +45,7 @@ public class bottomNavigationHelper {
                        chat.putExtra("gender",gender);
                         chat.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         chat.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(chat);
+                       // context.startActivity(chat);
 
                         break;
                     case R.id.profile:
@@ -51,7 +53,7 @@ public class bottomNavigationHelper {
                         profile.putExtra("gender",gender);
                         profile.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         profile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(profile);
+                       // context.startActivity(profile);
                         break;
 
                 }

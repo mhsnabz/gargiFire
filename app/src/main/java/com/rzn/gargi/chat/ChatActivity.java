@@ -1,13 +1,21 @@
 package com.rzn.gargi.chat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,14 +29,29 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.rzn.gargi.R;
+import com.rzn.gargi.helper.CallBack;
 import com.rzn.gargi.helper.ChatFragmentAdapter;
 import com.rzn.gargi.helper.bottomNavigationHelper;
 import com.rzn.gargi.home.HomeActivity;
+import com.rzn.gargi.profile.ProfileActivity;
+import com.rzn.gargi.topface.TopFaceActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import q.rorbin.badgeview.QBadgeView;
 
 public class ChatActivity extends AppCompatActivity {
     private ViewPager mainViewPager;
@@ -37,6 +60,7 @@ public class ChatActivity extends AppCompatActivity {
     private Dialog dialog;
     private String gender;
     private int count=0;
+    CoordinatorLayout coordinatorLay;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     String currentUser=auth.getUid();
@@ -45,12 +69,11 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         gender =getIntent().getStringExtra("gender");
-
+        coordinatorLay=(CoordinatorLayout)findViewById(R.id.coordinatorLay);
         dialog= new Dialog(this);
 
-        if (gender.isEmpty()){
+        if (gender==null){
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("allUser").document(currentUser);
             ref.get().addOnSuccessListener(ChatActivity.this, new OnSuccessListener<DocumentSnapshot>() {
@@ -112,6 +135,12 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     private void changeTabs(int i)
     {
         String TAG ="changeTabsFunc";
@@ -134,17 +163,31 @@ public class ChatActivity extends AppCompatActivity {
 
         Log.d(TAG, "changeTabs: ");
     }
+    List<String> list ;
 
     @Override
     protected void onStart() {
         super.onStart();
-        Intent i = new Intent(ChatActivity.this,OneToOneChat.class);
-        startActivity(i);
-    }
-
-    private void setNavigation(String gender){
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
+        final QBadgeView view1 = (QBadgeView) new QBadgeView(ChatActivity.this);
+        final QBadgeView view2 = (QBadgeView) new QBadgeView(ChatActivity.this);
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) view.getChildAt(0);
+        Transition slide = new Slide(Gravity.RIGHT);
+        slide.excludeTarget(bottomNavigationMenuView, true);
+        final View v = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+
+        list= new ArrayList<>();
+        final QBadgeView badge = new QBadgeView(ChatActivity.this);
+      //  badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true).setBadgeBackgroundColor(Color.RED).setBadgeNumber(documentSnapshot.getData().size());
+
+
+    }
+    private void setNavigation(final String gender){
+        BottomNavigationView view;
+        view=(BottomNavigationView)findViewById(R.id.navigationController);
+
 
         bottomNavigationHelper.enableNavigation(ChatActivity.this,view,gender);
         Menu menu = view.getMenu();
@@ -153,8 +196,52 @@ public class ChatActivity extends AppCompatActivity {
 
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) view.getChildAt(0);
-        final View v = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+        Transition slide = new Slide(Gravity.RIGHT);
+        slide.excludeTarget(bottomNavigationMenuView, true);
+        getWindow().setEnterTransition(slide);
+        final View v1 = bottomNavigationMenuView.getChildAt(0); // number of menu from left
+        final View v2 = bottomNavigationMenuView.getChildAt(1); // number of menu from left
+        final View v3 = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+        final View v4 = bottomNavigationMenuView.getChildAt(3); // number of menu from left
 
+
+
+
+
+        v1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatActivity.this,HomeActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+
+                overridePendingTransition(R.anim.slide_in_left,0);
+
+            }
+        });
+        v2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatActivity.this, TopFaceActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_left,0);
+
+            }
+        });
+        v4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatActivity.this, ProfileActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+            }
+        });
 
     }
     @Override
@@ -174,5 +261,10 @@ public class ChatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.gc();
+    }
+
+
+    private void hasBadge(final CallBack<Boolean> has){
+
     }
 }

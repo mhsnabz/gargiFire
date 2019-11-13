@@ -480,8 +480,11 @@ public class EditProfileActivity extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.putExtra("gender",gender);
+
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.slide_in_left,0);
+
     }
 
     @Override

@@ -17,9 +17,13 @@ import android.widget.Button;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -115,9 +119,30 @@ public class LoginFragment extends Fragment {
                         progressDialog.cancel();
                         Log.d("task is succes", "onComplete:  giriş yapılmadı " );
                     }else{
-                        Intent i = new Intent(getContext(), HomeActivity.class);
-                        startActivity(i);
-                        getActivity().finish();
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        DocumentReference ref =
+                                db
+                                .collection("allUser")
+                                .document(auth.getUid());
+                        ref.get().addOnCompleteListener( new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()){
+                                    String gender = task.getResult().getString("gender");
+                                    Intent i = new Intent(getContext(), HomeActivity.class);
+                                    i.putExtra("gender",gender);
+                                    startActivity(i);
+                                    getActivity().finish();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Crashlytics.log(e.toString());
+                            }
+                        });
+                       // i.putExtra("gender",)
+
                     }
                        /* HashMap<String , Object > tokenID = new HashMap<>();
                         HashMap<String , Object > userID = new HashMap<>();

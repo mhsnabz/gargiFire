@@ -18,13 +18,13 @@
             android:id="@+id/msg"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="2dp"
-            android:padding="2dp"
             android:textColor="#fff"
             android:fontFamily="@font/nunito_sans_semibold"
-            android:textSize="12sp"
+            android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="hello\nnaber nasılsun \nnerdesin">
+            android:text="@string/hello_blank_fragment"
+            >
 
         </TextView>
         <TextView

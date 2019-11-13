@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import com.rzn.gargi.chat.ChatActivity;
 import com.rzn.gargi.helper.TopFaceFragmentPagerAdapter;
 import com.rzn.gargi.helper.bottomNavigationHelper;
 import com.rzn.gargi.home.HomeActivity;
+import com.rzn.gargi.profile.ProfileActivity;
 
 public class TopFaceActivity extends AppCompatActivity {
 
@@ -115,7 +117,7 @@ public class TopFaceActivity extends AppCompatActivity {
 
 
 
-    private void setNavigation(String gender){
+    private void setNavigation(final String gender){
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
 
@@ -127,6 +129,48 @@ public class TopFaceActivity extends AppCompatActivity {
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) view.getChildAt(0);
         final View v = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+
+        final View v1 = bottomNavigationMenuView.getChildAt(0); // number of menu from left
+        final View v2 = bottomNavigationMenuView.getChildAt(1); // number of menu from left
+        final View v3 = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+        final View v4 = bottomNavigationMenuView.getChildAt(3); // number of menu from left
+        v1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TopFaceActivity.this,HomeActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+
+                overridePendingTransition(R.anim.slide_in_left,0);
+
+
+            }
+        });
+        v3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TopFaceActivity.this, ChatActivity.class);
+                i.putExtra("gender",gender);
+                startActivity(i);
+
+
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+            }
+        });
+        v4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TopFaceActivity.this, ProfileActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+
+            }
+        });
 
 
     }

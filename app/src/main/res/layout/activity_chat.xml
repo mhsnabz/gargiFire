@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/coordinatorLayoutLay"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,26 +9,31 @@
 
     tools:context=".chat.ChatActivity">
     <RelativeLayout
-        android:id="@+id/relLayTap"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/relLayTap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <include layout="@layout/chat_tabbar"></include>
+            <include layout="@layout/chat_tabbar"></include>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_below="@id/relLayTap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/relLayNavi"
+            >
+            <include layout="@layout/center_view_pager"  ></include>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/relLayNavi"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            >
+            <include layout="@layout/bottom_nav_layout"  ></include>
+        </RelativeLayout>
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_below="@id/relLayTap"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/relLayNavi"
-        >
-        <include layout="@layout/center_view_pager"  ></include>
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/relLayNavi"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        >
-        <include layout="@layout/bottom_nav_layout"  ></include>
-    </RelativeLayout>
+
 </RelativeLayout>

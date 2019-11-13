@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/profileImage"
+            />
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/profileImage"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:layout_marginLeft="12dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/nunito_sans_semibold"
+            />
+        <ImageView
+            android:layout_marginLeft="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/verified_white"
+            android:layout_centerVertical="true"
+            android:id="@+id/verified"
+            android:layout_toEndOf="@id/username"
+            />
+        <ImageButton
+            android:layout_centerVertical="true"
+            android:id="@+id/options"
+            android:background="@android:color/transparent"
+            android:layout_width="16dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/dots"
+            android:scaleType="centerCrop"
+            />
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/options"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:layout_marginRight="20dp"
+            />
+    </RelativeLayout>
+</RelativeLayout>

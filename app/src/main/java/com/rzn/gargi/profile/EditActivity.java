@@ -96,6 +96,8 @@ public class EditActivity extends AppCompatActivity {
                 i.putExtra("gender",getIntent().getStringExtra("gender"));
                 startActivity(i);
                 wating.dismiss();
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
             }
         });
         facebook.setOnClickListener(new View.OnClickListener() {
@@ -345,5 +347,7 @@ public class EditActivity extends AppCompatActivity {
         i.putExtra("gender",gender);
         startActivity(i);
         finish();
+        overridePendingTransition(R.anim.slide_in_left,0);
+
     }
 }

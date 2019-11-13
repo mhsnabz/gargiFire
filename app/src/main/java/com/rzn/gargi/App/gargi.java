@@ -6,100 +6,168 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.helper.CallBack;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 public class gargi extends Application {
 
     @Override
     public void onCreate() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttp3Downloader(this,Integer.MAX_VALUE));
+        Picasso built = builder.build();
+        built.setIndicatorsEnabled(true);
+        built.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(built);
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null){
-            FirebaseAuth auth = FirebaseAuth.getInstance();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+                if (user.getUid()!=null){
 
-            db.collection("allUser")
-                    .document(auth.getUid()).addSnapshotListener( new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    String gender = documentSnapshot.getString("gender");
-                    if (!gender.isEmpty()){
-                        if (gender.equals("MAN")){
-                            Log.d("genderApp", "onEvent: "+gender);
-                            checkCount(gender, new CallBack<Boolean>() {
-                                @Override
-                                public void returnFalse(Boolean _false) {
-                                    Log.d("genderApp", "onEvent: "+"has not limit");
+                    db.collection("allUser")
+                            .document(user.getUid()).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                            final String gender = documentSnapshot.getString("gender");
+                            if (!gender.isEmpty()){
 
-                                }
+                                    Log.d("genderApp", "onEvent: "+gender);
+                                    checkCount(gender, new CallBack<Boolean>() {
+                                        @Override
+                                        public void returnFalse(Boolean _false) {
+                                            Log.d("genderApp", "onEvent: "+"has not limit");
+                                        }
 
-                                @Override
-                                public void returnTrue(Boolean _true) {
-                                    Log.d("genderApp", "onEvent: "+"has  limit");
+                                        @Override
+                                        public void returnTrue(Boolean _true) {
+                                            Log.d("genderApp", "onEvent: "+"has  limit");
+                                            removeFromMatch(gender,user.getUid());
 
-                                }
-                            });
-                        }else if (gender.equals("WOMAN")){
-                            Log.d("genderApp", "onEvent: "+gender);
 
+                                        }
+                                    },user.getUid());
+
+                            }
                         }
-                    }
+                    });
                 }
-            });
+
         }
+        //set();
         super.onCreate();
     }
 
-    private void checkCount(String gender, final CallBack<Boolean> _return ){
+
+    void checkCount(@NotNull final String gender, final CallBack<Boolean> _return, final String currentUser){
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        if (gender.equals("MAN")){
-            db.collection("chat")
-                    .document("messegeTime")
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+        CollectionReference ref = db.collection("msgList")
+                .document(currentUser)
+                .collection(currentUser);
+        chatSize = ref.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                            if (documentSnapshot.exists()){
-                                long count = documentSnapshot.getLong("count");
-                                if (count>=2){
-                                    _return.returnTrue(true);
-                                }else _return.returnFalse(false);
-                            }else _return.returnFalse(false);
+                Log.d("chatSize", "onEvent: " + queryDocumentSnapshots.getDocuments().size());
+                if (gender.equals("MAN")){
+                    if (queryDocumentSnapshots.getDocuments().size()>=2){
+                        _return.returnTrue(true);
 
-                        }
-                    });
-        }else if (gender.equals("WOMAN")){
-            db.collection("chat")
-                    .document("messegeTime")
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    }else{
+                        _return.returnFalse(false);
+                        getUserInfo(currentUser,queryDocumentSnapshots.getDocuments().size());
 
-                            if (documentSnapshot.exists()){
-                                long count = documentSnapshot.getLong("count");
-                                if (count>=2){
-                                    _return.returnTrue(true);
-                                }else _return.returnFalse(false);
-                            }else _return.returnFalse(false);
+                    }
+                }else if (gender.equals("WOMAN")){
+                    if (queryDocumentSnapshots.getDocuments().size()>=6){
 
-                        }
-                    });
-        }
+                        _return.returnTrue(true);
+
+                    }else {
+                        _return.returnFalse(false);
+                        getUserInfo(currentUser,queryDocumentSnapshots.getDocuments().size());
+
+                    }
+                }
+
+            }
+        });
+
+
 
     }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        chatSize.remove();
+    }
+    ListenerRegistration chatSize;
+
+   private void getUserInfo(final String userId, final int size){
+       final Map<String,Object> map = new HashMap<>();
+
+       FirebaseFirestore db = FirebaseFirestore.getInstance();
+      db.collection("allUser")
+                .document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                 @Override
+                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                     if (task.isSuccessful()){
+                            long age = task.getResult().getLong("age");
+                            String gender = task.getResult().getString("gender");
+                            String burc= task.getResult().getString("burc");
+                            map.put("age",age);
+                            map.put("burc",burc );
+                            map.put("chatSize",size);
+                            addOnChat(gender,userId,map);
+                     }
+
+                 }
+             });
+   }
+    Task<Void> db;
+   private void addOnChat(String gender , String userID , Map<String, Object> map){
+        db = FirebaseFirestore.getInstance()
+               .collection(gender+"match")
+               .document(userID)
+               .set(map, SetOptions.merge());
+
+   }
+
+   private void removeFromMatch(String gender , String userId){
+       FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+       Task<Void> ref = db.collection(gender+"match")
+               .document(userId).delete();
+
+
+   }
 
 }

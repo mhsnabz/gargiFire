@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.marcoscg.easylicensesdialog.EasyLicensesDialogCompat;
 import com.rzn.gargi.Log_Sign.LoginSignUp;
 import com.rzn.gargi.R;
+import com.rzn.gargi.SplashScreen.SplashScreen;
+import com.rzn.gargi.profile.ProfileActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ImageButton veriftyImage;
@@ -87,7 +89,8 @@ public class SettingActivity extends AppCompatActivity {
                         SettingActivity.this,
                         new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
                 ).signOut();
-                Intent intent = new Intent(SettingActivity.this, LoginSignUp.class);
+                Intent intent = new Intent(SettingActivity.this, SplashScreen.class);
+
                 startActivity(intent);
                 finish();
             }
@@ -107,12 +110,18 @@ public class SettingActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void back(View view) {
+
+
         finish();
+
+
     }
     public void aboutApp(View view)
     {
         Intent i = new Intent(SettingActivity.this,aboutapp.class);
         startActivity(i);
+
+
     }
 
     public void helpAndSupport(View view) {

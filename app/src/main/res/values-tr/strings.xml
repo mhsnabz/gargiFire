@@ -107,5 +107,6 @@
     <string name="yeterince_eslesmen_var">Yeterince Eşleşmen Var</string>
     <string name="resim_yukleniyor">RESİM YUKLENİYOR</string>
     <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>
+    <string name="nev">Yeni</string>
 
 </resources>

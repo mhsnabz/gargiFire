@@ -24,7 +24,6 @@
     <string name="sohbet">Sohbet </string>
     <string name="profil">Profil </string>
     <string name="anladim">ANLADIM </string>
-
     <string name="kendinden_bahset_bize">Kendinden Bahset Bize </string>
     <string name="okudugun_okul">Okuduğun Okul </string>
     <string name="belki_arkadaslarinla_karsilasirsin">Belki Arkadaşlarınla Karşılaşırsın </string>
@@ -121,6 +120,7 @@
     <string name="yeterince_eslesmen_var">Yeterince Eşleşmen Var</string>
     <string name="resim_yukleniyor">RESİM YUKLENİYOR</string>
     <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>
+    <string name="nev">Yeni</string>
 
 
 </resources>

@@ -46,6 +46,8 @@ import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.helper.Shard;
 import com.rzn.gargi.helper.UserProfileClass;
 import com.rzn.gargi.helper.bottomNavigationHelper;
+import com.rzn.gargi.home.HomeActivity;
+import com.rzn.gargi.topface.TopFaceActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -87,14 +89,14 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         rates = new ArrayList<>();
         gender = getIntent().getStringExtra("gender");
-        if (gender.isEmpty()){
+        if (gender==null){
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("allUser").document(currentUser);
             ref.get().addOnSuccessListener(ProfileActivity.this, new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot!=null){
-                        String gender = documentSnapshot.getString("gender");
+                         gender = documentSnapshot.getString("gender");
                         setNavigation(gender);
 
                     }
@@ -128,6 +130,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 startActivity(i);
                 wating.dismiss();
+                overridePendingTransition(R.anim.slide_in_left,0);
+
 
             }
         });
@@ -137,7 +141,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(ProfileActivity.this,EditActivity.class);
                 i.putExtra("gender",gender);
+
                 startActivity(i);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
 
             }
         });
@@ -155,7 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    private void setNavigation(String  gender){
+    private void setNavigation(final String  gender){
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
 
@@ -167,6 +174,42 @@ public class ProfileActivity extends AppCompatActivity {
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) view.getChildAt(0);
         final View v = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+        final View v1 = bottomNavigationMenuView.getChildAt(0); // number of menu from left
+        final View v2 = bottomNavigationMenuView.getChildAt(1); // number of menu from left
+        final View v3 = bottomNavigationMenuView.getChildAt(2); // number of menu from left
+        final View v4 = bottomNavigationMenuView.getChildAt(3); // number of menu from left
+        v1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, HomeActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_left,0);
+
+
+            }
+        });
+        v2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, TopFaceActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_left,0);
+            }
+        });
+        v3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, ChatActivity.class);
+                i.putExtra("gender",gender);
+
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in_left,0);
+            }
+        });
 
 
     }
