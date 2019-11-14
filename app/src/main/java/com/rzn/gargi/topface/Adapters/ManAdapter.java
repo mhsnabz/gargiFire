@@ -93,6 +93,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
                     dialog.dismiss();
                     context.startActivity(i);
 
+
                 }
 
             }
@@ -167,7 +168,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
             final ProgressBar loading = (ProgressBar)view.findViewById(R.id.loading);
 
             if (!_image.isEmpty()&&_image!=null){
-                Picasso.get().load(_image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.upload_place_holder)
+                Picasso.get().load(_image).config(Bitmap.Config.RGB_565)
                         .into(image, new Callback() {
                             @Override
                             public void onSuccess() {
@@ -179,7 +180,8 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
 
                             }
                         });
-            }else {
+            }
+            else {
                 image.setImageResource(R.drawable.upload_place_holder);
                 loading.setVisibility(View.GONE);
             }

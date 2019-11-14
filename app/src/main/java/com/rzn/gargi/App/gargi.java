@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -22,13 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.helper.CallBack;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -140,10 +141,14 @@ public class gargi extends Application {
                  @Override
                  public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                      if (task.isSuccessful()){
-                            long age = task.getResult().getLong("age");
+                         if (task.getResult().getLong("age")!=null){
+                             long age = task.getResult().getLong("age");
+                             map.put("age",age);
+
+
+                         }
                             String gender = task.getResult().getString("gender");
                             String burc= task.getResult().getString("burc");
-                            map.put("age",age);
                             map.put("burc",burc );
                             map.put("chatSize",size);
                             addOnChat(gender,userId,map);
@@ -161,6 +166,20 @@ public class gargi extends Application {
 
    }
 
+   private void getUser(){
+       FirebaseFirestore db = FirebaseFirestore.getInstance();
+       CollectionReference ref = db.collection("MAN");
+       ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+           @Override
+           public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            for (DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()){
+                getUserInfo(dc.getId(),0);
+                Log.d("userId", "onSuccess: "+dc.getId());
+            }
+           }
+       });
+
+   }
    private void removeFromMatch(String gender , String userId){
        FirebaseFirestore db = FirebaseFirestore.getInstance();
 

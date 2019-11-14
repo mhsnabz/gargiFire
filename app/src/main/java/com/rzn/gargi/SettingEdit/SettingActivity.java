@@ -89,7 +89,7 @@ public class SettingActivity extends AppCompatActivity {
                         SettingActivity.this,
                         new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
                 ).signOut();
-                Intent intent = new Intent(SettingActivity.this, SplashScreen.class);
+                Intent intent = new Intent(SettingActivity.this, LoginSignUp.class);
 
                 startActivity(intent);
                 finish();

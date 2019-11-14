@@ -587,11 +587,13 @@ public class HomeActivity extends AppCompatActivity {
                       }
                       else if (gender.equals("WOMAN")){
                           if (size>=6){
-                              rippleBackground.setVisibility(View.VISIBLE);
-                              relLayList.setVisibility(View.GONE);
-                          }else {
                               rippleBackground.setVisibility(View.GONE);
                               relLayList.setVisibility(View.VISIBLE);
+                          }else {
+                              rippleBackground.setVisibility(View.VISIBLE);
+                              relLayList.setVisibility(View.GONE);
+                              setCenterImage();
+                              startAnimation();
                           }
                       }
 
@@ -717,6 +719,59 @@ public class HomeActivity extends AppCompatActivity {
                     });
 
                 }
+                else if (gender.equals("WOMAN")){
+                    Query ref;
+                    if (lastResult==null){
+                        ref = db.collection("MAN"+"match").limit(3)
+                                ;
+                    }
+
+                    else {
+                        ref = db.collection("MAN"+"match")
+                                 .startAfter(lastResult);
+                    }
+                    final Task<QuerySnapshot> task = ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
+
+                            for (final DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()) {
+                                chekcAfterMatchLimit(currentUser, new CallBack<Boolean>() {
+                                    @Override
+                                    public void returnFalse(Boolean _false) {
+                                        isExist(currentUser, dc.getId(), new CallBack<Boolean>() {
+                                            @Override
+                                            public void returnFalse(Boolean _false) {
+                                                setMsgList(currentUser, dc.getId());
+
+                                                lastResult = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                                            }
+
+                                            @Override
+                                            public void returnTrue(Boolean _true) {
+                                                return;
+                                            }
+                                        });
+
+
+                                    }
+
+                                    @Override
+                                    public void returnTrue(Boolean _true) {
+                                        return;
+                                    }
+                                });
+                                break;
+                            }
+
+                        }
+                    }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Crashlytics.logException(e);
+                        }
+                    });
+
+                }
             }
 
             @Override
@@ -765,6 +820,7 @@ public class HomeActivity extends AppCompatActivity {
                             }else if (gender.equals("WOMAN")){
                                 if (taskCount>=6){
                                     hasLimit.returnTrue(true);
+                                    return;
                                 }else hasLimit.returnFalse(true);
                             }
 
@@ -831,7 +887,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isComplete()){
-                   // setMsgList(currentUser,userId);
+                    return;
                 }
             }
         });

@@ -188,21 +188,24 @@ public class OneToOneChat extends AppCompatActivity {
                 if (documentSnapshot!=null){
                     String _name = documentSnapshot.getString("name");
                     name.setText(_name);
-                    String url = documentSnapshot.getString("thumb_image");
-                    Picasso.get().load(url)
-                            .config(Bitmap.Config.RGB_565)
-                            .placeholder(R.drawable.upload_place_holder)
-                            .into(image, new Callback() {
-                                @Override
-                                public void onSuccess() {
+                    if (!documentSnapshot.getString("thumb_image").isEmpty()){
+                        String url = documentSnapshot.getString("thumb_image");
+                        Picasso.get().load(url)
+                                .config(Bitmap.Config.RGB_565)
+                                .placeholder(R.drawable.upload_place_holder)
+                                .into(image, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onError(Exception e) {
+                                    @Override
+                                    public void onError(Exception e) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }else image.setImageResource(R.drawable.upload_place_holder);
+
                 }
             }
         }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
