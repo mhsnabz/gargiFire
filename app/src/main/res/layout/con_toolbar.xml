@@ -4,6 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
+        android:background="@color/colorAccent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <de.hdodenhof.circleimageview.CircleImageView
@@ -37,7 +38,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/options"
             android:background="@android:color/transparent"
-            android:layout_width="16dp"
+            android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="12dp"
@@ -49,6 +50,7 @@
         <TextView
             android:textColor="@color/white"
             android:id="@+id/timer"
+            android:text="11:11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@id/options"
@@ -57,5 +59,25 @@
             android:fontFamily="@font/nunito_sans_semibold"
             android:layout_marginRight="20dp"
             />
+        <ImageView
+            android:id="@+id/lock"
+            android:visibility="visible"
+            android:src="@drawable/lock"
+            android:layout_width="16sp"
+            android:layout_height="16sp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/timer"
+            android:layout_marginRight="4dp"
+            ></ImageView>
+        <ImageView
+            android:id="@+id/unlock"
+            android:visibility="gone"
+            android:src="@drawable/un_lock"
+            android:layout_width="16sp"
+            android:layout_height="16sp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/timer"
+            android:layout_marginRight="4dp"
+            ></ImageView>
     </RelativeLayout>
 </RelativeLayout>

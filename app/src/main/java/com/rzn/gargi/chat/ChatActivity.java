@@ -31,10 +31,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
@@ -168,6 +171,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //getBadgeCount();
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
         final QBadgeView view1 = (QBadgeView) new QBadgeView(ChatActivity.this);
@@ -183,6 +187,38 @@ public class ChatActivity extends AppCompatActivity {
       //  badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true).setBadgeBackgroundColor(Color.RED).setBadgeNumber(documentSnapshot.getData().size());
 
 
+    }
+
+    private void getBadgeCount(){
+        BottomNavigationView view;
+        view=(BottomNavigationView)findViewById(R.id.navigationController);
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) view.getChildAt(0);
+        final QBadgeView view1 = (QBadgeView) new QBadgeView(ChatActivity.this);
+        final QBadgeView view2 = (QBadgeView) new QBadgeView(ChatActivity.this);
+        final QBadgeView badge = new QBadgeView(ChatActivity.this);
+        final View v = bottomNavigationMenuView.getChildAt(2);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final DocumentReference ref = db.collection("badgeCount")
+               .document("badge")
+                .collection(auth.getUid())
+                .document(auth.getUid());
+
+        ref.addSnapshotListener(ChatActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+
+              //  Log.d("badgeCount--->", "onEvent: "+documentSnapshot.getData().size());
+                if (documentSnapshot.getData().size()>0)
+                    badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true).setBadgeBackgroundColor(Color.RED).setBadgeText("");
+
+                else
+
+                badge.hide(true);
+
+            }
+        });
     }
     private void setNavigation(final String gender){
         BottomNavigationView view;
@@ -203,10 +239,6 @@ public class ChatActivity extends AppCompatActivity {
         final View v2 = bottomNavigationMenuView.getChildAt(1); // number of menu from left
         final View v3 = bottomNavigationMenuView.getChildAt(2); // number of menu from left
         final View v4 = bottomNavigationMenuView.getChildAt(3); // number of menu from left
-
-
-
-
 
         v1.setOnClickListener(new View.OnClickListener() {
             @Override

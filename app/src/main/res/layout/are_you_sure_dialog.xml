@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:elevation="4dp"
+    app:cardCornerRadius="25dp"
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_margin="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/header"
+        android:text="@string/bu_sohbeti_bitirmek_istiyor_musunuz"
+        android:fontFamily="@font/nunito_sans_semibold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/header"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/yes"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/button_back"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:textColor="@color/white"
+            android:text="@string/evet"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content">
+
+        </Button>
+        <Button
+            android:id="@+id/no"
+            android:background="@drawable/button_back"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:textColor="@color/white"
+            android:text="@string/hayir"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+</RelativeLayout>
+</androidx.cardview.widget.CardView>

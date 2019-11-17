@@ -96,7 +96,6 @@ public class gargi extends Application {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                Log.d("chatSize", "onEvent: " + queryDocumentSnapshots.getDocuments().size());
                 if (gender.equals("MAN")){
                     if (queryDocumentSnapshots.getDocuments().size()>=2){
                         _return.returnTrue(true);

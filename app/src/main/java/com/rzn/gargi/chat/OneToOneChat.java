@@ -9,8 +9,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -20,6 +24,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +37,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -82,6 +88,9 @@ public class OneToOneChat extends AppCompatActivity {
     private long _time;
 
 
+    Dialog dialog_options,report_dilaog;
+    Dialog time_dialog,dialog_areYouSure ;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +102,7 @@ public class OneToOneChat extends AppCompatActivity {
         _time=getIntent().getLongExtra("timer",0);
         msgges= new ArrayList<>();
         send=(FloatingActionButton)findViewById(R.id.send);
-
+        mikrofon.setVisibility(View.GONE);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,9 +117,7 @@ public class OneToOneChat extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (count>0){
-                    mikrofon.setVisibility(View.GONE);
-                }else mikrofon.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -178,7 +185,26 @@ public class OneToOneChat extends AppCompatActivity {
         final TextView name=(TextView)findViewById(R.id.username);
         final ImageButton options =(ImageButton)findViewById(R.id.options);
         final ImageView verified =(ImageView)findViewById(R.id.verified);
+        final ImageView lock =(ImageView)findViewById(R.id.lock);
+        final ImageView unlock =(ImageView)findViewById(R.id.unlock);
+
+
         timer =(TextView)findViewById(R.id.timer);
+        dialog_options = new Dialog(this);
+        report_dilaog = new Dialog(this);
+        time_dialog= new Dialog(this);
+        dialog_areYouSure=new Dialog(this);
+
+        report_dilaog.setContentView(R.layout.report_dialog);
+        report_dilaog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog_options.setContentView(R.layout.options_dialog);
+        dialog_options.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        time_dialog.setContentView(R.layout.time_dialog);
+        time_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog_areYouSure.setContentView(R.layout.are_you_sure_dialog);
+        dialog_areYouSure.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("allUser")
                 .document(userId)
@@ -231,7 +257,116 @@ public class OneToOneChat extends AppCompatActivity {
                setOffline();
             }
         });
+
+
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog_options.show();
+                Button cancel = (Button)dialog_options.findViewById(R.id.cancel);
+                final TextView removeMatch=(TextView)dialog_options.findViewById(R.id.removeMatch);
+                TextView report =(TextView)dialog_options.findViewById(R.id.report);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog_options.dismiss();
+                    }
+                });
+
+
+                removeMatch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clickDeleteMatch(_timeLeft);
+                    }
+                });
+
+                report.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+
+                        report_dilaog.show();
+                        dialog_options.dismiss();
+
+                        TextView sahteHesap = (TextView)report_dilaog.findViewById(R.id.sahteHesap);
+                        TextView kufur = (TextView)report_dilaog.findViewById(R.id.kufur);
+                        TextView ciplaklik = (TextView)report_dilaog.findViewById(R.id.ciplaklik);
+                        Button cancel = (Button)report_dilaog.findViewById(R.id.cancel);
+
+                        sahteHesap.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
+
+                        kufur.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
+
+                        ciplaklik.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+
+
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                report_dilaog.dismiss();
+                                dialog_options.show();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+        setlock(lock,unlock,getIntent().getLongExtra("timer",0));
     }
+
+    private void setlock(final ImageView lock, final ImageView unlock, final long timer) {
+        if (timer>=(27*60000)){
+            lock.setVisibility(View.VISIBLE);
+            unlock.setVisibility(View.GONE);
+            downTimer= new CountDownTimer(timer,1000) {
+                @Override
+                public void onTick(long l) {
+                    _time = l;
+                    if (27*60000>=l){
+                        lock.setVisibility(View.GONE);
+                        unlock.setVisibility(View.VISIBLE);
+                        return;
+                    }
+
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+        }else {
+            lock.setVisibility(View.GONE);
+            unlock.setVisibility(View.VISIBLE);
+        }
+
+
+
+
+
+    }
+
     private void sendMsg(String currentUser, final String userId){
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference refSender = db.collection("msg")
@@ -265,15 +400,21 @@ public class OneToOneChat extends AppCompatActivity {
                                             .document(auth.getUid())
                                             .collection(auth.getUid())
                                             .document(userId);
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-
                                     Map<String,Object> map1 = new HashMap<>();
-                                    map.put("time", FieldValue.serverTimestamp());
-                                    ref.set(map,SetOptions.merge() ).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    map1.put("time", FieldValue.serverTimestamp());
+                                    ref.set(map1,SetOptions.merge() ).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isComplete()){
                                                 Log.d("tag", "onComplete: "+task);
+                                                DocumentReference ref = db
+                                                        .collection("msgList")
+                                                        .document(userId)
+                                                        .collection(userId)
+                                                        .document(auth.getUid());
+                                                Map<String,Object> map1 = new HashMap<>();
+                                                map1.put("time", FieldValue.serverTimestamp());
+                                                ref.set(map1,SetOptions.merge() );
                                             }
                                         }
                                     });
@@ -286,35 +427,38 @@ public class OneToOneChat extends AppCompatActivity {
         }
 
     }
-
     @Override
     protected void onStop() {
-        super.onStop();
-        msgListner.remove();
-        stopTimer();
-    }
 
+
+        super.onStop();
+        stopTimer();
+        msgListner.remove();
+    }
     @Override
     protected void onPause() {
+
+
         super.onPause();
         stopTimer();
     }
 
     @Override
     protected void onStart() {
+
         super.onStart();
         setToolbar(getIntent().getStringExtra("userId"));
         startTimer(timer);
-      setOnline();
+        setOnline();
 
       //  removeBadge();
     }
-
     @Override
     protected void onDestroy() {
+        stopTimer();
+
         super.onDestroy();
         msgListner.remove();
-        stopTimer();
 
     }
 
@@ -328,17 +472,22 @@ public class OneToOneChat extends AppCompatActivity {
     }
 
     private long _timeLeft,currentLeftTime;
-    private boolean timerRunning;
+    private boolean timerRunning,_lock=true,_unlock=false;
 
     private void startTimer(final TextView _timer){
+
+
         downTimer = new CountDownTimer(getIntent().getLongExtra("timer",0),1000) {
             @Override
             public void onTick(long l) {
                 _time = l;
                 _timeLeft=_time;
                 currentLeftTime=_time;
+                if (3*60000>=_time){
+                    _lock=false;
+                    _unlock=true;
+                }
                 updateTimeTV(_timer);
-
             }
 
             @Override
@@ -362,46 +511,68 @@ public class OneToOneChat extends AppCompatActivity {
    //     removeMatch(_time);
 
     }
+
+
     private void stopTimer(){
         downTimer.cancel();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-       final DocumentReference refCurrentUser =db.collection("msgList")
-               .document(auth.getUid())
-               .collection(auth.getUid())
-               .document(getIntent().getStringExtra("userId"))
-               ;
-        DocumentReference refUserId =db.collection("msgList")
-                .document(getIntent().getStringExtra("userId"))
-                .collection(getIntent().getStringExtra("userId"))
-                .document(auth.getUid())
-                ;
-                final Map<String,Object> timer = new HashMap<>();
-                timer.put("timer",_timeLeft);
-                refUserId.set(timer,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isComplete()){
-                            refCurrentUser.set(timer, SetOptions.merge()).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isComplete()){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                                    }
+        DocumentReference ref = db.collection("msgList")
+                .document(auth.getUid())
+                .collection(auth.getUid())
+                .document(getIntent().getStringExtra("userId"));
+        ref.get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isComplete()){
+                    if (task.getResult().get("getterUid")!=null){
+
+                        final DocumentReference refCurrentUser =db.collection("msgList")
+                                .document(auth.getUid())
+                                .collection(auth.getUid())
+                                .document(getIntent().getStringExtra("userId"));
+                        DocumentReference refUserId =db.collection("msgList")
+                                .document(getIntent().getStringExtra("userId"))
+                                .collection(getIntent().getStringExtra("userId"))
+                                .document(auth.getUid()) ;
+                        final Map<String,Object> timer = new HashMap<>();
+                        timer.put("timer",_timeLeft);
+                        refUserId.set(timer,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    refCurrentUser.set(timer, SetOptions.merge()).addOnCompleteListener( new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isComplete()){
+                                                Log.d("timerTask", "onComplete: "+"complete");
+                                            }
+                                        }
+                                    }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Crashlytics.log(e.toString());
+                                        }
+                                    });
                                 }
-                            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Crashlytics.log(e.toString());
-                                }
-                            });
-                        }
+                            }
+                        }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Crashlytics.log(e.toString());
+                            }
+                        });
                     }
-                }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Crashlytics.log(e.toString());
-                    }
-                });
+                }
+            }
+        }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Crashlytics.logException(e);
+            }
+        });
+
+
         timerRunning = false;
 
     }
@@ -440,10 +611,13 @@ public class OneToOneChat extends AppCompatActivity {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()){
                         if (task!=null){
-                            boolean isOnline = task.getResult().getBoolean("isOnline");
-                            if(isOnline){
-                                _isOnline.returnTrue(true);
+                            if (task.getResult().getBoolean("isOnline")!=null){
+                                boolean isOnline = task.getResult().getBoolean("isOnline");
+                                if(isOnline){
+                                    _isOnline.returnTrue(true);
+                                }else _isOnline.returnFalse(false);
                             }else _isOnline.returnFalse(false);
+
 
                         }
                     }
@@ -461,8 +635,9 @@ public class OneToOneChat extends AppCompatActivity {
     private void setNewBadge(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference ref = db.collection("badgeCount")
-                .document(getIntent().getStringExtra("userId"))
-
+                .document("badge")
+                .collection(getIntent().getStringExtra("userId"))
+                .document(auth.getUid())
                 .collection(auth.getUid())
                 .document();
         final Map<String,Object> mTrue = new HashMap<>();
@@ -482,30 +657,203 @@ public class OneToOneChat extends AppCompatActivity {
         });
 
     }
+    private void clickDeleteMatch(long _leftTime){
+        if (_timeLeft>=(27*60000)){
+            time_dialog.show();
+            dialog_options.dismiss();
+            TextView report = (TextView)time_dialog.findViewById(R.id.report);
+            report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    time_dialog.dismiss();
+                    report_dilaog.show();
+                    TextView sahteHesap = (TextView)report_dilaog.findViewById(R.id.sahteHesap);
+                    TextView kufur = (TextView)report_dilaog.findViewById(R.id.kufur);
+                    TextView ciplaklik = (TextView)report_dilaog.findViewById(R.id.ciplaklik);
+                    Button cancel = (Button)report_dilaog.findViewById(R.id.cancel);
 
-    private void removeMatch(long _time){
-        if (_time<=1000){
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference refCurrentUser = db.collection("msgList")
-                    .document(auth.getUid())
-                    .collection(auth.getUid())
-                    .document(getIntent().getStringExtra("userId"));
-            refCurrentUser.delete().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful())
-                        Log.d("deleteMatch", "onComplete: "+"succes");
+                    sahteHesap.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+
+                    kufur.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+
+                    ciplaklik.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            report_dilaog.dismiss();
+                            dialog_options.show();
+                        }
+                    });
                 }
-            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+
+            });
+            Button cancel = (Button)time_dialog.findViewById(R.id.cancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Crashlytics.log(e.toString());
+                public void onClick(View v) {
+                    time_dialog.dismiss();
+                    dialog_options.show();
                 }
             });
+            final TextView timer = (TextView)time_dialog.findViewById(R.id.leftTime);
+            downTimer= new CountDownTimer(_leftTime-(27*60000),1000) {
+                @Override
+                public void onTick(long l) {
+                    _time = l;
+                    currentLeftTime=_time;
+                    updateTimeTV(timer);
+                }
 
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+        }else {
+                dialog_options.dismiss();
+                dialog_areYouSure.show();
+                Button yes = (Button)dialog_areYouSure.findViewById(R.id.yes);
+                 Button no = (Button)dialog_areYouSure.findViewById(R.id.no);
+
+                 no.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         dialog_areYouSure.dismiss();
+                         dialog_options.show();
+                     }
+                 });
+
+                 yes.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                        removeMatch(getIntent().getStringExtra("userId"),auth.getUid());
+                     }
+                 });
         }
+    }
+    private void removeMatch(final String userId, final String currentUser){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final DocumentReference refCurrent = db.collection("msgList")
+                .document(currentUser)
+                .collection(currentUser)
+                .document(userId);
+        DocumentReference refUserId = db.collection("msgList")
+                .document(userId)
+                .collection(userId)
+                .document(currentUser);
+        final DocumentReference oldChatCurrentUser = db.collection("oldList")
+                .document(currentUser)
+                .collection(currentUser)
+                .document(userId);
+
+        final DocumentReference oldChatUserId = db.collection("oldList")
+                .document(userId)
+                .collection(userId)
+                .document(currentUser);
+
+
+        Map<String  , Object> mapDelete = new HashMap<>();
+        final Map<String  , Object> currentUserOldChat = new HashMap<>();
+        final Map<String  , Object> userIdOldChat = new HashMap<>();
+        currentUserOldChat.put("getterUid",currentUser);
+        currentUserOldChat.put("senderUid",userId);
+        currentUserOldChat.put("time", ServerValue.TIMESTAMP);
+        currentUserOldChat.put("isOnline",false);
+
+
+        userIdOldChat.put("getterUid",userId);
+        userIdOldChat.put("senderUid",currentUser);
+        userIdOldChat.put("time", ServerValue.TIMESTAMP);
+        userIdOldChat.put("isOnline",false);
+        mapDelete.put("getterUid",FieldValue.delete());
+        mapDelete.put("isOnline",FieldValue.delete());
+        mapDelete.put("senderUid",FieldValue.delete());
+        mapDelete.put("time",FieldValue.delete());
+        mapDelete.put("timer",FieldValue.delete());
+        refCurrent.set(mapDelete,SetOptions.merge()).addOnSuccessListener(this, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                oldChatCurrentUser.set(currentUserOldChat,SetOptions.merge())
+                        .addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isComplete()){
+                                    CollectionReference currenUserRef = db.collection("msgList")
+                                            .document(currentUser)
+                                            .collection(currentUser);
+                                    CollectionReference refUserId = db.collection("msgList")
+                                            .document(userId)
+                                            .collection(userId);
+                                    currenUserRef.document(userId).delete();
+                                    refUserId.document(currentUser).delete();
+                                    Intent i = new Intent(OneToOneChat.this,ChatActivity.class);
+                                    i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }
+                        }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Crashlytics.logException(e);
+                    }
+                });
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Crashlytics.logException(e);
+            }
+        });
+
+
+        refUserId.set(mapDelete,SetOptions.merge())
+                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        oldChatUserId.set(userIdOldChat,SetOptions.merge())
+                                .addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isComplete()){
+                                            Log.d("removeMach", "onComplete: "+"task is succes");
+                                        }
+                                    }
+                                }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                    Crashlytics.logException(e);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            Crashlytics.logException(e);
+            }
+        });
 
     }
+
 
 
 

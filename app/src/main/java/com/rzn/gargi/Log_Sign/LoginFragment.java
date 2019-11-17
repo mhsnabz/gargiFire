@@ -14,13 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -44,6 +54,11 @@ public class LoginFragment extends Fragment {
     String _gender;
     View rootView;
     private FirebaseFirestore firebaseFirestore;
+    LoginButton fbLoginButton;
+
+    private static final String TAG = "FacebookLogin";
+    private CallbackManager mCallbackManager;
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -55,9 +70,34 @@ public class LoginFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
        firebaseFirestore =FirebaseFirestore.getInstance();
         auth= FirebaseAuth.getInstance();
-
+        mCallbackManager = CallbackManager.Factory.create();
         email=(MaterialEditText)rootView.findViewById(R.id.email);
         password=(MaterialEditText)rootView.findViewById(R.id.password);
+        fbLoginButton=(LoginButton)rootView.findViewById(R.id.login_button);
+        fbLoginButton.setPermissions("email","public_profile","user_gender"," birthday");
+        fbLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                // [START_EXCLUDE]
+                updateUI(null);
+                // [END_EXCLUDE]
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                // [START_EXCLUDE]
+                updateUI(null);
+                // [END_EXCLUDE]
+            }
+        });
         loginButton =(Button)rootView.findViewById(R.id.login_click);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +110,51 @@ public class LoginFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
 
         return rootView;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+    private void updateUI(FirebaseUser user) {
+        if (user!=null){
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+        }
+    }
+
+    private void handleFacebookAccessToken(final AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+        // [START_EXCLUDE silent]
+
+        // [END_EXCLUDE]
+
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+
+                            FirebaseUser user = auth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getContext(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // [START_EXCLUDE]
+
+                        // [END_EXCLUDE]
+                    }
+                });
     }
 
     private void loginFonk(MaterialEditText _email, MaterialEditText _password) {
@@ -144,23 +229,6 @@ public class LoginFragment extends Fragment {
                        // i.putExtra("gender",)
 
                     }
-                       /* HashMap<String , Object > tokenID = new HashMap<>();
-                        HashMap<String , Object > userID = new HashMap<>();
-                        HashMap<String , Object > node = new HashMap<>();
-                        tokenID.put("tokenId",tokenId);
-                        userID.put(auth.getUid(),tokenId);
-                        node.put("tokenId",userID);
-                        firebaseFirestore.collection("user").document("tokenId")
-                                .set(userID).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    Log.d("", "onComplete: "+"tamama");
-                                }
-                            }
-                        });
-
-                    }*/
                 }
             });
 
@@ -169,4 +237,10 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        updateUI(currentUser);
+    }
 }

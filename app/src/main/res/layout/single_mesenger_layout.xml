@@ -18,7 +18,6 @@
             android:id="@+id/profile_image"
 
             android:layout_marginLeft="8dp"
-            android:src="@drawable/upload_place_holder"
             ></de.hdodenhof.circleimageview.CircleImageView>
         <LinearLayout
             android:id="@+id/linName"

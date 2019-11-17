@@ -173,7 +173,7 @@ public class Messege extends Fragment {
                             Picasso.get().load(image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.upload_place_holder).resize(128,128)
                                     .memoryPolicy(MemoryPolicy.NO_STORE)
                                     .into(thumb_image);
-                        }
+                        }else thumb_image.setImageResource(R.drawable.upload_place_holder);
 
                         name.setText(_name);
                     }
@@ -229,8 +229,9 @@ public class Messege extends Fragment {
                 final RelativeLayout relBadge=(RelativeLayout)itemView.findViewById(R.id.relBadge);
                 final TextView tv_badge=(TextView) itemView.findViewById(R.id.tv_badge);
                     Query ref = FirebaseFirestore.getInstance().collection("badgeCount")
-                            .document(auth.getUid())
-                            .collection(userId).whereEqualTo("hasBadge",true);
+                            .document("badge")
+                            .collection(auth.getUid())
+                            .document(auth.getUid()).collection(userId).whereEqualTo("hasBadge",true);
                     ref.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot doc, @Nullable FirebaseFirestoreException e) {
@@ -246,9 +247,10 @@ public class Messege extends Fragment {
             }
             public void removeBadge(final String userId){
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                final Query ref = db.collection("badgeCount")
-                        .document(auth.getUid()).collection(userId);
-
+                Query ref = FirebaseFirestore.getInstance().collection("badgeCount")
+                        .document("badge")
+                        .collection(auth.getUid())
+                        .document(userId).collection(userId);
                 ref.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -276,11 +278,15 @@ public class Messege extends Fragment {
     }
     private void deleteBadge(String id,String userId){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("hasBadge",FieldValue.delete());
         db.collection("badgeCount")
+                .document("badge")
+                .collection(auth.getUid())
                 .document(auth.getUid())
-                .collection(userId)
-                .document(id)
-                .delete();
+                .collection(userId).document(id).set(map,SetOptions.merge())
+        ;
     }
 
     @Override

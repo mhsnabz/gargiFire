@@ -3,8 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="facebook_app_id">2800820189946672</string>
-    <string name="fb_login_protocol_scheme">fb2800820189946672</string>
+
 
     <string name="library_name">DENEME</string>
     <string name="about_text">DENEME</string>
@@ -121,6 +120,9 @@
     <string name="resim_yukleniyor">RESİM YUKLENİYOR</string>
     <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>
     <string name="nev">Yeni</string>
+
+    <string name="facebook_app_id">2326447654262106</string>
+    <string name="fb_login_protocol_scheme">fb2326447654262106</string>
 
 
 </resources>

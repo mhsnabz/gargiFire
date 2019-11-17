@@ -55,8 +55,10 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.chat.ChatActivity;
+import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.CallBack;
 import com.rzn.gargi.helper.CallBackLimit;
 import com.rzn.gargi.helper.bottomNavigationHelper;
@@ -75,7 +77,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import im.delight.android.location.SimpleLocation;
@@ -87,8 +91,12 @@ public class HomeActivity extends AppCompatActivity {
      CoordinatorLayout coordinatorLayoutLay;
     String currentUser=auth.getUid();
     String gender;
+    RippleBackground rippleBackground;
     private Dialog noOneIsExist;
-
+    private long manSize,womanSize;
+    int result=0;
+    List<String> userID;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean mLocationPermissionGranted = false;
     public static final int ERROR_DIALOG_REQUEST = 9001;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9002;
@@ -101,14 +109,19 @@ public class HomeActivity extends AppCompatActivity {
         checkMapServices();
         noOneIsExist=new Dialog(this);
         coordinatorLayoutLay=(CoordinatorLayout)findViewById(R.id.coordinatorLay);
+         rippleBackground=(RippleBackground)findViewById(R.id.content);
         if (!mLocation.hasLocationEnabled()) {
             SimpleLocation.openSettings(this);
         }
 
 
+
+
         gender = getIntent().getStringExtra("gender");
+
+
+
         if (gender==null){
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("allUser").document(currentUser);
             ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -116,6 +129,28 @@ public class HomeActivity extends AppCompatActivity {
                     if (documentSnapshot!=null){
                         String gender = documentSnapshot.getString("gender");
                         setNavigation(gender);
+                        if (gender.equals("MAN")){
+                            db.collection("ManSize")
+                                    .document(auth.getUid()).addSnapshotListener(HomeActivity.this, new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                    if (null != documentSnapshot){
+                                        manSize = documentSnapshot.getLong("size");
+                                    }
+                                }
+                            });
+                        }else {
+                            db.collection("WomanSize")
+                                    .document(auth.getUid()).addSnapshotListener(HomeActivity.this, new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                    if (null != documentSnapshot){
+                                        womanSize = documentSnapshot.getLong("size");
+                                    }
+                                }
+                            });
+                        }
+
 
                     }
                 }
@@ -123,21 +158,188 @@ public class HomeActivity extends AppCompatActivity {
 
         }else{
             setNavigation(gender);
+            if (gender.equals("MAN")){
+                db.collection("ManSize")
+                        .document(auth.getUid()).addSnapshotListener(HomeActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (null != documentSnapshot){
+                            manSize = documentSnapshot.getLong("size");
+                        }
+                    }
+                });
+            }else {
+                db.collection("WomanSize")
+                        .document(auth.getUid()).addSnapshotListener(HomeActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (null != documentSnapshot){
+                            womanSize = documentSnapshot.getLong("size");
+                        }
+                    }
+                });
+            }
         }
 
         if (!isNetworkConnected()){
             showSnackBar();
         }
+
+
+
+
+        final CircleImageView centerImage =(CircleImageView)findViewById(R.id.centerImage);
+        db.collection("allUser")
+                .document(auth.getUid())
+                .get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    String url = task.getResult().getString("profileImage");
+
+                    Picasso.get().load(url).resize(256,256).placeholder(R.drawable.looking_for)
+                            .into(centerImage);
+                }
+            }
+        }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Crashlytics.logException(e);
+            }
+        });
+        db.collection("MAN"+"match").addSnapshotListener(this,MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e==null){
+                    return;
+                }else {
+                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments() ){
+                        if (ds.getId().equals(auth.getUid())){
+                            centerImage.setVisibility(View.VISIBLE);
+                        }else centerImage.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        centerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if (gender.equals("MAN")){
+                    if (manSize<2){
+                        rippleBackground.startRippleAnimation();
+                        lookForNewMatchForMAN();
+
+                    }else rippleBackground.stopRippleAnimation();
+                }else if (gender.equals("WOMAN")){
+                    if (womanSize<6){
+
+                    }
+                }
+            }
+        });
+
+
+    }
+
+
+    private void lookForNewMatchForMAN() {
+        Query ref;
+        if (result==0)
+             ref = db.collection("WOMANmatch").limit(1);
+        else {
+            ref = db.collection("WOMANmatch").orderBy("age").startAfter(result).limit(1);
+        }
+            ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (queryDocumentSnapshots.getDocuments().size()>0){
+                        for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
+                            String id = ds.getId();
+                            setNewMatchForMan(id);
+                        }
+                    }
+                }
+            });
+    }
+
+    private  void setNewMatchForMan( final String userId){
+        final long[] size = {manSize};
+        final Map<String , Object> mapCurrenUser = new HashMap<>();
+        final Map<String , Object> mapUserId = new HashMap<>();
+
+        mapCurrenUser.put("isOnline",false);
+        mapCurrenUser.put("senderUid",userId);
+        mapCurrenUser.put("getterUid",currentUser);
+        mapCurrenUser.put("time", FieldValue.serverTimestamp());
+        mapCurrenUser.put("timer",1800000);
+
+        mapUserId.put("isOnline",false);
+        mapUserId.put("senderUid",currentUser);
+        mapUserId.put("getterUid",userId);
+        mapUserId.put("timer",1800000);
+        mapUserId.put("time",FieldValue.serverTimestamp());
+
+        final DocumentReference refCurrenUser = db
+                .collection("msgList")
+                .document(currentUser)
+                .collection(currentUser)
+                .document(userId);
+
+        final DocumentReference refUserId = db.collection("msgList")
+                .document(userId)
+                .collection(userId)
+                .document(currentUser);
+
+        refCurrenUser.get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isComplete()){
+
+                    if (task.getResult().get(userId)==null){
+                        if (manSize <2){
+                            refCurrenUser.set(mapCurrenUser);
+                            refUserId.set(mapUserId);
+                            manSize++;
+                            result++;
+                            updateManSize();
+
+                            if (manSize<2)
+                            lookForNewMatchForMAN();
+                            }else return;
+
+                    }else{
+                        if (manSize<2)
+                            result++;
+                        lookForNewMatchForMAN();
+
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void updateManSize(){
+        db.collection("msgList")
+                .document(auth.getUid())
+                .collection(auth.getUid()).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                long size = task.getResult().getDocuments().size();
+                manSize = size;
+                Map<String,Object> map = new HashMap<>();
+                map.put("size",size);
+                db.collection("ManSize").document(auth.getUid()).set(map, SetOptions.merge());
+            }
+        });
     }
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-
-    private void setList(){
-
-    }
     public void showSnackBar(){
          Snackbar snackbar =  Snackbar.make(coordinatorLayoutLay,getText(R.string.lutfen_internet_baglantinizi_kontrol_edin),Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.tamam), new View.OnClickListener() {
@@ -148,7 +350,6 @@ public class HomeActivity extends AppCompatActivity {
                 }).setActionTextColor(Color.RED);
         snackbar.show();
     }
-
         ///TODO: bottom navigiton setter
     private void setNavigation(final String  gender){
         BottomNavigationView view;
@@ -336,132 +537,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         mLocation.beginUpdates();
     }
-
-    private void getUser(){
-        try {
-            JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONArray m_jArry = obj.getJSONArray("WOMAN");
-            ArrayList<HashMap<String, Object>> formList = new ArrayList<HashMap<String, Object>>();
-            HashMap<String, Object> user;
-            for (int i = 0; i < m_jArry.length(); i++) {
-                JSONObject a = m_jArry.getJSONObject(i);
-                user = new HashMap<String, Object>();
-
-                final String id,name,profileImage,thumb_image,school,about,job,burc,email,gender;
-                long age=0,reg_time=0;
-                double lat=0,longLat=0,rate = 0;
-
-
-                user.put("gender","WOMAN");
-                if (a.has("name")){
-                    name = a.getString("name");
-                }else name="";
-                user.put("name",name);
-
-                if (a.has("profileImage")){
-                    profileImage = a.getString("profileImage");
-                }else profileImage="";
-                user.put("profileImage",profileImage);
-
-                if (a.has("thumb_image")){
-                    thumb_image = a.getString("thumb_image");
-                }else thumb_image="";
-                user.put("thumb_image",thumb_image);
-
-                if (a.has("school")){
-                    school = a.getString("school");
-                }else school="";
-                user.put("school",school);
-
-
-                if (a.has("about")){
-                    about = a.getString("about");
-                }else about="";
-                user.put("about",about);
-
-                if (a.has("job")){
-                    job = a.getString("job");
-                }else job="";
-                user.put("job",job);
-
-
-                if (a.has("burc")){
-                    burc = a.getString("burc");
-                }else burc="";
-                user.put("burc",burc);
-
-
-                if (a.has("email")){
-                    email = a.getString("email");
-                }else email="";
-                user.put("email",email);
-
-               int count=0,click=0,totalRate=0;
-
-                if (a.has("count")){
-                     count = Integer.parseInt(a.getString("count"));
-                }
-                user.put("count",count);
-
-                if (a.has("click")){
-                    click = Integer.parseInt(a.getString("click"));
-                }
-                if (a.has("age")){
-                    age =a.getLong("age");
-                }user.put("age",age);
-                if (a.has("reg_time")){
-                    reg_time =a.getLong("reg_time");
-                }user.put("reg_time",reg_time);
-                if (a.has("lat")){
-                    lat=a.getDouble("lat");
-                    user.put("lat",lat);
-                }else user.put("lat",lat);
-                if (a.has("longLat")){
-                    longLat=a.getDouble("longLat");
-                    user.put("longLat",longLat);
-                }else user.put("longLat",longLat);
-                user.put("click",click);
-
-
-
-
-
-                if (a.has("id")){
-                    id = a.getString("id");
-                }else id="";
-                user.put("id",id);
-
-                if (a.has("rate")){
-                    rate = a.getDouble("totalPoint");
-                }
-                user.put("rate",rate);
-
-                if (a.has("rate")){
-                    totalRate=a.getInt("rate");
-                    user.put("totalRate",totalRate);
-                }else user.put("totalRate",totalRate);
-
-                Map<String,Object> img = new HashMap<>();
-                img.put("bir",profileImage);
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("images")
-                        .document(id)
-                        .set(img).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                            Log.d("task", "onComplete->>>>: "+id);
-
-                    }
-                });
-                formList.add(user);
-            }
-
-        }
-      catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     protected void onPause() {
         mLocation.endUpdates();
@@ -529,6 +604,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         final RelativeLayout rippleBackground =(RelativeLayout)findViewById(R.id.rippleBackground);
@@ -552,8 +633,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
     private void setLayouts(final String currentUser, final String gender, final RelativeLayout rippleBackground, final RelativeLayout relLayList){
-
-
       checkAnyIsExist(gender, new CallBack<Boolean>() {
           @Override
           public void returnFalse(Boolean _false) {
@@ -568,10 +647,9 @@ public class HomeActivity extends AppCompatActivity {
               FirebaseFirestore db = FirebaseFirestore.getInstance();
               CollectionReference ref = db.collection("msgList")
                       .document(currentUser).collection(currentUser);
-              ref.addSnapshotListener(HomeActivity.this, MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+              ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
                   @Override
-                  public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
+                  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                       long size = queryDocumentSnapshots.getDocuments().size();
                       if (gender.equals("MAN")){
                           if (size>=2){
@@ -580,8 +658,6 @@ public class HomeActivity extends AppCompatActivity {
                           }else {
                               rippleBackground.setVisibility(View.VISIBLE);
                               relLayList.setVisibility(View.GONE);
-                              setCenterImage();
-                              startAnimation();
 
                           }
                       }
@@ -592,13 +668,17 @@ public class HomeActivity extends AppCompatActivity {
                           }else {
                               rippleBackground.setVisibility(View.VISIBLE);
                               relLayList.setVisibility(View.GONE);
-                              setCenterImage();
-                              startAnimation();
+
                           }
                       }
+                  }
+              }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+                  @Override
+                  public void onFailure(@NonNull Exception e) {
 
                   }
               });
+
           }
 
       });
@@ -625,286 +705,73 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    private void setCenterImage(){
-        final CircleImageView centerImage =(CircleImageView)findViewById(R.id.centerImage);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("allUser")
-                .document(auth.getUid())
-                .get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    String url = task.getResult().getString("profileImage");
-
-                    Picasso.get().load(url).resize(256,256).placeholder(R.drawable.looking_for)
-                            .into(centerImage);
-                }
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Crashlytics.logException(e);
-            }
-        });
-    }
-    private void startAnimation(){
-        RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
-        rippleBackground.startRippleAnimation();
-        lookForNewMatch(gender,auth.getUid());
 
 
-    }
+   private void setNewChat(final String  userId, final String currentUser){
+       final Map<String , Object> mapCurrenUser = new HashMap<>();
+       final Map<String , Object> mapUserId = new HashMap<>();
 
-    private DocumentSnapshot lastResult;
-    int limit_one = 1;
-    int limit_two;
-    private void lookForNewMatch(final String gender, final String currentUser ){
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        checkLimit(gender, currentUser, new CallBack<Boolean>() {
-            @Override
-            public void returnFalse(Boolean _false) {
-                if (gender.equals("MAN")) {
-                    Query ref;
+       mapCurrenUser.put("isOnline",false);
+       mapCurrenUser.put("senderUid",userId);
+       mapCurrenUser.put("getterUid",currentUser);
+       mapCurrenUser.put("time", FieldValue.serverTimestamp());
+       mapCurrenUser.put("timer",1800000);
 
-                    if (lastResult==null){
-                         ref = db.collection("WOMAN"+"match")
-                                .orderBy("chatSize",Query.Direction.ASCENDING).limit(1);
-                    }
+       mapUserId.put("isOnline",false);
+       mapUserId.put("senderUid",currentUser);
+       mapUserId.put("getterUid",userId);
+       mapUserId.put("timer",1800000);
+       mapUserId.put("time",FieldValue.serverTimestamp());
 
-                    else {
-                         ref = db.collection("WOMAN"+"match")
-                                .orderBy("chatSize",Query.Direction.ASCENDING).startAfter(lastResult).limit(1);
-                    }
+       final DocumentReference refCurrenUser = db
+               .collection("msgList")
+               .document(currentUser)
+               .collection(currentUser)
+               .document(userId);
 
+       final DocumentReference refUserId = db.collection("msgList")
+               .document(userId)
+               .collection(userId)
+               .document(currentUser);
 
-                    final Task<QuerySnapshot> task = ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
+       db.collection("msgList")
+               .document(auth.getUid())
+               .collection(auth.getUid()).get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+           @Override
+           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+               if (task.isSuccessful()){
+               if (task.getResult().getDocuments().size()>0){
 
-                            for (final DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()) {
-                                chekcAfterMatchLimit(currentUser, new CallBack<Boolean>() {
-                                    @Override
-                                    public void returnFalse(Boolean _false) {
-                                        isExist(currentUser, dc.getId(), new CallBack<Boolean>() {
-                                            @Override
-                                            public void returnFalse(Boolean _false) {
-                                                setMsgList(currentUser, dc.getId());
+                   for (DocumentSnapshot dc : task.getResult().getDocuments()){
+                       if (!dc.getId().equals(userId)){
+                           db.collection("msgList")
+                                   .document(auth.getUid())
+                                   .collection(auth.getUid())
+                                   .addSnapshotListener(HomeActivity.this, MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+                                       @Override
+                                       public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                           if (queryDocumentSnapshots.getDocuments().size()<=2){
+                                               refCurrenUser.set(mapCurrenUser);
+                                               refUserId.set(mapUserId);
+                                           }
+                                       }
+                                   });
 
-                                                lastResult = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                                            }
+                       }else {
+                       }
+                   }
+               }else {
+                   refCurrenUser.set(mapCurrenUser);
+                   refUserId.set(mapUserId);
+               }
 
-                                            @Override
-                                            public void returnTrue(Boolean _true) {
-                                                return;
-                                            }
-                                        });
-
-
-                                    }
-
-                                    @Override
-                                    public void returnTrue(Boolean _true) {
-                                        return;
-                                    }
-                                });
-                                break;
-                            }
-
-                        }
-                    }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Crashlytics.logException(e);
-                        }
-                    });
-
-                }
-                else if (gender.equals("WOMAN")){
-                    Query ref;
-                    if (lastResult==null){
-                        ref = db.collection("MAN"+"match").limit(3)
-                                ;
-                    }
-
-                    else {
-                        ref = db.collection("MAN"+"match")
-                                 .startAfter(lastResult);
-                    }
-                    final Task<QuerySnapshot> task = ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-
-                            for (final DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()) {
-                                chekcAfterMatchLimit(currentUser, new CallBack<Boolean>() {
-                                    @Override
-                                    public void returnFalse(Boolean _false) {
-                                        isExist(currentUser, dc.getId(), new CallBack<Boolean>() {
-                                            @Override
-                                            public void returnFalse(Boolean _false) {
-                                                setMsgList(currentUser, dc.getId());
-
-                                                lastResult = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                                            }
-
-                                            @Override
-                                            public void returnTrue(Boolean _true) {
-                                                return;
-                                            }
-                                        });
+               }
+           }
+       });
 
 
-                                    }
-
-                                    @Override
-                                    public void returnTrue(Boolean _true) {
-                                        return;
-                                    }
-                                });
-                                break;
-                            }
-
-                        }
-                    }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Crashlytics.logException(e);
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void returnTrue(Boolean _true) {
-
-            }
-        });
-    }
-    private void isExist(String currentUser, String uid , final CallBack<Boolean> isExist){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection("msgList")
-                .document(currentUser)
-                .collection(currentUser).document(uid);
-        ref.get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    if (task.getResult().exists()){
-                        isExist.returnTrue(true);
-                    }else isExist.returnFalse(false);
-                }
-            }
-        }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Crashlytics.logException(e);
-            }
-        });
-
-    }
-    private void chekcAfterMatchLimit(String uid , final CallBack<Boolean> hasLimit){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<QuerySnapshot> ref = db.collection("msgList")
-                .document(uid)
-                .collection(uid).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            long taskCount = task.getResult().size();
-                            if (gender.equals("MAN")){
-                                if (taskCount>=2){
-                                    hasLimit.returnTrue(true);
-                                    return;
-                                }else hasLimit.returnFalse(true);
-
-                            }else if (gender.equals("WOMAN")){
-                                if (taskCount>=6){
-                                    hasLimit.returnTrue(true);
-                                    return;
-                                }else hasLimit.returnFalse(true);
-                            }
-
-                        }
-                    }
-                }).addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-    }
-    private void checkLimit(final String gender , String uid, final CallBack<Boolean> hasLimit){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        CollectionReference reference = db.collection("msgList")
-                .document(uid)
-                .collection(uid);
-        reference.addSnapshotListener(this, MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                long size = queryDocumentSnapshots.size();
-                if (gender.equals("MAN")){
-                    if (size>=2){
-                        hasLimit.returnTrue(true);
-                    }else hasLimit.returnFalse(true);
-
-                }else if (gender.equals("WOMAN")){
-                    if (size>=6){
-                        hasLimit.returnTrue(true);
-                    }else hasLimit.returnFalse(true);
-                }
-            }
-        });
-    }
-
-    Task<Void> isFinish;
-    private void setMsgList(final String  currentUser , final String userId){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String , Object> mapCurrenUser = new HashMap<>();
-        Map<String , Object> mapUserId = new HashMap<>();
-
-        mapCurrenUser.put("isOnline",false);
-        mapCurrenUser.put("senderUid",userId);
-        mapCurrenUser.put("getterUid",currentUser);
-        mapCurrenUser.put("time", FieldValue.serverTimestamp());
-        mapCurrenUser.put("timer",1800000);
-
-        mapUserId.put("isOnline",false);
-        mapUserId.put("senderUid",currentUser);
-        mapUserId.put("getterUid",userId);
-        mapUserId.put("timer",1800000);
-        mapUserId.put("time",FieldValue.serverTimestamp());
 
 
-        DocumentReference refCurrenUser = db
-                .collection("msgList")
-                .document(currentUser)
-                .collection(currentUser)
-                .document(userId);
-
-        refCurrenUser.set(mapCurrenUser).addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isComplete()){
-                    return;
-                }
-            }
-        });
-        DocumentReference refUserId = db.collection("msgList")
-                .document(userId)
-                .collection(userId)
-                .document(currentUser);
-         isFinish = refUserId.set(mapUserId).addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isComplete()){
-                    return;
-                }
-            }
-        });
-
-    }
-
+   }
 
 }
