@@ -58,7 +58,7 @@ public class gargi extends Application {
                         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                             final String gender = documentSnapshot.getString("gender");
                             if (!gender.isEmpty()){
-
+                                setChatSize(gender,user.getUid());
                                     Log.d("genderApp", "onEvent: "+gender);
                                     checkCount(gender, new CallBack<Boolean>() {
                                         @Override
@@ -124,6 +124,29 @@ public class gargi extends Application {
 
     }
 
+    private void setChatSize(final String gender , final String userId){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("msgList")
+                .document(userId)
+                .collection(userId).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    long size= queryDocumentSnapshots.getDocuments().size();
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("size",size);
+                    if (gender.equals("MAN")){
+
+                        db.collection("ManSize")
+                                .document(userId).set(map,SetOptions.merge());
+                    }else if (gender.equals("WOMAN")){
+
+                        db.collection("WomanSize")
+                                .document(userId).set(map,SetOptions.merge());
+                    }
+
+            }
+        });
+    }
     @Override
     public void onLowMemory() {
         super.onLowMemory();

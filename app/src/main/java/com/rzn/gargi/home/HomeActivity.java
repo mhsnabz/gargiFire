@@ -163,9 +163,9 @@ public class HomeActivity extends AppCompatActivity {
                         .document(auth.getUid()).addSnapshotListener(HomeActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if (null != documentSnapshot){
+                        if (null != documentSnapshot.getLong("size")){
                             manSize = documentSnapshot.getLong("size");
-                        }
+                        }else manSize=0;
                     }
                 });
             }else {
@@ -174,7 +174,9 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         if (null != documentSnapshot){
+                            if (documentSnapshot.getLong("size")!=null)
                             womanSize = documentSnapshot.getLong("size");
+                            else  womanSize=0;
                         }
                     }
                 });
@@ -234,7 +236,8 @@ public class HomeActivity extends AppCompatActivity {
                     }else rippleBackground.stopRippleAnimation();
                 }else if (gender.equals("WOMAN")){
                     if (womanSize<6){
-
+                        rippleBackground.startRippleAnimation();
+                        lookForNewMatchForWOMAN();
                     }
                 }
             }
@@ -244,12 +247,31 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    private void lookForNewMatchForWOMAN(){
+        Query ref;
+        if (result==0)
+            ref = db.collection("MANmatch").orderBy("age");
+        else {
+            ref = db.collection("MANmatch").orderBy("chatSize").startAfter(result);
+        }
+        ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots.getDocuments().size()>0){
+                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
+                        String id = ds.getId();
+                        setNewMatchForMan(id);
+                    }
+                }
+            }
+        });
+    }
     private void lookForNewMatchForMAN() {
         Query ref;
         if (result==0)
-             ref = db.collection("WOMANmatch").limit(1);
+             ref = db.collection("WOMANmatch").orderBy("age");
         else {
-            ref = db.collection("WOMANmatch").orderBy("age").startAfter(result).limit(1);
+            ref = db.collection("WOMANmatch").orderBy("chatSize").startAfter(result);
         }
             ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
                 @Override
@@ -264,6 +286,81 @@ public class HomeActivity extends AppCompatActivity {
             });
     }
 
+    private void setNewMatchForWoman(final String userId){
+        final Map<String , Object> mapCurrenUser = new HashMap<>();
+        final Map<String , Object> mapUserId = new HashMap<>();
+
+        mapCurrenUser.put("isOnline",false);
+        mapCurrenUser.put("senderUid",userId);
+        mapCurrenUser.put("getterUid",currentUser);
+        mapCurrenUser.put("time", FieldValue.serverTimestamp());
+        mapCurrenUser.put("timer",1800000);
+
+        mapUserId.put("isOnline",false);
+        mapUserId.put("senderUid",currentUser);
+        mapUserId.put("getterUid",userId);
+        mapUserId.put("timer",1800000);
+        mapUserId.put("time",FieldValue.serverTimestamp());
+
+        final DocumentReference refCurrenUser = db
+                .collection("msgList")
+                .document(currentUser)
+                .collection(currentUser).document(userId);
+        ;
+        final Query refCurrenUserMsgList = db
+                .collection("msgList")
+                .document(currentUser)
+                .collection(currentUser).whereEqualTo("senderUid",userId);
+        ;
+        final Query oldList = db
+                .collection("oldList")
+                .document(currentUser)
+                .collection(currentUser).whereEqualTo("senderUid",userId);
+        ;
+        final DocumentReference refUserId = db.collection("msgList")
+                .document(userId)
+                .collection(userId)
+                .document(currentUser);
+
+
+        oldList.get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getDocuments().size()>0){
+                        Log.d("userIdIsExist", "onComplete: ");
+                        result++;
+                        lookForNewMatchForMAN();
+                    }else
+                    {
+                        refCurrenUserMsgList.get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()){
+                                    if (task.getResult().getDocuments().size()>0){
+                                        result++;
+                                        lookForNewMatchForWOMAN();
+                                    }else {
+                                        if (womanSize <2){
+                                            refCurrenUser.set(mapCurrenUser);
+                                            refUserId.set(mapUserId);
+                                            womanSize++;
+                                            result++;
+                                            updateManSize();
+
+                                            if (womanSize<2)
+                                                lookForNewMatchForWOMAN();
+                                        }else return;
+                                    }
+                                }
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+    }
     private  void setNewMatchForMan( final String userId){
         final long[] size = {manSize};
         final Map<String , Object> mapCurrenUser = new HashMap<>();
@@ -284,40 +381,62 @@ public class HomeActivity extends AppCompatActivity {
         final DocumentReference refCurrenUser = db
                 .collection("msgList")
                 .document(currentUser)
-                .collection(currentUser)
-                .document(userId);
-
+                .collection(currentUser).document(userId);
+                ;
+        final Query refCurrenUserMsgList = db
+                .collection("msgList")
+                .document(currentUser)
+                .collection(currentUser).whereEqualTo("senderUid",userId);
+                ;
+        final Query oldList = db
+                .collection("oldList")
+                .document(currentUser)
+                .collection(currentUser).whereEqualTo("senderUid",userId);
+               ;
         final DocumentReference refUserId = db.collection("msgList")
                 .document(userId)
                 .collection(userId)
                 .document(currentUser);
 
-        refCurrenUser.get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isComplete()){
-
-                    if (task.getResult().get(userId)==null){
-                        if (manSize <2){
-                            refCurrenUser.set(mapCurrenUser);
-                            refUserId.set(mapUserId);
-                            manSize++;
-                            result++;
-                            updateManSize();
-
-                            if (manSize<2)
-                            lookForNewMatchForMAN();
-                            }else return;
-
-                    }else{
-                        if (manSize<2)
-                            result++;
+      oldList.get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+          @Override
+          public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getDocuments().size()>0){
+                        Log.d("userIdIsExist", "onComplete: ");
+                        result++;
                         lookForNewMatchForMAN();
+                    }else
+                    {
+                        refCurrenUserMsgList.get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()){
+                                    if (task.getResult().getDocuments().size()>0){
+                                        result++;
+                                        lookForNewMatchForMAN();
+                                    }else {
+                                        if (manSize <2){
+                                            refCurrenUser.set(mapCurrenUser);
+                                            refUserId.set(mapUserId);
+                                            manSize++;
+                                            result++;
+                                            updateWomanSize();
+
+                                            if (manSize<2)
+                                                lookForNewMatchForMAN();
+                                        }else return;
+                                    }
+                                }
+                            }
+                        });
 
                     }
                 }
-            }
-        });
+          }
+      });
+
+
 
     }
 
@@ -332,6 +451,20 @@ public class HomeActivity extends AppCompatActivity {
                 Map<String,Object> map = new HashMap<>();
                 map.put("size",size);
                 db.collection("ManSize").document(auth.getUid()).set(map, SetOptions.merge());
+            }
+        });
+    }
+    private void updateWomanSize(){
+        db.collection("msgList")
+                .document(auth.getUid())
+                .collection(auth.getUid()).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                long size = task.getResult().getDocuments().size();
+                manSize = size;
+                Map<String,Object> map = new HashMap<>();
+                map.put("size",size);
+                db.collection("WomanSize").document(auth.getUid()).set(map, SetOptions.merge());
             }
         });
     }
