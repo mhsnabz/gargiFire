@@ -32,7 +32,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
             android:textSize="16dp"
-            android:text="11:59:00"
             android:fontFamily="@font/nunito_sans_semibold"
             android:textStyle="bold"
             android:textColor="#ff00"

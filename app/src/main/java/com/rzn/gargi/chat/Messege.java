@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -102,6 +104,10 @@ public class Messege extends Fragment {
 
         messeges_list.setLayoutManager(new LinearLayoutManager(getContext()));
         messeges_list.setAdapter(adapter);
+        messeges_list.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
+
+
     }
 
     @Override
@@ -138,6 +144,7 @@ public class Messege extends Fragment {
                     i.putExtra("gender",getActivity().getIntent().getStringExtra("gender"));
                     holder.removeBadge(model.getSenderUid());
                     getActivity().startActivity(i);
+                    getActivity().finish();
                 }
             });
         }
@@ -226,69 +233,57 @@ public class Messege extends Fragment {
                 }
             }
 
-            public void getBadgeCount(String userId){
+            public void getBadgeCount(final String userId){
                 final RelativeLayout relBadge=(RelativeLayout)itemView.findViewById(R.id.relBadge);
-                final TextView tv_badge=(TextView) itemView.findViewById(R.id.tv_badge);
-                    Query ref = FirebaseFirestore.getInstance().collection("badgeCount")
-                            .document("badge")
-                            .collection(auth.getUid())
-                            .document(auth.getUid()).collection(userId).whereEqualTo("hasBadge",true);
-                    ref.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot doc, @Nullable FirebaseFirestoreException e) {
-                            Log.d("badgeCount", "onEvent: "+doc.getDocuments().size());
-                            if (doc.getDocuments().size()>0){
-                                relBadge.setVisibility(View.VISIBLE);
-                                tv_badge.setText(String.valueOf(doc.getDocuments().size()));
-                                setBadgeCount(doc.getDocuments().size());
-                            }else relBadge.setVisibility(View.GONE);
+              /*  db.collection("badgeCount")
+                        .document(auth.getUid())
+                        .collection(userId).addSnapshotListener(getActivity(), MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (queryDocumentSnapshots!=null){
+                            if (queryDocumentSnapshots.getDocuments()!=null){
+                                if (queryDocumentSnapshots.getDocuments().size()!=0){
+                                    relBadge.setVisibility(View.VISIBLE);
+                                    tv_badge.setText(String.valueOf(queryDocumentSnapshots.getDocuments().size()));
+                                    setBadgeCount(queryDocumentSnapshots.getDocuments().size());
+                                }else relBadge.setVisibility(View.GONE);
 
+                            }else relBadge.setVisibility(View.GONE);
                         }
-                    });
+                    }
+                });*/
+
+
+                db.collection("badgeCount")
+                        .document(auth.getUid())
+                        .addSnapshotListener(getActivity(), MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                if (documentSnapshot!=null){
+                                    if (documentSnapshot.get(userId)!=null){
+                                        relBadge.setVisibility(View.VISIBLE);
+
+                                    }else {
+                                        relBadge.setVisibility(View.GONE);
+
+                                    }
+                                }
+                            }
+                        });
             }
             public void removeBadge(final String userId){
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                Query ref = FirebaseFirestore.getInstance().collection("badgeCount")
-                        .document("badge")
-                        .collection(auth.getUid())
-                        .document(userId).collection(userId);
-                ref.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e==null){
-                            for (DocumentSnapshot doc: queryDocumentSnapshots.getDocuments()){
-                                Log.d("id->", "onEvent->>: "+doc
-                                .getId());
-                                deleteBadge(doc.getId(),userId);
-                            }
-                        }
-                    }
-                });
+                Map<String,Object> delete = new HashMap<>();
+                delete.put(userId,FieldValue.delete());
+                        db.collection("badgeCount")
+                        .document(auth.getUid())
+                        .set(delete,SetOptions.merge());
 
             }
         }
 
     }
 
-    private void setBadgeCount(int size){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String,Object> count = new HashMap<>();
-        db.collection("badgeCount")
-                .document(auth.getUid()).set(count, SetOptions.merge());
-    }
-    private void deleteBadge(String id,String userId){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("hasBadge",FieldValue.delete());
-        db.collection("badgeCount")
-                .document("badge")
-                .collection(auth.getUid())
-                .document(auth.getUid())
-                .collection(userId).document(id).set(map,SetOptions.merge())
-        ;
-    }
 
     @Override
     public void onStop() {

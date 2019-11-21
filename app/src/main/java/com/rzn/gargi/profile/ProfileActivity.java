@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
@@ -41,6 +42,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.rzn.gargi.R;
 import com.rzn.gargi.SettingEdit.SettingActivity;
 import com.rzn.gargi.chat.ChatActivity;
+import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.ModelUser;
 import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.helper.Shard;
@@ -62,6 +64,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import q.rorbin.badgeview.QBadgeView;
 
 import static java.util.Objects.*;
 
@@ -213,6 +216,30 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
+    private void getBadgeCount(){
+        BottomNavigationView view;
+        view=(BottomNavigationView)findViewById(R.id.navigationController);
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) view.getChildAt(0);
+        final QBadgeView badge = new QBadgeView(ProfileActivity.this);
+        final View v = bottomNavigationMenuView.getChildAt(2);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("badgeCount").document(auth.getUid()).addSnapshotListener(ProfileActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@androidx.annotation.Nullable DocumentSnapshot documentSnapshot, @androidx.annotation.Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot!=null){
+                    if (documentSnapshot.getData()!=null){
+                        badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true)
+                                .setBadgeBackgroundColor(Color.RED).setBadgeNumber(documentSnapshot.getData().size());
+                        Log.d("badgeCount->>", "onEvent: "+documentSnapshot.getData().size());
+                    }
+                }
+                else
+                    badge.hide(true);
+
+            }
+        });
+    }
 
     private  String getRandomString(final int sizeOfRandomString){
         final Random random=new Random();
@@ -229,10 +256,23 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
         loadProfile();
         getViewers();
+        getBadgeCount();
 
     }
   ListenerRegistration userListener;
-
+    int count =0;
+    @Override
+    public void onBackPressed()
+    {
+        count++;
+        if (count==2){
+            Toast.makeText(ProfileActivity.this,"Çıkmak için Tekrar Dokunun",Toast.LENGTH_SHORT).show();
+        }
+        if (count == 3){
+            finishAffinity();
+            System.exit(0);
+        }
+    }
     private void loadProfile() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference user = db.document(gender + "/" + currentUser);

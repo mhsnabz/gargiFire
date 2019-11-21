@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -24,10 +26,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telecom.Call;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,12 +68,14 @@ import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.chat.ChatActivity;
 import com.rzn.gargi.chat.OneToOneChat;
+import com.rzn.gargi.chat.msg_list.Adapter;
 import com.rzn.gargi.helper.CallBack;
 import com.rzn.gargi.helper.CallBackLimit;
 import com.rzn.gargi.helper.bottomNavigationHelper;
 import com.rzn.gargi.profile.ProfileActivity;
 import com.rzn.gargi.topface.TopFaceActivity;
 import com.skyfishjy.library.RippleBackground;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -79,6 +87,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +98,7 @@ import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import im.delight.android.location.SimpleLocation;
+import q.rorbin.badgeview.QBadgeView;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -99,15 +109,18 @@ public class HomeActivity extends AppCompatActivity {
     String gender;
      CircleImageView centerImage;
     RippleBackground rippleBackground;
+    RecyclerView macth_list;
     private Dialog noOneIsExist,newMatchDialog,yeterinceEslesmenVar,gunlukEslesmeLimit;
     private long manSize,womanSize,manLimit,womanLimit;
     int result=0;
     List<String> userID;
+    List<String> userId;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean mLocationPermissionGranted = false;
     public static final int ERROR_DIALOG_REQUEST = 9001;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9002;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9003;
+    LinearLayoutManager layoutManager;
 
     private CountDownTimer downTimer;
     @Override
@@ -122,6 +135,18 @@ public class HomeActivity extends AppCompatActivity {
         gunlukEslesmeLimit= new Dialog(this);
         coordinatorLayoutLay=(CoordinatorLayout)findViewById(R.id.coordinatorLay);
          rippleBackground=(RippleBackground)findViewById(R.id.content);
+        userId=new ArrayList<>();
+         macth_list=(RecyclerView)findViewById(R.id.macth_list);
+
+        adapter= new macthList(userId);
+        macth_list = (RecyclerView)findViewById(R.id.macth_list) ;
+        layoutManager = new LinearLayoutManager(HomeActivity.this);
+        layoutManager.setReverseLayout(false);
+        layoutManager.setStackFromEnd(true);
+        macth_list.setLayoutManager(layoutManager);
+        macth_list.setHasFixedSize(true);
+
+        macth_list.setAdapter(adapter);
         if (!mLocation.hasLocationEnabled()) {
             SimpleLocation.openSettings(this);
         }
@@ -292,9 +317,9 @@ public class HomeActivity extends AppCompatActivity {
     private void lookForNewMatchForWOMAN(){
         Query ref;
         if (result==0)
-            ref = db.collection("MANmatch").orderBy("age");
+            ref = db.collection("MANmatch").orderBy("age").limit(10);
         else {
-            ref = db.collection("MANmatch").orderBy("chatSize").startAfter(result);
+            ref = db.collection("MANmatch").orderBy("chatSize").startAfter(result).limit(10);
         }
         ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -311,9 +336,9 @@ public class HomeActivity extends AppCompatActivity {
     private void lookForNewMatchForMAN() {
         Query ref;
         if (result==0)
-             ref = db.collection("WOMANmatch").orderBy("age");
+             ref = db.collection("WOMANmatch").orderBy("age").limit(10);
         else {
-            ref = db.collection("WOMANmatch").orderBy("chatSize").startAfter(result);
+            ref = db.collection("WOMANmatch").orderBy("chatSize").startAfter(result).limit(10);
         }
             ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
                 @Override
@@ -392,6 +417,7 @@ public class HomeActivity extends AppCompatActivity {
                                             addNewMatchOnLimit(userId);
                                             addNewMatchOnLimitOther(userId);
                                             updateManLimit(userId);
+                                            setBadge(userId,auth.getUid());
                                             womanSize++;
                                             womanLimit++;
                                             result++;
@@ -399,6 +425,7 @@ public class HomeActivity extends AppCompatActivity {
                                             showDialog();
                                             if (womanSize<6 && womanLimit<35)
                                                 lookForNewMatchForWOMAN();
+                                            else return;
                                         }else {
                                             rippleBackground.stopRippleAnimation();
                                             return;
@@ -412,6 +439,19 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    int count =0;
+    @Override
+    public void onBackPressed()
+    {
+        count++;
+        if (count==2){
+            Toast.makeText(HomeActivity.this,"Çıkmak için Tekrar Dokunun",Toast.LENGTH_SHORT).show();
+        }
+        if (count == 3){
+            finishAffinity();
+            System.exit(0);
+        }
     }
     private  void setNewMatchForMan( final String userId){
         final long[] size = {manSize};
@@ -479,10 +519,12 @@ public class HomeActivity extends AppCompatActivity {
                                             addNewMatchOnLimit(userId);
                                             addNewMatchOnLimitOther(userId);
                                             updateWomanLimit(userId);
+                                            setBadge(userId,auth.getUid());
                                             showDialog();
 
                                             if (manSize<2 && manLimit<10)
                                                 lookForNewMatchForMAN();
+                                            else return;
                                         }else {
                                             rippleBackground.stopRippleAnimation();
                                             return;
@@ -537,6 +579,9 @@ public class HomeActivity extends AppCompatActivity {
                         Date date = Timestamp.now().toDate();
                         long currentTime=date.getTime();
                         long value = second+(24*60*60000)-currentTime;
+                        if (value<0){
+                            deleteLimit(auth.getUid());
+                        }
                         startTimer(timer,value);
                     }
                 }
@@ -553,6 +598,9 @@ public class HomeActivity extends AppCompatActivity {
                         Date date = Timestamp.now().toDate();
                         long currentTime=date.getTime();
                         long value = second+(24*60*60000)-currentTime;
+                        if (value<0){
+                            deleteLimit(auth.getUid());
+                        }
                          startTimer(timer,value);
 
                     }
@@ -568,7 +616,9 @@ public class HomeActivity extends AppCompatActivity {
                 ,1000) {
             @Override
             public void onTick(long l) {
-
+                if (l<=2000){
+                    deleteLimit(auth.getUid());
+                }
                 updateTimeTV(timer,l);
             }
 
@@ -578,6 +628,19 @@ public class HomeActivity extends AppCompatActivity {
             }
         }.start();
 
+    }
+
+    private void deleteLimit(String uid)
+    {
+        db.collection("limit")
+                .document(uid).delete().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Log.d("limit refresh", "onComplete: "+"true");
+                }
+            }
+        });
     }
 
 
@@ -602,6 +665,17 @@ public class HomeActivity extends AppCompatActivity {
         _timer.setText(timeLeftString);*/
         // if (_time<=1500)
         //     removeMatch(_time);
+
+    }
+    private void setBadge(String userId, String currentUser){
+        Map<String,Object> mapUserId = new HashMap<>();
+        Map<String,Object> mapCurrntUser = new HashMap<>();
+        mapUserId.put(currentUser,userId);
+        mapCurrntUser.put(userId,currentUser);
+        db.collection("badgeCount")
+                .document(userId).set(mapUserId,SetOptions.merge());
+        db.collection("badgeCount")
+                .document(currentUser).set(mapCurrntUser,SetOptions.merge());
 
     }
     private void setYeterinceEslesmenVar(){
@@ -634,6 +708,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 centerImage.performClick();
                 newMatchDialog.dismiss();
+
             }
         });
 
@@ -1007,10 +1082,35 @@ public class HomeActivity extends AppCompatActivity {
         super.onStop();
 
     }
+    private void getBadgeCount(){
+        BottomNavigationView view;
+        view=(BottomNavigationView)findViewById(R.id.navigationController);
+        BottomNavigationMenuView bottomNavigationMenuView =
+                (BottomNavigationMenuView) view.getChildAt(0);
+        final QBadgeView badge = new QBadgeView(HomeActivity.this);
+        final View v = bottomNavigationMenuView.getChildAt(2);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("badgeCount").document(auth.getUid()).addSnapshotListener(HomeActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot!=null){
+                    if (documentSnapshot.getData()!=null){
+                        badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true)
+                                .setBadgeBackgroundColor(Color.RED).setBadgeNumber(documentSnapshot.getData().size());
+                        Log.d("badgeCount->>", "onEvent: "+documentSnapshot.getData().size());
+                    }
+                }
+                else
+                    badge.hide(true);
 
+            }
+        });
+    }
     @Override
     protected void onStart() {
         super.onStart();
+        setList();
+        getBadgeCount();
         final RelativeLayout rippleBackground =(RelativeLayout)findViewById(R.id.rippleBackground);
         final RelativeLayout relLayList =(RelativeLayout)findViewById(R.id.listRel);
 
@@ -1108,75 +1208,292 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-   private void setNewChat(final String  userId, final String currentUser){
-       final Map<String , Object> mapCurrenUser = new HashMap<>();
-       final Map<String , Object> mapUserId = new HashMap<>();
 
-       mapCurrenUser.put("isOnline",false);
-       mapCurrenUser.put("senderUid",userId);
-       mapCurrenUser.put("getterUid",currentUser);
-       mapCurrenUser.put("time", FieldValue.serverTimestamp());
-       mapCurrenUser.put("timer",1800000);
 
-       mapUserId.put("isOnline",false);
-       mapUserId.put("senderUid",currentUser);
-       mapUserId.put("getterUid",userId);
-       mapUserId.put("timer",1800000);
-       mapUserId.put("time",FieldValue.serverTimestamp());
+   macthList adapter ;
 
-       final DocumentReference refCurrenUser = db
-               .collection("msgList")
-               .document(currentUser)
-               .collection(currentUser)
-               .document(userId);
-
-       final DocumentReference refUserId = db.collection("msgList")
-               .document(userId)
-               .collection(userId)
-               .document(currentUser);
+   private  void setList()
+   {
 
        db.collection("msgList")
                .document(auth.getUid())
-               .collection(auth.getUid()).get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+               .collection(auth.getUid()).addSnapshotListener(HomeActivity.this, new EventListener<QuerySnapshot>() {
            @Override
-           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-               if (task.isSuccessful()){
-               if (task.getResult().getDocuments().size()>0){
-
-                   for (DocumentSnapshot dc : task.getResult().getDocuments()){
-                       if (!dc.getId().equals(userId)){
-                           db.collection("msgList")
-                                   .document(auth.getUid())
-                                   .collection(auth.getUid())
-                                   .addSnapshotListener(HomeActivity.this, MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
-                                       @Override
-                                       public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                           if (queryDocumentSnapshots.getDocuments().size()<=2){
-                                               refCurrenUser.set(mapCurrenUser);
-                                               refUserId.set(mapUserId);
-                                           }
-                                       }
-                                   });
-
-                       }else {
-                       }
-                   }
+           public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+               if (e!=null){
+                   return;
                }else {
-                   refCurrenUser.set(mapCurrenUser);
-                   refUserId.set(mapUserId);
-               }
-
+                   if (queryDocumentSnapshots!=null){
+                      for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
+                          if (dc.getType()==DocumentChange.Type.ADDED){
+                              userId.add(dc.getDocument().getId());
+                              adapter.notifyDataSetChanged();
+                          }
+                      }
+                   }
                }
            }
        });
 
-
-
-
-   }
-
-   private  void setList(String gender){
+      // adapter= new macthList()
 
    }
 
+   public class macthList extends RecyclerView.Adapter<HomeActivity.ViewHolder>{
+
+       List<String> userId;
+
+       public macthList(List<String> userId)
+       {
+           this.userId = userId;
+       }
+
+       @NonNull
+       @Override
+       public HomeActivity.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+           View itemView = LayoutInflater.from(parent.getContext())
+                   .inflate(R.layout.topface_single_layout, parent, false);
+
+           return new ViewHolder(itemView);
+       }
+
+       @Override
+       public void onBindViewHolder(@NonNull HomeActivity.ViewHolder holder, int position)
+       {
+            holder.setProfile(userId.get(position));
+       }
+
+       @Override
+       public int getItemCount() {
+           return userId.size();
+       }
+   }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(@NonNull View itemView) {
+
+            super(itemView);
+
+        }
+
+        public void setProfile(String userid){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            TextView seen = (TextView)itemView.findViewById(R.id.seen);
+            final TextView name = (TextView)itemView.findViewById(R.id.name);
+            TextView location = itemView.findViewById(R.id.locaiton);
+            final CircleImageView image = (CircleImageView)itemView.findViewById(R.id.profileImage);
+            final ProgressBar loading = (ProgressBar)itemView.findViewById(R.id.loading);
+            TextView _age = (TextView)itemView.findViewById(R.id.age);
+            TextView point =(TextView)itemView.findViewById(R.id.point);
+
+            if (gender.equals("MAN")){
+                db.collection("WOMAN")
+                        .document(userid)
+                        .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            String _name=task.getResult().getString("name");
+                            name.setText(_name);
+
+                            String _horoscope = task.getResult().getString("burc");
+                            if (task.getResult().getLong("age")!=null){
+                                long _age
+                                        = task.getResult().getLong("age");
+                                getAge(_age);
+                            }
+
+
+                            getBurc(_horoscope);
+                            if (task.getResult().getLong("click")!=null){
+                                getClick(task.getResult().getLong("click"));
+                            }
+                            if (task.getResult().getLong("count")!=null&&task.getResult().getLong("totalRate")!=null){
+                                calculateRate(task.getResult().getLong("count"),task.getResult().getLong("totalRate"));
+                            }
+                            if (task.getResult().getString("thumb_image")!=null){
+                                String _thumb= task.getResult().getString("thumb_image");
+                                if (!_thumb.isEmpty())
+                                    Picasso.get().load(_thumb)
+                                            .placeholder(R.drawable.upload_place_holder)
+                                            .into(image, new Callback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    loading.setVisibility(View.GONE);
+                                                }
+
+                                                @Override
+                                                public void onError(Exception e) {
+
+                                                }
+                                            });
+                                else {
+                                    image.setImageResource(R.drawable.upload_place_holder);
+                                    loading.setVisibility(View.GONE);
+
+                                }
+                            }else{
+                                image.setImageResource(R.drawable.upload_place_holder);
+                                loading.setVisibility(View.GONE);
+
+                            }
+                        }
+                    }
+                });
+            }else if (gender.equals("WOMAN")){
+                db.collection("MAN")
+                        .document(userid)
+                        .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            String _name=task.getResult().getString("name");
+                            name.setText(_name);
+                            if (task.getResult().getLong("click")!=null){
+                                getClick(task.getResult().getLong("click"));
+                            }
+                            if (task.getResult().getLong("count")!=null&&task.getResult().getLong("totalRate")!=null){
+                                calculateRate(task.getResult().getLong("count"),task.getResult().getLong("totalRate"));
+                            }
+                            String _horoscope = task.getResult().getString("burc");
+                            long _age
+                                    = task.getResult().getLong("age");
+                            getAge(_age);
+
+                            getBurc(_horoscope);
+                            if (task.getResult().getString("thumb_image")!=null){
+                                String _thumb= task.getResult().getString("thumb_image");
+                                if (!_thumb.isEmpty())
+                                    Picasso.get().load(_thumb)
+                                            .placeholder(R.drawable.upload_place_holder)
+                                            .into(image, new Callback() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    loading.setVisibility(View.GONE);
+                                                }
+
+                                                @Override
+                                                public void onError(Exception e) {
+
+                                                }
+                                            });
+                                else {
+                                    image.setImageResource(R.drawable.upload_place_holder);
+                                    loading.setVisibility(View.GONE);
+
+                                }
+                            }else{
+                                image.setImageResource(R.drawable.upload_place_holder);
+                                loading.setVisibility(View.GONE);
+
+                            }
+                        }
+                    }
+                });
+            }
+            db.collection("allUser")
+                    .document(userid)
+                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            String _name=task.getResult().getString("name");
+                            name.setText(_name);
+
+                            String _horoscope = task.getResult().getString("burc");
+                            long _age
+                                    = task.getResult().getLong("age");
+                            getAge(_age);
+
+                            getBurc(_horoscope);
+                            if (task.getResult().getString("thumb_image")!=null){
+                                String _thumb= task.getResult().getString("thumb_image");
+                                if (!_thumb.isEmpty())
+                                Picasso.get().load(_thumb)
+                                        .placeholder(R.drawable.upload_place_holder)
+                                        .into(image, new Callback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                loading.setVisibility(View.GONE);
+                                            }
+
+                                            @Override
+                                            public void onError(Exception e) {
+
+                                            }
+                                        });
+                                else {
+                                    image.setImageResource(R.drawable.upload_place_holder);
+                                    loading.setVisibility(View.GONE);
+
+                                }
+                            }else{
+                                image.setImageResource(R.drawable.upload_place_holder);
+                                loading.setVisibility(View.GONE);
+
+                            }
+                        }
+                }
+            });
+
+        }
+        private void calculateRate(long count , long totalRate){
+            TextView point =(TextView)itemView.findViewById(R.id.point);
+
+            double rating = (double) totalRate/count;
+            rating=Math.round(rating*100.0)/100.0;
+            point.setText(String.valueOf(rating));
+
+        }
+        public void getClick(long _click){
+            TextView seen = (TextView)itemView.findViewById(R.id.seen);
+            if (_click<=9999999)
+            {
+                seen.setText(Long.toString(_click));
+            }
+            else if (_click>=1000000 && _click<=999999999)
+                seen.setText(Long.toString(_click/1000000)+"M");
+        }
+        public void getAge(long age){
+            TextView _age = (TextView)itemView.findViewById(R.id.age);
+
+            Calendar currentDate = Calendar.getInstance();
+            SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Long time= currentDate.getTime().getTime() / 1000 - age / 1000;
+            int years = Math.round(time) / 31536000;
+            int months = Math.round(time - years * 31536000) / 2628000;
+            _age.setText(String.valueOf(years));
+        }
+        public void getBurc(String _burc){
+            ImageView burc =(ImageView) itemView.findViewById(R.id.horoscope);
+            if (_burc.equals("balik"))
+                burc.setImageResource(R.drawable.balik);
+            else if (_burc.equals("kova"))
+                burc.setImageResource(R.drawable.kova);
+            else if (_burc.equals("koc"))
+                burc.setImageResource(R.drawable.koc);
+            else if (_burc.equals("boga"))
+                burc.setImageResource(R.drawable.boga);
+            else if (_burc.equals("ikizler"))
+                burc.setImageResource(R.drawable.ikizler);
+            else if (_burc.equals("yengec"))
+                burc.setImageResource(R.drawable.yengec);
+            else if (_burc.equals("aslan"))
+                burc.setImageResource(R.drawable.aslan);
+            else if (_burc.equals("basak"))
+                burc.setImageResource(R.drawable.aslan);
+            else if (_burc.equals("terazi"))
+                burc.setImageResource(R.drawable.terazi);
+            else if (_burc.equals("akrep"))
+                burc.setImageResource(R.drawable.akrep);
+            else if (_burc.equals("yay"))
+                burc.setImageResource(R.drawable.yay);
+            else if (_burc.equals("oglak"))
+                burc.setImageResource(R.drawable.oglak);
+            else {
+                if (_burc.isEmpty())
+                    burc.setVisibility(View.GONE);
+            }
+        }
+    }
 }

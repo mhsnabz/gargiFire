@@ -85,13 +85,14 @@ public class ChatActivity extends AppCompatActivity {
                     if (documentSnapshot!=null){
                         String gender = documentSnapshot.getString("gender");
                         setNavigation(gender);
-
+                        getBadgeCount();
                     }
                 }
             });
 
         }else{
             setNavigation(gender);
+            getBadgeCount();
         }
 
 
@@ -171,7 +172,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //getBadgeCount();
+
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
         final QBadgeView view1 = (QBadgeView) new QBadgeView(ChatActivity.this);
@@ -194,27 +195,20 @@ public class ChatActivity extends AppCompatActivity {
         view=(BottomNavigationView)findViewById(R.id.navigationController);
         BottomNavigationMenuView bottomNavigationMenuView =
                 (BottomNavigationMenuView) view.getChildAt(0);
-        final QBadgeView view1 = (QBadgeView) new QBadgeView(ChatActivity.this);
-        final QBadgeView view2 = (QBadgeView) new QBadgeView(ChatActivity.this);
         final QBadgeView badge = new QBadgeView(ChatActivity.this);
         final View v = bottomNavigationMenuView.getChildAt(2);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference ref = db.collection("badgeCount")
-               .document("badge")
-                .collection(auth.getUid())
-                .document(auth.getUid());
-
-        ref.addSnapshotListener(ChatActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+        db.collection("badgeCount").document(auth.getUid()).addSnapshotListener(ChatActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-
-
-              //  Log.d("badgeCount--->", "onEvent: "+documentSnapshot.getData().size());
-                if (documentSnapshot.getData().size()>0)
-                    badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true).setBadgeBackgroundColor(Color.RED).setBadgeText("");
-
+                if (documentSnapshot!=null){
+                    if (documentSnapshot.getData()!=null){
+                        badge.bindTarget(v).setBadgeTextSize(14,true).setBadgePadding(7,true)
+                                .setBadgeBackgroundColor(Color.RED).setBadgeNumber(documentSnapshot.getData().size());
+                        Log.d("badgeCount->>", "onEvent: "+documentSnapshot.getData().size());
+                    }
+                }
                 else
-
                 badge.hide(true);
 
             }

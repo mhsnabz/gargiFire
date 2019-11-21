@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_marginLeft="4dp"
-    android:layout_marginRight="12dp"
-    app:layout_goneMarginLeft="12dp"
+<RelativeLayout
     android:background="#fff"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
@@ -46,27 +44,15 @@
             </TextView>
         </LinearLayout>
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/relBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_alignParentEnd="true"
             android:background="@drawable/badge"
             android:layout_centerVertical="true"
             android:layout_marginRight="18dp"
             >
-            <TextView
-                android:id="@+id/tv_badge"
-                android:padding="4dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_centerInParent="true"
-                android:textColor="@color/white"
-                android:fontFamily="@font/nunito_sans_semibold"
-                />
+
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

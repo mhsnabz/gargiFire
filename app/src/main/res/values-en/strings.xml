@@ -114,8 +114,15 @@
  <string name="saat_once">hour ago</string>
  <string name="dun">yesterday</string>
  <string name="gun_once">days ago</string>
- <string name="yeterince_eslesmen_var">Tienes suficientes matches</string>
-
+ <string name="yeterince_eslesmen_var">You Have Enough Matches</string>
+ <string name="resim_yukleniyor">Image Is Uploading</string>
+ <string name="lutfen_bekleniyiz">Please Wait!</string>
+ <string name="nev">New</string>
+ <string name="eslebilecegin_kimse_yok">Malesef Eşleşebileceğin Kimse Yok</string>
+ <string name="yeni_bir_eslesmen_var_">You Have New Match</string>
+ <string name="mesaj_gonder">Send A Msg</string>
+ <string name="kapat">Close</string>
+ <string name="devam_et">Continue</string>
 
 </resources>
 

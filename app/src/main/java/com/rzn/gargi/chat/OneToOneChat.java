@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.clans.fab.FloatingActionButton;
@@ -257,6 +259,9 @@ public class OneToOneChat extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(OneToOneChat.this,ChatActivity.class);
+                i.putExtra("gender",getIntent().getStringExtra("gender"));
+                startActivity(i);
                 finish();
                setOffline();
             }
@@ -338,7 +343,12 @@ public class OneToOneChat extends AppCompatActivity {
 
         setlock(lock,unlock,getIntent().getLongExtra("timer",0));
     }
+    int count =0;
+    @Override
+    public void onBackPressed()
+    {
 
+    }
     private void setlock(final ImageView lock, final ImageView unlock, final long timer) {
         if (timer>=(27*60000)){
             lock.setVisibility(View.VISIBLE);
@@ -515,8 +525,6 @@ public class OneToOneChat extends AppCompatActivity {
    //     removeMatch(_time);
 
     }
-
-
     private void stopTimer(){
         downTimer.cancel();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -603,62 +611,17 @@ public class OneToOneChat extends AppCompatActivity {
         ref.set(map,SetOptions.merge());
     }
 
-    private void isOnline(final CallBack<Boolean> _isOnline){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference ref = db.collection("isOnline")
-                .document(auth.getUid())
-                .collection(auth.getUid())
-                .document(getIntent().getStringExtra("userId"));
-            ref.get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()){
-                        if (task!=null){
-                            if (task.getResult().getBoolean("isOnline")!=null){
-                                boolean isOnline = task.getResult().getBoolean("isOnline");
-                                if(isOnline){
-                                    _isOnline.returnTrue(true);
-                                }else _isOnline.returnFalse(false);
-                            }else _isOnline.returnFalse(false);
-
-
-                        }
-                    }
-                }
-            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-               Crashlytics.log(e.toString());
-                }
-            });
-
-
-    }
-
     private void setNewBadge(){
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference ref = db.collection("badgeCount")
-                .document("badge")
-                .collection(getIntent().getStringExtra("userId"))
-                .document(auth.getUid())
-                .collection(auth.getUid())
-                .document();
-        final Map<String,Object> mTrue = new HashMap<>();
-        final Map<String,Boolean> mFalse = new HashMap<>();
-        mTrue.put("hasBadge",true);
-        mFalse.put("hasBadge",false);
-        isOnline(new CallBack<Boolean>() {
-            @Override
-            public void returnFalse(Boolean _false) {
-                ref.set(mTrue,SetOptions.merge());
-            }
+        Map<String,Object> currentUserBadge = new HashMap<>();
+        Map<String,Object> hasBadge = new HashMap<>();
+        hasBadge.put(auth.getUid(),getIntent().getStringExtra("userId"));
+        currentUserBadge.put(auth.getUid(),hasBadge);
+        db.collection("badgeCount")
+                .document(getIntent().getStringExtra("userId")).set(hasBadge,SetOptions.merge());
 
-            @Override
-            public void returnTrue(Boolean _true) {
 
-            }
-        });
 
     }
     private void clickDeleteMatch(long _leftTime){
@@ -975,9 +938,6 @@ public class OneToOneChat extends AppCompatActivity {
     }
 
 
-    private void checkHasLimit(){
-
-    }
     private void getUserInfo(final String userId, final int size){
         final Map<String,Object> map = new HashMap<>();
 
