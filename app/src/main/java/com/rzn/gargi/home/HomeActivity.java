@@ -21,12 +21,15 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.telecom.Call;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -74,8 +77,11 @@ import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,9 +97,10 @@ public class HomeActivity extends AppCompatActivity {
      CoordinatorLayout coordinatorLayoutLay;
     String currentUser=auth.getUid();
     String gender;
+     CircleImageView centerImage;
     RippleBackground rippleBackground;
-    private Dialog noOneIsExist;
-    private long manSize,womanSize;
+    private Dialog noOneIsExist,newMatchDialog,yeterinceEslesmenVar,gunlukEslesmeLimit;
+    private long manSize,womanSize,manLimit,womanLimit;
     int result=0;
     List<String> userID;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,6 +108,8 @@ public class HomeActivity extends AppCompatActivity {
     public static final int ERROR_DIALOG_REQUEST = 9001;
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9002;
     public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9003;
+
+    private CountDownTimer downTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +117,9 @@ public class HomeActivity extends AppCompatActivity {
         mLocation = new SimpleLocation(this);
         checkMapServices();
         noOneIsExist=new Dialog(this);
+        newMatchDialog= new Dialog(this);
+        yeterinceEslesmenVar= new Dialog(this);
+        gunlukEslesmeLimit= new Dialog(this);
         coordinatorLayoutLay=(CoordinatorLayout)findViewById(R.id.coordinatorLay);
          rippleBackground=(RippleBackground)findViewById(R.id.content);
         if (!mLocation.hasLocationEnabled()) {
@@ -165,19 +177,34 @@ public class HomeActivity extends AppCompatActivity {
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         if (null != documentSnapshot.getLong("size")){
                             manSize = documentSnapshot.getLong("size");
+
                         }else manSize=0;
+                        if (null != documentSnapshot.getLong("limit")){
+                            manLimit = documentSnapshot.getLong("limit");
+
+                        }else manLimit=0;
                     }
                 });
+
             }else {
+
                 db.collection("WomanSize")
-                        .document(auth.getUid()).addSnapshotListener(HomeActivity.this,MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                        .document(auth.getUid()).addSnapshotListener(HomeActivity.this, new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         if (null != documentSnapshot){
                             if (documentSnapshot.getLong("size")!=null)
                             womanSize = documentSnapshot.getLong("size");
-                            else  womanSize=0;
-                        }
+                            else womanSize=0;
+
+
+                        }else womanSize =0;
+                        if (null != documentSnapshot){
+                            if (documentSnapshot.getLong("limit")!=null)
+                                womanLimit = documentSnapshot.getLong("limit");
+                            else  womanLimit=0;
+                        }else womanLimit =0;
+
                     }
                 });
             }
@@ -190,7 +217,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-        final CircleImageView centerImage =(CircleImageView)findViewById(R.id.centerImage);
+        centerImage =(CircleImageView)findViewById(R.id.centerImage);
         db.collection("allUser")
                 .document(auth.getUid())
                 .get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
@@ -209,7 +236,7 @@ public class HomeActivity extends AppCompatActivity {
                 Crashlytics.logException(e);
             }
         });
-        db.collection("MAN"+"match").addSnapshotListener(this,MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+      /*  db.collection("MAN"+"match").addSnapshotListener(this,MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e==null){
@@ -222,23 +249,38 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
         centerImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 if (gender.equals("MAN")){
+                    if (manLimit<10){
                     if (manSize<2){
-                        rippleBackground.startRippleAnimation();
-                        lookForNewMatchForMAN();
 
-                    }else rippleBackground.stopRippleAnimation();
-                }else if (gender.equals("WOMAN")){
-                    if (womanSize<6){
-                        rippleBackground.startRippleAnimation();
-                        lookForNewMatchForWOMAN();
+                            rippleBackground.startRippleAnimation();
+                            lookForNewMatchForMAN();
+                        }else{
+                        setYeterinceEslesmenVar();
+                        rippleBackground.stopRippleAnimation();
                     }
+                    }else {
+                            setGunlukEslesmeLimit("MAN",auth.getUid());
+                    }
+                }else if (gender.equals("WOMAN")){
+                    if (womanLimit<35){
+                        if (womanSize<6){
+                            rippleBackground.startRippleAnimation();
+                            lookForNewMatchForWOMAN();
+                        }else {
+                            setYeterinceEslesmenVar();
+                            rippleBackground.stopRippleAnimation();
+                        }
+                    }else {
+                            setGunlukEslesmeLimit("WOMAN",auth.getUid());
+                    }
+
                 }
             }
         });
@@ -260,7 +302,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (queryDocumentSnapshots.getDocuments().size()>0){
                     for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
                         String id = ds.getId();
-                        setNewMatchForMan(id);
+                        setNewMatchForWoman(id);
                     }
                 }
             }
@@ -330,7 +372,7 @@ public class HomeActivity extends AppCompatActivity {
                     if (task.getResult().getDocuments().size()>0){
                         Log.d("userIdIsExist", "onComplete: ");
                         result++;
-                        lookForNewMatchForMAN();
+                        lookForNewMatchForWOMAN();
                     }else
                     {
                         refCurrenUserMsgList.get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
@@ -341,16 +383,26 @@ public class HomeActivity extends AppCompatActivity {
                                         result++;
                                         lookForNewMatchForWOMAN();
                                     }else {
-                                        if (womanSize <2){
+                                        if (womanSize <6 && womanLimit<35){
                                             refCurrenUser.set(mapCurrenUser);
                                             refUserId.set(mapUserId);
-                                            womanSize++;
-                                            result++;
-                                            updateManSize();
 
-                                            if (womanSize<2)
+                                            updateManSize(userId);
+                                            updateWomanSize(auth.getUid());
+                                            addNewMatchOnLimit(userId);
+                                            addNewMatchOnLimitOther(userId);
+                                            updateManLimit(userId);
+                                            womanSize++;
+                                            womanLimit++;
+                                            result++;
+
+                                            showDialog();
+                                            if (womanSize<6 && womanLimit<35)
                                                 lookForNewMatchForWOMAN();
-                                        }else return;
+                                        }else {
+                                            rippleBackground.stopRippleAnimation();
+                                            return;
+                                        }
                                     }
                                 }
                             }
@@ -416,16 +468,25 @@ public class HomeActivity extends AppCompatActivity {
                                         result++;
                                         lookForNewMatchForMAN();
                                     }else {
-                                        if (manSize <2){
+                                        if (manSize <2 && manLimit<10){
                                             refCurrenUser.set(mapCurrenUser);
                                             refUserId.set(mapUserId);
                                             manSize++;
                                             result++;
-                                            updateWomanSize();
+                                            manLimit++;
+                                            updateManSize(auth.getUid());
+                                            updateWomanSize(userId);
+                                            addNewMatchOnLimit(userId);
+                                            addNewMatchOnLimitOther(userId);
+                                            updateWomanLimit(userId);
+                                            showDialog();
 
-                                            if (manSize<2)
+                                            if (manSize<2 && manLimit<10)
                                                 lookForNewMatchForMAN();
-                                        }else return;
+                                        }else {
+                                            rippleBackground.stopRippleAnimation();
+                                            return;
+                                        }
                                     }
                                 }
                             }
@@ -436,35 +497,240 @@ public class HomeActivity extends AppCompatActivity {
           }
       });
 
+    }
+
+    private void removeFromMatch(String gender , String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Task<Void> ref = db.collection(gender+"match")
+                .document(userId).delete();
 
 
     }
 
-    private void updateManSize(){
-        db.collection("msgList")
-                .document(auth.getUid())
-                .collection(auth.getUid()).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+    private void setGunlukEslesmeLimit(String gender,String currentUser){
+        gunlukEslesmeLimit.setContentView(R.layout.gunluk_eslesme_limitine_ulastin);
+        gunlukEslesmeLimit.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        gunlukEslesmeLimit.setCanceledOnTouchOutside(false);
+        gunlukEslesmeLimit.show();
+        TextView timer =(TextView)gunlukEslesmeLimit.findViewById(R.id.timer);
+        Button kapat =(Button) gunlukEslesmeLimit.findViewById(R.id.cancel);
+        kapat.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                long size = task.getResult().getDocuments().size();
-                manSize = size;
-                Map<String,Object> map = new HashMap<>();
-                map.put("size",size);
-                db.collection("ManSize").document(auth.getUid()).set(map, SetOptions.merge());
+            public void onClick(View v) {
+                gunlukEslesmeLimit.dismiss();
+            }
+        });
+        setTimer(gender,currentUser,timer);
+
+    }
+    private void setTimer(String gender , final String currentUser, final TextView timer){
+        if (gender.equals("MAN")){
+            db.collection("ManSize")
+                    .document(currentUser)
+                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        Date time = task.getResult().getDate("time");
+                        long second =time.getTime();
+                        Date date = Timestamp.now().toDate();
+                        long currentTime=date.getTime();
+                        long value = second+(24*60*60000)-currentTime;
+                        startTimer(timer,value);
+                    }
+                }
+            });
+        }else if (gender.equals("WOMAN")){
+            db.collection("WomanSize")
+                    .document(currentUser)
+                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        Date time = task.getResult().getDate("time");
+                        long second =time.getTime();
+                        Date date = Timestamp.now().toDate();
+                        long currentTime=date.getTime();
+                        long value = second+(24*60*60000)-currentTime;
+                         startTimer(timer,value);
+
+                    }
+                }
+            });
+        }
+    }
+
+    private void startTimer(final TextView timer, final long time){
+
+
+        downTimer = new CountDownTimer(time
+                ,1000) {
+            @Override
+            public void onTick(long l) {
+
+                updateTimeTV(timer,l);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+
+    }
+
+
+    private void updateTimeTV(TextView _timer,long durationInMillis) {
+       // long millis = durationInMillis % 1000;
+        long second = (durationInMillis / 1000) % 60;
+        long minute = (durationInMillis / (1000 * 60)) % 60;
+        long hour = (durationInMillis / (1000 * 60 * 60)) % 24;
+
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+        _timer.setText(time);
+       /* int hour=(int) _time % 60;
+        int min =(int) _time/60000;
+        int second = (int) _time % 60000/1000;
+        String timeLeftString;
+        timeLeftString = ""+hour;
+        timeLeftString+=":";
+        timeLeftString += ""+min;
+        timeLeftString+=":";
+        if (second< 10) timeLeftString +=0;
+        timeLeftString += second;
+        _timer.setText(timeLeftString);*/
+        // if (_time<=1500)
+        //     removeMatch(_time);
+
+    }
+    private void setYeterinceEslesmenVar(){
+        yeterinceEslesmenVar.setContentView(R.layout.yeterince_eslesmen_var);
+        yeterinceEslesmenVar.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        yeterinceEslesmenVar.setCanceledOnTouchOutside(false);
+        yeterinceEslesmenVar.show();
+        Button sendMsg=(Button)yeterinceEslesmenVar.findViewById(R.id.sendMsg);
+        sendMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,ChatActivity.class);
+                i.putExtra("gender",gender);
+                startActivity(i);
+                finish();
             }
         });
     }
-    private void updateWomanSize(){
+    private void showDialog(){
+        newMatchDialog.setContentView(R.layout.you_have_new_match);
+        newMatchDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        newMatchDialog.setCanceledOnTouchOutside(false);
+        newMatchDialog.show();
+
+        Button devamEt=(Button)newMatchDialog.findViewById(R.id.devamEt);
+        Button sendMsg=(Button)newMatchDialog.findViewById(R.id.sendMsg);
+
+        devamEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerImage.performClick();
+                newMatchDialog.dismiss();
+            }
+        });
+
+        sendMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,ChatActivity.class);
+                i.putExtra("gender",gender);
+                startActivity(i);
+                finish();
+            }
+        });
+
+
+    }
+    private void updateManSize(final  String userId){
         db.collection("msgList")
-                .document(auth.getUid())
-                .collection(auth.getUid()).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+                .document(userId)
+                .collection(userId).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 long size = task.getResult().getDocuments().size();
                 manSize = size;
                 Map<String,Object> map = new HashMap<>();
                 map.put("size",size);
-                db.collection("WomanSize").document(auth.getUid()).set(map, SetOptions.merge());
+                map.put("time",FieldValue.serverTimestamp());
+                db.collection("ManSize").document(userId).set(map, SetOptions.merge());
+                if (manSize>=2){
+                    removeFromMatch("MAN",userId);
+                    Log.d("remove", "onComplete: ");
+                }
+            }
+        });
+    }
+    private void addNewMatchOnLimit(String userId){
+        Map<String ,Object> map = new HashMap<>();
+        map.put("user",userId);
+        Map<String,Object> userMap = new HashMap<>();
+        userMap.put(userId,map);
+        db.collection("limit")
+                .document(auth.getUid())
+                .set(userMap,SetOptions.merge());
+    }
+    private void addNewMatchOnLimitOther(String userId){
+        Map<String ,Object> map = new HashMap<>();
+        map.put("user",auth.getUid());
+        Map<String,Object> userMap = new HashMap<>();
+        userMap.put(auth.getUid(),map);
+        db.collection("limit")
+                .document(userId)
+                .set(userMap,SetOptions.merge());
+    }
+    private void updateWomanLimit(final String userId){
+        db.collection("limit")
+                .document(userId)
+                .get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                long size = task.getResult().getData().size();
+                Map<String,Object> map = new HashMap<>();
+                map.put("limit",size);
+                map.put("time",FieldValue.serverTimestamp());
+                db.collection("WomanSize").document(userId).set(map, SetOptions.merge());
+            }
+        });
+    }
+
+    private void updateManLimit(final String userId){
+        db.collection("limit")
+                .document(userId)
+                .get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                long size = task.getResult().getData().size();
+                Map<String,Object> map = new HashMap<>();
+                map.put("limit",size);
+                map.put("time",FieldValue.serverTimestamp());
+                db.collection("ManSize").document(userId).set(map, SetOptions.merge());
+            }
+        });
+    }
+    private void updateWomanSize(final String userId){
+        db.collection("msgList")
+                .document(userId)
+                .collection(userId).get().addOnCompleteListener(this, new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                long size = task.getResult().getDocuments().size();
+                womanSize = size;
+                Map<String,Object> map = new HashMap<>();
+                map.put("size",size);
+                map.put("time",FieldValue.serverTimestamp());
+                db.collection("WomanSize").document(userId).set(map, SetOptions.merge());
+                if (womanSize>=6){
+                    removeFromMatch("WOMAN",userId);
+                    Log.d("remove", "onComplete: ");
+                }
             }
         });
     }
@@ -762,7 +1028,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
 
-        }else  setLayouts(auth.getUid(),gender,rippleBackground,relLayList);
+        }else {
+            setLayouts(auth.getUid(),gender,rippleBackground,relLayList);
+        }
 
     }
     private void setLayouts(final String currentUser, final String gender, final RelativeLayout rippleBackground, final RelativeLayout relLayList){
@@ -904,6 +1172,10 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
+   }
+
+   private  void setList(String gender){
 
    }
 

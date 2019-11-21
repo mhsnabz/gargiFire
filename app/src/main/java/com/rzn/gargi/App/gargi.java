@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -59,22 +60,31 @@ public class gargi extends Application {
                             final String gender = documentSnapshot.getString("gender");
                             if (!gender.isEmpty()){
                                 setChatSize(gender,user.getUid());
-                                    Log.d("genderApp", "onEvent: "+gender);
-                                    checkCount(gender, new CallBack<Boolean>() {
-                                        @Override
-                                        public void returnFalse(Boolean _false) {
-                                            Log.d("genderApp", "onEvent: "+"has not limit");
-                                        }
+                                setLimit(gender,user.getUid());
+                                checkLimit(gender, user.getUid(), new CallBack<Boolean>() {
+                                    @Override
+                                    public void returnFalse(Boolean _false) {
+                                        checkCount(gender, new CallBack<Boolean>() {
+                                            @Override
+                                            public void returnFalse(Boolean _false) {
+                                                Log.d("LimitAndSize", "returnFalse: "+"has not limit and size");
+                                            }
 
-                                        @Override
-                                        public void returnTrue(Boolean _true) {
-                                            Log.d("genderApp", "onEvent: "+"has  limit");
-                                            removeFromMatch(gender,user.getUid());
+                                            @Override
+                                            public void returnTrue(Boolean _true) {
+                                                Log.d("LimitAndSize", "returnFalse: "+"has limit and size");
+                                                removeFromMatch(gender,user.getUid());
+                                                Log.d("LimitAndSize", "returnFalse: "+"deleted = " + user.getUid());
 
+                                            }
+                                        },user.getUid());
+                                    }
 
-                                        }
-                                    },user.getUid());
+                                    @Override
+                                    public void returnTrue(Boolean _true) {
 
+                                    }
+                                });
                             }
                         }
                     });
@@ -86,6 +96,58 @@ public class gargi extends Application {
     }
 
 
+    void  checkLimit(final String gender , final String  currentUser , final CallBack<Boolean> limit){
+        final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        if (gender.equals("MAN")){
+            db.collection("limit")
+                    .document(currentUser).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (documentSnapshot!=null){
+                        if (documentSnapshot.getData()!=null){
+                            if (documentSnapshot.getData().size()<10){
+                                limit.returnFalse(false);
+                                Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
+
+                            }else {
+                                limit.returnTrue(true);
+                                removeFromMatch(gender,currentUser);
+                                Log.d("LimitAndSize", "returnFalse: "+"deleted = " + currentUser);
+                                Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
+
+
+                            }
+                        }else limit.returnFalse(false);
+
+                    }else limit.returnFalse(false);
+                }
+            });
+        }else if (gender.equals("WOMAN")){
+            db.collection("limit")
+                    .document(currentUser).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (documentSnapshot!=null){
+                        if (documentSnapshot.getData()!=null){
+                            if (documentSnapshot.getData().size()<35){
+                                limit.returnFalse(false);
+                                Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
+
+                            }else {
+                                limit.returnTrue(true);
+                                removeFromMatch(gender,currentUser);
+                                Log.d("LimitAndSize", "returnFalse: "+"deleted = " + currentUser);
+                                Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
+
+
+                            }
+                        }else  limit.returnFalse(false);
+
+                    }else limit.returnFalse(false);
+                }
+            });
+        }
+    }
     void checkCount(@NotNull final String gender, final CallBack<Boolean> _return, final String currentUser){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -94,7 +156,7 @@ public class gargi extends Application {
                 .collection(currentUser);
         chatSize = ref.addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+            public void onEvent(@Nullable final QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                 if (gender.equals("MAN")){
                     if (queryDocumentSnapshots.getDocuments().size()>=2){
@@ -103,6 +165,8 @@ public class gargi extends Application {
                     }else{
                         _return.returnFalse(false);
                         getUserInfo(currentUser,queryDocumentSnapshots.getDocuments().size());
+                        Log.d("LimitAndSize", "returnFalse: "+"added = " + currentUser);
+
 
                     }
                 }else if (gender.equals("WOMAN")){
@@ -113,6 +177,8 @@ public class gargi extends Application {
                     }else {
                         _return.returnFalse(false);
                         getUserInfo(currentUser,queryDocumentSnapshots.getDocuments().size());
+                        Log.d("LimitAndSize", "returnFalse: "+"added = " + currentUser);
+
 
                     }
                 }
@@ -131,6 +197,7 @@ public class gargi extends Application {
                 .collection(userId).addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if ( queryDocumentSnapshots.getDocuments()!=null){
                     long size= queryDocumentSnapshots.getDocuments().size();
                     Map<String,Object> map = new HashMap<>();
                     map.put("size",size);
@@ -143,9 +210,52 @@ public class gargi extends Application {
                         db.collection("WomanSize")
                                 .document(userId).set(map,SetOptions.merge());
                     }
+                }
+
 
             }
         });
+    }
+    private void setLimit(final String gender , final String userId){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("limit")
+                .document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot!=null){
+                            if (documentSnapshot.getData()!=null){
+                                long limit= documentSnapshot.getData().size();
+                                Map<String , Object > map = new HashMap<>();
+                                map.put("limit",limit);
+                                if (gender.equals("MAN")){
+                                    db.collection("ManSize")
+                                            .document(userId)
+                                            .set(map,SetOptions.merge());
+                                }else if (gender.equals("WOMAN")){
+                                    db.collection("WomanSize")
+                                            .document(userId)
+                                            .set(map,SetOptions.merge());
+                                }
+                            }else {
+                                if (gender.equals("MAN")){
+                                    Map<String , Object > map = new HashMap<>();
+                                    map.put("limit",0);
+                                    db.collection("ManSize")
+                                            .document(userId)
+                                            .set(map,SetOptions.merge());
+
+                                }else if (gender.equals("WOMAN")){
+                                    Map<String , Object > map = new HashMap<>();
+                                    map.put("limit",0);
+                                    db.collection("WomanSize")
+                                            .document(userId)
+                                            .set(map,SetOptions.merge());
+                                }
+                            }
+                        }
+                    }
+                });
     }
     @Override
     public void onLowMemory() {

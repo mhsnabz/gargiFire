@@ -123,6 +123,11 @@
 
     <string name="facebook_app_id">2326447654262106</string>
     <string name="fb_login_protocol_scheme">fb2326447654262106</string>
+    <string name="eslebilecegin_kimse_yok">Malesef Eşleşebileceğin Kimse Yok</string>
+    <string name="yeni_bir_eslesmen_var_">Yeni Bir Eşleşmen Var</string>
+    <string name="devam_et">Devam Et</string>
+    <string name="mesaj_gonder">Mesaj Yaz</string>
+    <string name="kapat">Kapat</string>
 
 
 </resources>

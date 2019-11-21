@@ -14,7 +14,7 @@
             android:id="@+id/txt1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/eslebilecegin_kimse_yok"
+            android:text="@string/yeterince_eslesmen_var"
             android:textSize="16dp"
             android:textColor="#000"
             android:textStyle="bold"
@@ -25,13 +25,26 @@
             android:layout_marginRight="20dp"
             ></TextView>
         <TextView
-
-            android:text="🙄"
+            android:id="@+id/emoji"
+            android:text="🙃"
             android:textSize="40dp"
             android:layout_marginBottom="8dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/txt1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mesaj_gonder"
+            android:layout_below="@+id/emoji"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@drawable/button_back"
+            android:id="@+id/sendMsg"
+            ></Button>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

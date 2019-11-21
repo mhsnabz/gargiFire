@@ -87,7 +87,7 @@ public class OneToOneChat extends AppCompatActivity {
     private CountDownTimer downTimer;
     private long _time;
 
-
+    Dialog dialog;
     Dialog dialog_options,report_dilaog;
     Dialog time_dialog,dialog_areYouSure ;
 
@@ -205,6 +205,10 @@ public class OneToOneChat extends AppCompatActivity {
         time_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog_areYouSure.setContentView(R.layout.are_you_sure_dialog);
         dialog_areYouSure.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog =new Dialog(this);
+        dialog.setContentView(R.layout.wait_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("allUser")
                 .document(userId)
@@ -745,6 +749,7 @@ public class OneToOneChat extends AppCompatActivity {
                  yes.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
+                         dialog.show();
                         removeMatch(getIntent().getStringExtra("userId"),auth.getUid());
                      }
                  });
@@ -804,11 +809,126 @@ public class OneToOneChat extends AppCompatActivity {
                                             .document(userId)
                                             .collection(userId);
                                     currenUserRef.document(userId).delete();
-                                    refUserId.document(currentUser).delete();
-                                    Intent i = new Intent(OneToOneChat.this,ChatActivity.class);
-                                    i.putExtra("gender",getIntent().getStringExtra("gender"));
-                                    startActivity(i);
-                                    finish();
+                                    refUserId.document(currentUser).delete().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isComplete()){
+                                                db.collection("msgList")
+                                                        .document(userId)
+                                                        .collection(userId).get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull final Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()){
+                                                                    if (getIntent().getStringExtra("gender").equals("MAN")){
+                                                                        if (task.getResult().getDocuments().size()<6){
+                                                                            db.collection("limit")
+                                                                                    .document(userId)
+                                                                                    .get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+                                                                                        @Override
+                                                                                        public void onComplete(@NonNull Task<DocumentSnapshot> taskLimit) {
+                                                                                            if (taskLimit.isSuccessful()){
+                                                                                                if (taskLimit.getResult().getData()!=null){
+                                                                                                    if (taskLimit.getResult().getData().size()<35){
+                                                                                                        getUserInfo(userId, task.getResult().getDocuments().size());
+                                                                                                        Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                                        i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                                        startActivity(i);
+                                                                                                        finish();
+                                                                                                        dialog.dismiss();
+                                                                                                    }else {
+                                                                                                        Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                                        i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                                        startActivity(i);
+                                                                                                        finish();
+                                                                                                        dialog.dismiss();
+                                                                                                    }
+                                                                                                }
+                                                                                                    else {
+                                                                                                    getUserInfo(userId, task.getResult().getDocuments().size());
+
+                                                                                                    Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                                    i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                                    startActivity(i);
+                                                                                                    finish();
+                                                                                                    dialog.dismiss();
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Crashlytics.logException(e);
+                                                                                }
+                                                                            });
+
+                                                                        }else {
+                                                                            Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                            i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                            startActivity(i);
+                                                                            finish();
+                                                                            dialog.dismiss();
+                                                                        }
+                                                                    }
+                                                                    else if (getIntent().getStringExtra("gender").equals("WOMAN")){
+                                                                        if (task.getResult().getDocuments().size()<2){
+                                                                            db.collection("limit")
+                                                                                    .document(userId)
+                                                                                    .get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<DocumentSnapshot> taskLimit) {
+                                                                                    if (taskLimit.isSuccessful()){
+                                                                                        if (taskLimit.getResult().getData()!=null){
+                                                                                            if (taskLimit.getResult().getData().size()<10){
+                                                                                                getUserInfo(userId,task.getResult().getDocuments().size());
+                                                                                                Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                                i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                                startActivity(i);
+                                                                                                finish();
+                                                                                                dialog.dismiss();
+                                                                                            }else {
+                                                                                                Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                                i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                                startActivity(i);
+                                                                                                finish();
+                                                                                                dialog.dismiss();
+                                                                                            }
+                                                                                        }else {
+                                                                                            getUserInfo(userId,task.getResult().getDocuments().size());
+
+                                                                                            Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                                            i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                                            startActivity(i);
+                                                                                            finish();
+                                                                                            dialog.dismiss();
+                                                                                        }
+
+                                                                                    }
+                                                                                }
+                                                                            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Crashlytics.logException(e);
+                                                                                }
+                                                                            });
+
+                                                                        }else {
+                                                                            Intent i = new Intent(OneToOneChat.this, ChatActivity.class);
+                                                                            i.putExtra("gender",getIntent().getStringExtra("gender"));
+                                                                            startActivity(i);
+                                                                            finish();
+                                                                            dialog.dismiss();
+                                                                        }
+                                                                    }
+
+
+                                                                }
+                                                            }
+                                                        });
+
+                                            }
+                                        }
+                                    });
+
                                 }
                             }
                         }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
@@ -855,6 +975,40 @@ public class OneToOneChat extends AppCompatActivity {
     }
 
 
+    private void checkHasLimit(){
+
+    }
+    private void getUserInfo(final String userId, final int size){
+        final Map<String,Object> map = new HashMap<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("allUser")
+                .document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getLong("age")!=null){
+                        long age = task.getResult().getLong("age");
+                        map.put("age",age);
 
 
+                    }
+                    String gender = task.getResult().getString("gender");
+                    String burc= task.getResult().getString("burc");
+                    map.put("burc",burc );
+                    map.put("chatSize",size);
+                    addOnChat(gender,userId,map);
+                }
+
+            }
+        });
+    }
+    Task<Void> db;
+    private void addOnChat(String gender , String userID , Map<String, Object> map){
+        db = FirebaseFirestore.getInstance()
+                .collection(gender+"match")
+                .document(userID)
+                .set(map, SetOptions.merge());
+
+    }
 }

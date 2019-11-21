@@ -135,6 +135,7 @@ public class Messege extends Fragment {
                     i.putExtra("userId",model.getSenderUid());
                    // i.putExtra("isOnline",model.isOnline());
                     i.putExtra("timer",model.getTimer());
+                    i.putExtra("gender",getActivity().getIntent().getStringExtra("gender"));
                     holder.removeBadge(model.getSenderUid());
                     getActivity().startActivity(i);
                 }
