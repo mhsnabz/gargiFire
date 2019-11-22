@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -92,6 +93,7 @@ public class OneToOneChat extends AppCompatActivity {
     Dialog dialog;
     Dialog dialog_options,report_dilaog;
     Dialog time_dialog,dialog_areYouSure ;
+    String tokenId;
 
     @Override
 
@@ -127,8 +129,18 @@ public class OneToOneChat extends AppCompatActivity {
 
             }
         });
-
-
+        FirebaseFirestore dbToken = FirebaseFirestore.getInstance();
+        dbToken.collection("allUser")
+                .document(getIntent().getStringExtra("userId")).get().addOnSuccessListener(OneToOneChat.this, new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot!=null){
+                        if (documentSnapshot.getString("tokenID")!=null){
+                            tokenId=documentSnapshot.getString("tokenID");
+                        }
+                    }
+            }
+        });
         mAdapter= new Adapter(msgges);
         msg_list = (RecyclerView)findViewById(R.id.messeges_list) ;
         layoutManager = new LinearLayoutManager(OneToOneChat.this);
@@ -380,7 +392,34 @@ public class OneToOneChat extends AppCompatActivity {
 
 
     }
+    FirebaseFirestore notDb = FirebaseFirestore.getInstance();
+    private void sendNotification(String userId,String tokenId){
+        if (!tokenId.isEmpty()){
+            Map<String,Object> not=new HashMap<>();
 
+            not.put("from",auth.getUid());
+            not.put("type","msg");
+            not.put("getter",userId);
+            not.put("title","yeni mesaj");
+            not.put("tokenID",tokenId);
+            notDb.collection("notification")
+                    .document(userId)
+                    .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if (task.isSuccessful()){
+                        Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                    }
+                }
+            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Crashlytics.logException(e);
+                }
+            });
+        }
+
+    }
     private void sendMsg(String currentUser, final String userId){
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference refSender = db.collection("msg")
@@ -429,6 +468,7 @@ public class OneToOneChat extends AppCompatActivity {
                                                 Map<String,Object> map1 = new HashMap<>();
                                                 map1.put("time", FieldValue.serverTimestamp());
                                                 ref.set(map1,SetOptions.merge() );
+                                                sendNotification(userId,tokenId);
                                             }
                                         }
                                     });

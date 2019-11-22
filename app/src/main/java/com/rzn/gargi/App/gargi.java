@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.annotations.NotNull;
@@ -30,6 +31,8 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.CallBack;
 import com.rzn.gargi.home.HomeActivity;
 import com.squareup.picasso.OkHttp3Downloader;
@@ -55,8 +58,15 @@ public class gargi extends Application {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user!=null){
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
                 if (user.getUid()!=null){
+
+                    String tokenID = FirebaseInstanceId.getInstance().getToken();
+                    Map<String,Object> map=new HashMap<>();
+                    map.put("tokenID",tokenID);
+                    db.collection("allUser")
+                            .document(user.getUid())
+                            .set(map,SetOptions.merge());
 
                     db.collection("allUser")
                             .document(user.getUid()).addSnapshotListener( new EventListener<DocumentSnapshot>() {
