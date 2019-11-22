@@ -67,7 +67,7 @@ public class gargi extends Application {
                     db.collection("allUser")
                             .document(user.getUid())
                             .set(map,SetOptions.merge());
-
+                    rate("8Suta5hWD8dmLTMw1wAKnVUWIN93","BoRlFNqV5GexjltualfmT88FbY22",5);
                     db.collection("allUser")
                             .document(user.getUid()).addSnapshotListener( new EventListener<DocumentSnapshot>() {
                         @Override
@@ -336,5 +336,31 @@ public class gargi extends Application {
 
    }
 
+   private void setRate(){
+       FirebaseFirestore db = FirebaseFirestore.getInstance();
+       final String uid = "ml20r64rnmXBpPHNpO8tbSW5Y8v1";
+       db.collection("allUser").addSnapshotListener(new EventListener<QuerySnapshot>() {
+           @Override
+           public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
+                    if (dc.getType()==DocumentChange.Type.ADDED){
+                        String id = dc.getDocument().getId();
+                        Log.d("allUser-->>", "onEvent: "+id);
+                    }
 
+                }
+           }
+       });
+
+   }
+
+   private void rate(String id ,String uid,long R){
+       Map<String , Object> map = new HashMap<>();map.put("rate",R);
+       FirebaseFirestore db =FirebaseFirestore.getInstance();
+       db.collection("rate")
+               .document(id)
+               .collection(id)
+               .document(uid).set(map,SetOptions.merge());
+       Log.d("rate is done", "rate: "+"done");
+   }
 }

@@ -128,6 +128,11 @@
     <string name="devam_et">Devam Et</string>
     <string name="mesaj_gonder">Mesaj Yaz</string>
     <string name="kapat">Kapat</string>
+    <string name="sana_yeni_bir_mesaj_gonderdi">Sent You a New Message</string>
+    <string name="bir_beyefendi_size">Bir Beyefendi Size</string>
+    <string name="puan_verdi">Puan Verdi</string>
+    <string name="rate">Yeni Bir Oy Aldınız</string>
+    <string name="bir_hanımefendi_size">Bir Hanımefendi Size</string>
 
 
 </resources>

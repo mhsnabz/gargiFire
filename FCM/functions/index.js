@@ -17,8 +17,7 @@ exports.sendNotification =functions.firestore.document("/notification/{user_id}/
         const from_user_id=queryResult.data().from; 
         const type = queryResult.data().type;
         const tokenId = queryResult.data().tokenID;
-        const title = queryResult.data().title;
-        console.log("type = " +type +"  from_user"+from_user_id+"to_user    "+user_id +"  tokenID "+ tokenId);
+        const name = queryResult.data().name;
         const from_data = admin.firestore()
 
         .collection("allUser").doc(from_user_id).get();
@@ -29,19 +28,12 @@ exports.sendNotification =functions.firestore.document("/notification/{user_id}/
         //const to_name = result[1].name;
         console.log(result[0] +":  "+result[1]+":   " + type);
         const payload = {
-            notification: {
-              title: title,
-              body: type,
-              icon: "default",
-              sound : "sound.mp3",
-             
-
-            },
+         
             data : {
-            "body" : type,
-            "title": title,
+            
             "userID" : user_id,
-            "type" : type
+            "type" : type,
+            "name" : name
             }
                 };
                 return admin.messaging().sendToDevice(tokenId, payload);

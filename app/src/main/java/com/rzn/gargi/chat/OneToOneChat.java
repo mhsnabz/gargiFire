@@ -93,7 +93,7 @@ public class OneToOneChat extends AppCompatActivity {
     Dialog dialog;
     Dialog dialog_options,report_dilaog;
     Dialog time_dialog,dialog_areYouSure ;
-    String tokenId;
+    String tokenId,userName;
 
     @Override
 
@@ -138,7 +138,16 @@ public class OneToOneChat extends AppCompatActivity {
                         if (documentSnapshot.getString("tokenID")!=null){
                             tokenId=documentSnapshot.getString("tokenID");
                         }
+
                     }
+            }
+        });
+        dbToken.collection("allUser")
+                .document(auth.getUid())
+                .get().addOnSuccessListener(OneToOneChat.this, new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userName=documentSnapshot.getString("name");
             }
         });
         mAdapter= new Adapter(msgges);
@@ -392,16 +401,17 @@ public class OneToOneChat extends AppCompatActivity {
 
 
     }
+
     FirebaseFirestore notDb = FirebaseFirestore.getInstance();
     private void sendNotification(String userId,String tokenId){
         if (!tokenId.isEmpty()){
-            Map<String,Object> not=new HashMap<>();
 
+            Map<String,Object> not=new HashMap<>();
             not.put("from",auth.getUid());
             not.put("type","msg");
             not.put("getter",userId);
-            not.put("title","yeni mesaj");
             not.put("tokenID",tokenId);
+            not.put("name",userName);
             notDb.collection("notification")
                     .document(userId)
                     .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {

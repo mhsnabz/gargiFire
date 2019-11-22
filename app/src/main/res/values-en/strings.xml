@@ -123,6 +123,7 @@
  <string name="mesaj_gonder">Send A Msg</string>
  <string name="kapat">Close</string>
  <string name="devam_et">Continue</string>
+ <string name="sana_yeni_bir_mesaj_gonderdi">Sent You a New Message</string>
 
 </resources>
 

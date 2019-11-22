@@ -26,44 +26,46 @@ import java.util.Map;
 import java.util.Random;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String type,user_id,name,title,body;
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        if(remoteMessage.getData().isEmpty())
-            showNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-        else
-            showNotification(remoteMessage.getData());
+
+           showNotification(remoteMessage.getData());
     }
+
+
     private void showNotification(Map<String, String> data)
     {
-        final String baslik;
-        final String[] gonderen = new String[1];
-        final String tipi;
-        String title= data.get("title");
-        String body = data.get("body");
-        String type = data.get("type");
-        String userId = data.get("user_id");
-        if (!title.isEmpty()){
-            if (title.equals("yeni mesaj")){
-                baslik=getResources().getString(R.string.yeni_bir_mesaj_var);
-            }else if (title.equals("esleme")){
-                baslik=getResources().getString(R.string.yeni_bir_eslesmen_var_);
-            }
+
+        String type= data.get("type");
+        String body = "";
+        String name = data.get("name");
+        String gender =data.get("gender");
+        String rate =data.get("gender");
+
+        if (type.equals("msg")){
+            type=getResources().getString(R.string.yeni_bir_mesaj_var);
+
+            body = name +"  "+ getResources().getString(R.string.sana_yeni_bir_mesaj_gonderdi);
         }
-        if (!userId.isEmpty()){
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("allUser")
-                    .document(userId).get().addOnSuccessListener( new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot!=null){
-                        if (documentSnapshot.getString("name")!=null){
-                            gonderen[0] =documentSnapshot.getString("name");
-                        }
-                    }
-                }
-            });
+       else if (type.equals("match")){
+            type=getResources().getString(R.string.yeni_bir_eslesmen_var_ );
+
+            body = name ;
+        }else if (type.equals("rate")){
+           if (gender.equals("MAN"))
+           {
+               type=getResources().getString(R.string.rate);
+               body=getResources().getString(R.string.bir_beyefendi_size)+" "+rate+" "+getResources().getString(R.string.puan_verdi);
+
+           }else if (gender.equals("WOMAN")){
+               type=getResources().getString(R.string.rate);
+               body=getResources().getString(R.string.bir_hanımefendi_size)+" "+rate+" "+getResources().getString(R.string.puan_verdi);
+           }
         }
+
         NotificationManager manager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         String channel = "com.gargi";
         String channel_2 = "com.gargii";
@@ -84,7 +86,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder.setAutoCancel(true);
             builder.setWhen(System.currentTimeMillis());
             builder.setSmallIcon(R.mipmap.notification_logo);
-            builder.setContentTitle(title);
+            builder.setContentTitle(type);
             builder.setContentText(body);
             builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
             builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
@@ -104,7 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder.setAutoCancel(true);
             builder.setWhen(System.currentTimeMillis());
             builder.setSmallIcon(R.mipmap.notification_logo);
-            builder.setContentTitle(title);
+            builder.setContentTitle(type);
             builder.setContentText(body);
             //  builder.setDefaults(Notification.DEFAULT_VIBRATE);
 
@@ -121,88 +123,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void showNotification(String title,String body){
-
-
-
-        NotificationManager manager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        String channel = "com.gargi";
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            NotificationChannel  channel1
-                    = new NotificationChannel(channel,"bildirim",
-                    NotificationManager.IMPORTANCE_UNSPECIFIED);
-            Intent configureIntent = new Intent(getApplicationContext(), Messege.class);
-            configureIntent.putExtra("extra", "123123");
-            configureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), 0, configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            channel1.setDescription("Gargii");
-            channel1 .enableLights(true);
-            channel1.setLightColor(Color.BLUE);
-            // channel1.setVibrationPattern(new long[]{0,1000,500,1000});
-            manager.createNotificationChannel(channel1);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channel);
-            builder.setAutoCancel(true);
-            builder.setWhen(System.currentTimeMillis());
-            builder.setSmallIcon(R.mipmap.notification_logo);
-            builder.setContentTitle(title);
-            builder.setContentText(body);
-            builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
-            builder.setContentIntent(pendingClearScreenIntent);
-            builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
-            manager.cancelAll();
-
-            manager.notify(new Random().nextInt(),builder.build());
-
-        }
-        else{
-            Intent configureIntent = new Intent(getApplicationContext(), Messege.class);
-            configureIntent.putExtra("extra", "123123");
-            configureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), 0, configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channel);
-            builder.setAutoCancel(true);
-            builder.setWhen(System.currentTimeMillis());
-            builder.setSmallIcon(R.mipmap.notification_logo);
-            builder.setContentTitle(title);
-            builder.setContentText(body);
-            //  builder.setDefaults(Notification.DEFAULT_VIBRATE);
-            builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
-            builder.setContentIntent(pendingClearScreenIntent);
-            builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
-
-
-         /*   NotificationCompat.Builder builder2 = new NotificationCompat.Builder(this,channel);
-            builder2.setAutoCancel(true);
-            builder2.setWhen(System.currentTimeMillis());
-            builder2.setSmallIcon(R.mipmap.logo);
-            builder2.setContentTitle(title);
-            builder2.setContentText(body);
-            builder2.setVibrate(new long[]{0,1000,500,1000});
-            builder2.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
-            builder2.setContentIntent(pendingClearScreenIntent);
-            builder2.build().flags |= Notification.FLAG_AUTO_CANCEL;
-            Notification summaryNotification = new NotificationCompat.Builder(this, CHANNEL_2_ID)
-                    .setSmallIcon(R.mipmap.logo)
-                    .setStyle(new NotificationCompat.InboxStyle()
-                            .addLine("Yeni Mesajın Var")
-                            .addLine("Yeni Mesajın Var")
-                            .setBigContentTitle("Mesajların Var")
-                            .setSummaryText("Gargii"))
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setGroup("example_group")
-                    .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
-                    .setGroupSummary(true)
-                    .build();*/
-            manager.cancelAll();
-            manager.notify(new Random().nextInt(),builder.build());
-            // manager.notify(new Random().nextInt(),builder2.build());
-            // manager.notify(new Random().nextInt(),summaryNotification);
-
-
-        }
-    }
     @Override
     public void onNewToken(String mToken) {
         super.onNewToken(mToken);

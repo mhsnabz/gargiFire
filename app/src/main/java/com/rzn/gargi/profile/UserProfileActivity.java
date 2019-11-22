@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.helper.RatingDialog;
 import com.rzn.gargi.helper.UserInfo;
@@ -114,7 +115,9 @@ public class UserProfileActivity extends AppCompatActivity {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("rate")
                             .document(userId)
-                            .update(crrntUser)
+                            .collection(userId)
+                            .document(auth.getUid())
+                            .set(rate, SetOptions.merge())
                             .addOnCompleteListener(UserProfileActivity.this
                                     , new OnCompleteListener<Void>() {
                                         @Override
