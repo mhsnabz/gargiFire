@@ -115,6 +115,7 @@ public class HomeActivity extends AppCompatActivity {
     int result=0;
     List<String> userID;
     List<String> userId;
+    String userName;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean mLocationPermissionGranted = false;
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -421,6 +422,7 @@ public class HomeActivity extends AppCompatActivity {
                                             womanSize++;
                                             womanLimit++;
                                             result++;
+                                            sendNotification(userId);
 
                                             showDialog();
                                             if (womanSize<6 && womanLimit<35)
@@ -520,6 +522,7 @@ public class HomeActivity extends AppCompatActivity {
                                             addNewMatchOnLimitOther(userId);
                                             updateWomanLimit(userId);
                                             setBadge(userId,auth.getUid());
+                                            sendNotification(userId);
                                             showDialog();
 
                                             if (manSize<2 && manLimit<10)
@@ -826,6 +829,7 @@ public class HomeActivity extends AppCompatActivity {
     }
         ///TODO: bottom navigiton setter
     private void setNavigation(final String  gender){
+        getName();
         BottomNavigationView view;
         view=(BottomNavigationView)findViewById(R.id.navigationController);
 
@@ -1018,6 +1022,56 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
 
 
+    }
+    FirebaseFirestore notDb=FirebaseFirestore.getInstance();
+    private void sendNotification(final String userId){
+        notDb.collection("allUser")
+                .document(userId)
+                .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getString("tokenID")!=null ){
+                        Map<String,Object> not=new HashMap<>();
+                        not.put("from",auth.getUid());
+                        not.put("type","match");
+                        not.put("getter",userId);
+                        not.put("tokenID",task.getResult().getString("tokenID"));
+                        not.put("name",userName);
+                        notDb.collection("notification")
+                                .document(userId)
+                                .collection("notification").add(not).addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()){
+                                    Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                                }
+                            }
+                        }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Crashlytics.logException(e);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+
+    }
+    private void getName(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("allUser")
+                .document(auth.getUid())
+                .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    userName = task.getResult().getString("name");
+                }
+            }
+        });
     }
     private boolean checkMapServices(){
         if(isServicesOK()){

@@ -1,16 +1,20 @@
 package com.rzn.gargi.helper;
 
     public class Rate {
-        int rate;
+      long rate ;
+
+        public Rate(long rate) {
+            this.rate = rate;
+        }
 
         public Rate() {
         }
 
-        public Rate(int rate) {
-            this.rate = rate;
+        public long getRate() {
+            return rate;
         }
 
-        public int getRate() {
-            return rate;
+        public void setRate(long rate) {
+            this.rate = rate;
         }
     }

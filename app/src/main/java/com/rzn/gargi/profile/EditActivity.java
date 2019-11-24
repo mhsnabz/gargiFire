@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -184,7 +185,9 @@ public class EditActivity extends AppCompatActivity {
                         if (info.getName() != null) {
                             name.setText(info.getName());
                         }
-                        if (info.getInsta() != null) {
+                        calculateRate(info.getCount(),info.getTotalRate());
+
+                       /* if (info.getInsta() != null) {
                             insta.setVisibility(View.VISIBLE);
                             instaUrl = instaUrl + info.getInsta();
                         } else insta.setVisibility(View.GONE);
@@ -199,7 +202,7 @@ public class EditActivity extends AppCompatActivity {
                         if (info.getSnap() != null) {
                             snap.setVisibility(View.VISIBLE);
                             snapchatUrl = snapchatUrl + info.getSnap();
-                        } else snap.setVisibility(View.GONE);
+                        } else snap.setVisibility(View.GONE);*/
                         if (info.getJob() != null) {
                             job.setText(info.getJob());
                         }
@@ -215,24 +218,21 @@ public class EditActivity extends AppCompatActivity {
                             getHoroscope(burc,info.getBurc());
                         }else burc.setVisibility(View.GONE);
 
-                        if (info.getInsta() != null || info.getTwitter() != null || info.getFace() != null ||info.getSnap() != null){
-                            relSocial.setVisibility(View.VISIBLE);
-                        }else relSocial.setVisibility(View.GONE);
-                        if (info.getAbout() != null){
-                            relAbout.setVisibility(View.VISIBLE);
-                        }else relAbout.setVisibility(View.GONE);
-                        if (info.getJob()!=null || info.getSchool()!=null){
-                            relJobSchool.setVisibility(View.VISIBLE);
-                        }else {
-                            relJobSchool.setVisibility(View.GONE);
-                        }
+
                     }
                 }
             }
         });
 
 
-    }    private void getHoroscope(ImageView burc,String _burc) {
+    }
+    private void calculateRate(long count , long totalRate){
+        double rating = (double) totalRate/count;
+        rating=Math.round(rating*100.0)/100.0;
+        point.setText(String.valueOf(rating));
+
+    }
+    private void getHoroscope(ImageView burc,String _burc) {
         if (_burc.equals("balik"))
             burc.setImageResource(R.drawable.balik);
         else if (_burc.equals("kova"))
@@ -262,7 +262,62 @@ public class EditActivity extends AppCompatActivity {
                 burc.setVisibility(View.GONE);
         }
     }
+    private void getInfo(String userId,String gender){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(gender)
+                .document(userId).get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getString("about").isEmpty()){
+                        Log.d("userInfo", "about: "+"isEmpty");
+                        relAbout.setVisibility(View.GONE);
+                    }else  relAbout.setVisibility(View.VISIBLE);
 
+                    if (task.getResult().getString("job").isEmpty()&&task.getResult().getString("school").isEmpty()){
+                        relJobSchool.setVisibility(View.GONE);
+                    }else relJobSchool.setVisibility(View.VISIBLE);
+
+
+                    if (task.getResult().getString("face").isEmpty()
+                            && task.getResult().getString("insta").isEmpty()&&
+                            task.getResult().getString("snap").isEmpty()&&
+                            task.getResult().getString("twitter").isEmpty()  ){
+                        relSocial.setVisibility(View.GONE);
+                    }else{
+                        relSocial.setVisibility(View.VISIBLE);
+
+                        if (!task.getResult().getString("face").isEmpty()){
+                            facebook.setVisibility(View.VISIBLE);
+                            facebookUrl = facebookUrl + task.getResult().getString("face");
+
+                        }else facebook.setVisibility(View.GONE);
+
+                        if (!task.getResult().getString("insta").isEmpty()){
+                            insta.setVisibility(View.VISIBLE);
+                            instaUrl = instaUrl + task.getResult().getString("insta");
+                        }else insta.setVisibility(View.GONE);
+
+                        if (!task.getResult().getString("snap").isEmpty()){
+                            snap.setVisibility(View.VISIBLE);
+                            snapchatUrl = snapchatUrl + task.getResult().getString("snap");
+
+                        }else snap.setVisibility(View.GONE);
+
+                        if (!task.getResult().getString("twitter").isEmpty()){
+                            twitter.setVisibility(View.VISIBLE);
+                            twitterUrl = twitterUrl +task.getResult().getString("twitter");
+
+                        }else twitter.setVisibility(View.GONE);
+                    }
+
+
+
+
+                }
+            }
+        });
+    }
     private String convert(long milisecond){
         Calendar currentDate = Calendar.getInstance();
         SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -315,6 +370,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        getInfo(auth.getUid(),getIntent().getStringExtra("gender"));
         loadProfileInfo(getIntent().getStringExtra("gender"),insta,facebook,twitter,snap,name,age,job,school,about,horoscope);
         loadImages();
     }

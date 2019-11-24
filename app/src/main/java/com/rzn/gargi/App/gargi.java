@@ -34,17 +34,23 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.CallBack;
+import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.home.HomeActivity;
+import com.rzn.gargi.profile.UserProfileActivity;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 
+import org.w3c.dom.Document;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class gargi extends Application {
-
+    String currentUser;
     @Override
     public void onCreate() {
 
@@ -55,28 +61,31 @@ public class gargi extends Application {
         built.setIndicatorsEnabled(true);
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user!=null){
+                    final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user!=null){
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                if (user.getUid()!=null){
+                    //   getUser();
 
+                    currentUser = firebaseAuth.getCurrentUser().getUid();
                     String tokenID = FirebaseInstanceId.getInstance().getToken();
                     Map<String,Object> map=new HashMap<>();
                     map.put("tokenID",tokenID);
                     db.collection("allUser")
-                            .document(user.getUid())
+                            .document(currentUser)
                             .set(map,SetOptions.merge());
-                    rate("8Suta5hWD8dmLTMw1wAKnVUWIN93","BoRlFNqV5GexjltualfmT88FbY22",5);
                     db.collection("allUser")
-                            .document(user.getUid()).addSnapshotListener( new EventListener<DocumentSnapshot>() {
+                            .document(currentUser).addSnapshotListener( new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                             final String gender = documentSnapshot.getString("gender");
                             if (!gender.isEmpty()){
-                                setChatSize(gender,user.getUid());
-                                setLimit(gender,user.getUid());
-                                checkLimit(gender, user.getUid(), new CallBack<Boolean>() {
+                                setChatSize(gender, firebaseAuth.getCurrentUser().getUid());
+                                setLimit(gender,currentUser);
+                                checkLimit(gender, currentUser, new CallBack<Boolean>() {
                                     @Override
                                     public void returnFalse(Boolean _false) {
                                         checkCount(gender, new CallBack<Boolean>() {
@@ -88,11 +97,11 @@ public class gargi extends Application {
                                             @Override
                                             public void returnTrue(Boolean _true) {
                                                 Log.d("LimitAndSize", "returnFalse: "+"has limit and size");
-                                                removeFromMatch(gender,user.getUid());
-                                                Log.d("LimitAndSize", "returnFalse: "+"deleted = " + user.getUid());
+                                                removeFromMatch(gender,currentUser);
+                                                Log.d("LimitAndSize", "returnFalse: "+"deleted = " + currentUser);
 
                                             }
-                                        },user.getUid());
+                                        },currentUser);
                                     }
 
                                     @Override
@@ -103,13 +112,95 @@ public class gargi extends Application {
                             }
                         }
                     });
-                }
 
-        }
+
+                }
+            }
+        });
+
         //set();
         super.onCreate();
     }
+    List<Rate> rates;
+    Rate rateModel;
 
+    private void getManUser(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("WOMAN")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (queryDocumentSnapshots!=null){
+                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()){
+                       getTotalRate(ds.getId());
+                    }
+                }
+            }
+        });
+    }
+    private void getTotalRate(final String userId){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference ref = db.collection("rate")
+                .document(userId).collection(userId);
+
+        ref.addSnapshotListener( MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e!=null){
+                    return;
+                }else {
+                    rates= new ArrayList<>();
+                    if (queryDocumentSnapshots!=null){
+                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
+                            if (dc.getType()==DocumentChange.Type.ADDED)
+                            {
+                                Log.d("userId", "onEvent: "+userId);
+                                rateModel =dc.getDocument().toObject(Rate.class);
+                                rates.add(rateModel);
+                                setRateModel(rates,userId,"WOMAN");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+    }
+
+
+
+    private void setRateModel(List<Rate> rates,String userId,String gender){
+        long toplamPuan = 0;
+        for (int i =0;i<rates.size();i++)
+        {
+
+            Log.d("rates", "setRateModel: "+rates.get(i).getRate());
+            toplamPuan=toplamPuan+rates.get(i).getRate();
+            Log.d("rates", "setRateModel: "+toplamPuan);
+            Log.d("rates", "setRateModel: "+rates.size());
+            Log.d("rates", "setRateModel: "+"totalRate= " + (double)toplamPuan/rates.size()  );
+
+        }
+        Map<String ,Object > count = new HashMap<>();
+        Map<String ,Object > totalRate = new HashMap<>();
+        Map<String ,Object > rate = new HashMap<>();
+        count.put("count",rates.size());
+        totalRate.put("totalRate",toplamPuan);
+        rate.put("rate",(double)toplamPuan/rates.size());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref = db.collection(gender)
+                .document(userId);
+        ref.set(count, SetOptions.merge())
+        ;
+        ref.set(totalRate, SetOptions.merge())
+        ;
+
+        ref.set(rate, SetOptions.merge())
+        ;
+    }
 
     void  checkLimit(final String gender , final String  currentUser , final CallBack<Boolean> limit){
         final FirebaseFirestore db  = FirebaseFirestore.getInstance();
@@ -315,13 +406,14 @@ public class gargi extends Application {
 
    private void getUser(){
        FirebaseFirestore db = FirebaseFirestore.getInstance();
-       CollectionReference ref = db.collection("MAN");
+       CollectionReference ref = db.collection("WOMAN");
        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
            @Override
            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
             for (DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()){
-                getUserInfo(dc.getId(),0);
+               // getUserInfo(dc.getId(),0);
                 Log.d("userId", "onSuccess: "+dc.getId());
+                setSocial("WOMAN",dc.getId());
             }
            }
        });
@@ -336,31 +428,17 @@ public class gargi extends Application {
 
    }
 
-   private void setRate(){
-       FirebaseFirestore db = FirebaseFirestore.getInstance();
-       final String uid = "ml20r64rnmXBpPHNpO8tbSW5Y8v1";
-       db.collection("allUser").addSnapshotListener(new EventListener<QuerySnapshot>() {
-           @Override
-           public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()){
-                    if (dc.getType()==DocumentChange.Type.ADDED){
-                        String id = dc.getDocument().getId();
-                        Log.d("allUser-->>", "onEvent: "+id);
-                    }
 
-                }
-           }
-       });
-
-   }
-
-   private void rate(String id ,String uid,long R){
-       Map<String , Object> map = new HashMap<>();map.put("rate",R);
+   private void setSocial(String gender , String userID){
        FirebaseFirestore db =FirebaseFirestore.getInstance();
-       db.collection("rate")
-               .document(id)
-               .collection(id)
-               .document(uid).set(map,SetOptions.merge());
-       Log.d("rate is done", "rate: "+"done");
+
+
+       Map<String,Object> map= new HashMap<>();
+       map.put("insta","");
+       map.put("snap","");
+       map.put("face","");
+       map.put("twitter","");
+       db.collection(gender)
+               .document(userID).set(map,SetOptions.merge());
    }
 }

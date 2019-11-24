@@ -18,6 +18,8 @@ exports.sendNotification =functions.firestore.document("/notification/{user_id}/
         const type = queryResult.data().type;
         const tokenId = queryResult.data().tokenID;
         const name = queryResult.data().name;
+        const rate = queryResult.data().rate;
+        const gender = queryResult.data().gender;
         const from_data = admin.firestore()
 
         .collection("allUser").doc(from_user_id).get();
@@ -33,7 +35,10 @@ exports.sendNotification =functions.firestore.document("/notification/{user_id}/
             
             "userID" : user_id,
             "type" : type,
-            "name" : name
+            "name" : name,
+            "rate" : rate,
+            "gender" : gender
+
             }
                 };
                 return admin.messaging().sendToDevice(tokenId, payload);

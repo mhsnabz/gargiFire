@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String body = "";
         String name = data.get("name");
         String gender =data.get("gender");
-        String rate =data.get("gender");
+        String rate =data.get("rate");
 
         if (type.equals("msg")){
             type=getResources().getString(R.string.yeni_bir_mesaj_var);

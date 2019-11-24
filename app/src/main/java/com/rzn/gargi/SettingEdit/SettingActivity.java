@@ -85,10 +85,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                GoogleSignIn.getClient(
-                        SettingActivity.this,
-                        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                ).signOut();
+
                 Intent intent = new Intent(SettingActivity.this, SplashScreen.class);
 
                 startActivity(intent);

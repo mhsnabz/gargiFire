@@ -124,6 +124,9 @@
  <string name="kapat">Close</string>
  <string name="devam_et">Continue</string>
  <string name="sana_yeni_bir_mesaj_gonderdi">Sent You a New Message</string>
-
+ <string name="bir_beyefendi_size">A Gentleman Gave You </string>
+ <string name="puan_verdi">Points</string>
+ <string name="bir_hanımefendi_size">A Lady Gave You</string>
+ <string name="rate">Someone Voted You</string>
 </resources>
 

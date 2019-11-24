@@ -55,18 +55,21 @@ public class sliderAdapter extends PagerAdapter {
         final SpinKitView loading = (SpinKitView)view.findViewById(R.id.spinkit_loding);
         Log.d("instantiateItem", "instantiateItem: " + images.get(position));
         String img = String.valueOf(images.get(position));
-        Picasso.get().load(images.get(position)).config(Bitmap.Config.RGB_565).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.upload_place_holder)
-                .into(profile_image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        loading.setVisibility(View.GONE);
-                    }
+        if (!img.isEmpty()){
+            Picasso.get().load(images.get(position)).config(Bitmap.Config.RGB_565).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.upload_place_holder)
+                    .into(profile_image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            loading.setVisibility(View.GONE);
+                        }
 
-                    @Override
-                    public void onError(Exception e) {
+                        @Override
+                        public void onError(Exception e) {
 
-                    }
-                });
+                        }
+                    });
+        }
+
         container.addView(view);
         return view;
     }

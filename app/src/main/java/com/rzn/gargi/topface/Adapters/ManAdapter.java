@@ -106,7 +106,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
     public ViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.topface_single_layout, parent, false);
-        dialog = new Dialog(context);
+        dialog = new Dialog( parent.getContext());
 
         return new ManAdapter.ViewHoder(itemView);
     }

@@ -19,10 +19,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -30,11 +35,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
+import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.helper.RatingDialog;
 import com.rzn.gargi.helper.UserInfo;
 import com.rzn.gargi.helper.sliderAdapter;
+import com.rzn.gargi.home.HomeActivity;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -46,6 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import im.delight.android.location.SimpleLocation;
@@ -75,10 +84,12 @@ public class UserProfileActivity extends AppCompatActivity {
     private SimpleLocation location;
     RelativeLayout relSocial,relAbout,relJobSchool;
     long old_rate,total_rate;
-
+    List<com.rzn.gargi.helper.Rate> rates;
+    Rate rateModel;
     String gender ;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         dialog= new Dialog(this);
@@ -88,7 +99,7 @@ public class UserProfileActivity extends AppCompatActivity {
         relJobSchool=(RelativeLayout)findViewById(R.id.relLay_job_school);
         relSocial=(RelativeLayout)findViewById(R.id.relLay_social);
         location_tv=(TextView)findViewById(R.id.location);
-
+       // rates = new ArrayList<>();
         dots =(LinearLayout)findViewById(R.id.dots);
         pager_image=(ViewPager)findViewById(R.id.pager_image);
         location = new SimpleLocation(this);
@@ -104,35 +115,35 @@ public class UserProfileActivity extends AppCompatActivity {
         snap=(CircleImageView)findViewById(R.id.snapchat);
         twitter=(CircleImageView)findViewById(R.id.twit);
         ratingBar=(ScaleRatingBar)findViewById(R.id.rate);
+        getInfo(getIntent().getStringExtra("userId"),getIntent().getStringExtra("gender"));
         ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
+            public void onRatingChange(BaseRatingBar ratingBar, final float rating, boolean fromUser) {
                 if (fromUser){
-                    Map<String,Object> crrntUser =new HashMap<>();
-                    Map<String,Long> rate = new HashMap<>();
-                    rate.put("rate",(long)rating);
-                    crrntUser.put(auth.getUid(),rate);
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("rate")
-                            .document(userId)
-                            .collection(userId)
-                            .document(auth.getUid())
-                            .set(rate, SetOptions.merge())
-                            .addOnCompleteListener(UserProfileActivity.this
-                                    , new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
+                    if (rating>0){
+                        Map<String,Object> crrntUser =new HashMap<>();
+                        final Map<String,Long> rate = new HashMap<>();
+                        rate.put("rate",(long)rating);
+                        crrntUser.put(auth.getUid(),rate);
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("rate")
+                                .document(userId)
+                                .collection(userId)
+                                .document(auth.getUid())
+                                .set(rate, SetOptions.merge())
+                                .addOnCompleteListener(UserProfileActivity.this
+                                        , new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    setRate(old_rate,(long)rating,toplamOy,oySayisi,getIntent().getStringExtra("gender"),getIntent().getStringExtra("userId"));
+                                                    sendNotification(getIntent().getStringExtra("userId"),String.valueOf(rating));
+                                                }
+                                            }
+                                        });
+                    }
 
-                                        }
-                                    });
-                  /*  RatingDialog dialog = new RatingDialog();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userId",auth.getUid());
-                    bundle.putString("gender",gender);
-                    bundle.putLong("oldRate",old_rate);
-                    bundle.putLong("totalRate",total_rate);
-                    dialog.setArguments(bundle);
-                    dialog.show(getSupportFragmentManager(),"deneme");*/
+
                 }
             }
         });
@@ -185,8 +196,9 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         listener.remove();
-        oldRateListener.remove();
+       // oldRateListener.remove();
     }
+
 
     ListenerRegistration listener;
     private void loadProfileInfo(String gender,
@@ -216,7 +228,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         if (info.getName() != null) {
                             name.setText(info.getName());
                         }
-                        if (info.getInsta() != null) {
+                        /*if (info.getInsta() != null) {
                             insta.setVisibility(View.VISIBLE);
                             instaUrl = instaUrl + info.getInsta();
                         } else insta.setVisibility(View.GONE);
@@ -231,7 +243,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         if (info.getSnap() != null) {
                             snap.setVisibility(View.VISIBLE);
                             snapchatUrl = snapchatUrl + info.getSnap();
-                        } else snap.setVisibility(View.GONE);
+                        } else snap.setVisibility(View.GONE);*/
                         if (info.getJob() != null) {
                             job.setText(info.getJob());
                         }
@@ -247,19 +259,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             getHoroscope(burc,info.getBurc());
                         }else burc.setVisibility(View.GONE);
 
-
-                        if (info.getInsta() != null || info.getTwitter() != null || info.getFace() != null ||info.getSnap() != null){
-                            relSocial.setVisibility(View.VISIBLE);
-                        }else relSocial.setVisibility(View.GONE);
-                        if (info.getAbout() != null){
-                            Log.d("about", "onEvent: "+info.getAbout() );
-                            relAbout.setVisibility(View.VISIBLE);
-                        }else relAbout.setVisibility(View.GONE);
-                        if (info.getJob()!=null || info.getSchool()!=null){
-                            relJobSchool.setVisibility(View.VISIBLE);
-                        }else {
-                            relJobSchool.setVisibility(View.GONE);
-                        }
                     }
                 }
             }
@@ -267,6 +266,64 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     }
+
+    private void getInfo(String userId,String gender){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(gender)
+                .document(userId).get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        if (task.getResult().getString("about").isEmpty()){
+                            Log.d("userInfo", "about: "+"isEmpty");
+                            relAbout.setVisibility(View.GONE);
+                        }else  relAbout.setVisibility(View.VISIBLE);
+
+                        if (task.getResult().getString("job").isEmpty()&&task.getResult().getString("school").isEmpty()){
+                            relJobSchool.setVisibility(View.GONE);
+                        }else relJobSchool.setVisibility(View.VISIBLE);
+
+
+                        if (task.getResult().getString("face").isEmpty()
+                            && task.getResult().getString("insta").isEmpty()&&
+                                task.getResult().getString("snap").isEmpty()&&
+                                task.getResult().getString("twitter").isEmpty()  ){
+                            relSocial.setVisibility(View.GONE);
+                        }else{
+                            relSocial.setVisibility(View.VISIBLE);
+
+                            if (!task.getResult().getString("face").isEmpty()){
+                                facebook.setVisibility(View.VISIBLE);
+                                facebookUrl = facebookUrl + task.getResult().getString("face");
+
+                            }else facebook.setVisibility(View.GONE);
+
+                            if (!task.getResult().getString("insta").isEmpty()){
+                                insta.setVisibility(View.VISIBLE);
+                                instaUrl = instaUrl + task.getResult().getString("insta");
+                            }else insta.setVisibility(View.GONE);
+
+                            if (!task.getResult().getString("snap").isEmpty()){
+                                snap.setVisibility(View.VISIBLE);
+                                snapchatUrl = snapchatUrl + task.getResult().getString("snap");
+
+                            }else snap.setVisibility(View.GONE);
+
+                            if (!task.getResult().getString("twitter").isEmpty()){
+                                twitter.setVisibility(View.VISIBLE);
+                                twitterUrl = twitterUrl +task.getResult().getString("twitter");
+
+                            }else twitter.setVisibility(View.GONE);
+                        }
+
+
+
+
+                    }
+            }
+        });
+    }
+
     ViewPager.OnPageChangeListener pagerListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -419,93 +476,97 @@ public class UserProfileActivity extends AppCompatActivity {
     private void getOldRate(){
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference ref = db.collection("rate")
-                .document(userId);
-
-         oldRateListener = ref.addSnapshotListener(UserProfileActivity.this, MetadataChanges.INCLUDE, new EventListener<DocumentSnapshot>() {
+                .document(userId).collection(userId)
+                .document(auth.getUid());
+        ref.get().addOnSuccessListener(UserProfileActivity.this, new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException e) {
-                if (e==null){
-                    Map<String, Object> map = document.getData();
-                    if (map!=null){
-                        for (Map.Entry<String, Object> entry : map.entrySet()) {
-                            if (entry.getKey().equals(auth.getUid())) {
-                                Log.d("value", entry.getValue().toString());
-                                Map<String, Long> map1 = (Map<String, Long>) entry.getValue();
-                                for (Map.Entry<String, Long> value : map1.entrySet()) {
-                                    Log.d("rate", "onComplete: " + value.getValue());
-                                    float rate = (float) value.getValue();
-                                    old_rate=value.getValue();
-                                    ratingBar.setRating(rate);
-                                    break;
-                                }
-                            }
-                        }
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot!=null)  {
+                    if (documentSnapshot.getLong("rate")!=null){
+                        ratingBar.setRating((float)documentSnapshot.getLong("rate"));
+                        Log.d("oldRate", "onSuccess: "+(float)documentSnapshot.getLong("rate"));
+                        old_rate =documentSnapshot.getLong("rate");
                     }
-                }
-
-
-
-            }
-        });
-    }
-    private void getTotalRate(){
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection("rate")
-                .document(userId);
-        totalRate=ref.addSnapshotListener(UserProfileActivity.this,  MetadataChanges.INCLUDE,new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException e) {
-                if (e==null){
-                    long totolRate = 0;
-                    Map<String, Object> map = document.getData();
-                    if (map!=null){
-                        for (Map.Entry<String, Object> entry : map.entrySet()) {
-                                Log.d("value", entry.getValue().toString());
-                                Map<String, Long> map1 = (Map<String, Long>) entry.getValue();
-                                for (Map.Entry<String, Long> value : map1.entrySet()) {
-                                    Log.d("rate", "onComplete: " + value.getValue());
-                                   totolRate=totolRate+value.getValue();
-                                }
-
-                        }
-                        total_rate=totolRate;
-                        Log.d("rate", "onComplete: " + totolRate);
-                        Log.d("rate", "onComplete: " + map.size());
-                        updateTotalRate(totolRate,map.size());
-
+                    else{
+                        old_rate =0;
+                        Log.d("oldRate", "onSuccess: "+(float)documentSnapshot.getLong("rate"));
                     }
                 }
             }
         });
 
-
-
     }
-    private void updateTotalRate(final long totalRate, final long size){
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String,Object> newRate = new HashMap<>();
-        newRate.put("count",size);
-        newRate.put("totalRate",totalRate);
+    long toplamOy;
+    long oySayisi;
+    private  void getRateValues(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(getIntent().getStringExtra("gender"))
                 .document(getIntent().getStringExtra("userId"))
-        .update(newRate).addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<Void>() {
+                .get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
-                    double rating = (double) totalRate/size;
-                    Map<String ,Object> rate = new HashMap<>();
-                    rate.put("rate",rating);
-                    db.collection(getIntent().getStringExtra("gender"))
-                            .document(getIntent().getStringExtra("userId"))
-                            .update(rate);
+                    if (task!=null){
+                        toplamOy = task.getResult().getLong("totalRate");
+                        oySayisi = task.getResult().getLong("count");
+                        Log.d("oldRate", "onSuccess: "+toplamOy);
+                        Log.d("oldRate", "onSuccess: "+oySayisi);
 
+                    }
                 }
             }
+        }).addOnFailureListener(UserProfileActivity.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Crashlytics.logException(e);
+            }
         });
-
-
     }
+    private void setRate(long old_rate,long newRate , long totalRate,long count,String gender,String userId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (old_rate==0){
+            count++;
+           if (gender.equals("MAN")){
+
+               totalRate = totalRate+newRate;
+               Map<String ,Object> map = new HashMap<>();
+               map.put("count",count);
+               map.put("totalRate",totalRate);
+               db.collection("MAN")
+                       .document(userId).set(map,SetOptions.merge());
+
+
+           }else if (gender.equals("WOMAN")){
+
+               totalRate = totalRate+newRate;
+               Map<String ,Object> map = new HashMap<>();
+               map.put("count",count);
+               map.put("totalRate",totalRate);
+               db.collection("WOMAN")
+                       .document(userId).set(map,SetOptions.merge());
+
+
+           }
+        }else {
+            if (gender.equals("MAN")){
+                long _value1 = totalRate-old_rate;
+                totalRate=_value1+newRate;
+                Map<String ,Object> map = new HashMap<>();
+                map.put("totalRate",totalRate);
+                db.collection("MAN")
+                        .document(userId).set(map,SetOptions.merge());
+            }else if (gender.equals("WOMAN")){
+                long _value1 = totalRate-old_rate;
+                totalRate=_value1+newRate;
+                Map<String ,Object> map = new HashMap<>();
+                map.put("totalRate",totalRate);
+                db.collection("WOMAN")
+                        .document(userId).set(map,SetOptions.merge());
+            }
+        }
+    }
+
     private void calculateRate(long count , long totalRate){
         double rating = (double) totalRate/count;
         rating=Math.round(rating*100.0)/100.0;
@@ -518,12 +579,55 @@ public class UserProfileActivity extends AppCompatActivity {
         loadProfileInfo(getIntent().getStringExtra("gender"),insta,facebook,twitter,snap,name,age,job,school,about,horoscope,location_tv);
         loadImages();
         getOldRate();
-        getTotalRate();
+        getRateValues();
         System.gc();
     }
 
     public void back(View view)
     {
         finish();
+    }
+    FirebaseFirestore notDb = FirebaseFirestore.getInstance();
+    private void sendNotification(final String userId, final String rate){
+        notDb.collection("allUser")
+                .document(userId)
+                .get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getString("tokenID")!=null ){
+
+                        Map<String,Object> not=new HashMap<>();
+                        not.put("from",auth.getUid());
+                        not.put("type","rate");
+                        not.put("rate",rate);
+                        not.put("getter",userId);
+                        not.put("name","");
+                        not.put("tokenID",task.getResult().getString("tokenID"));
+                        if (getIntent().getStringExtra("gender").equals("MAN")){
+                            not.put("gender","WOMAN");
+                        }else if (getIntent().getStringExtra("gender").equals("WOMAN"))
+                            not.put("gender","MAN");
+                        notDb.collection("notification")
+                                .document(userId)
+                                .collection("notification").add(not).addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()){
+                                    Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                                }
+                            }
+                        }).addOnFailureListener(UserProfileActivity.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Crashlytics.logException(e);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+
     }
 }

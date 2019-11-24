@@ -675,7 +675,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!snap.isEmpty())
             map.put("snap",snap);
         final FirebaseFirestore db  =FirebaseFirestore.getInstance();
-        taskUserInfo = db.collection("allUser").document(auth.getUid())
+       db.collection("allUser").document(auth.getUid())
                 .set(map, SetOptions.merge())
                 .addOnCompleteListener(EditProfileActivity.this, new OnCompleteListener<Void>() {
                     @Override
@@ -750,7 +750,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         listenerRegistration.remove();
-        taskUserInfo.isComplete();
+
         System.gc();
     }
 }
