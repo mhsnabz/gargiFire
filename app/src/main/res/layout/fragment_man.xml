@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F3F3F3"
+    android:background="@color/white"
 
     tools:context=".topface.Man">
 
@@ -52,7 +52,9 @@
             android:layout_toEndOf="@id/line_text"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimaryDark"
-            android:layout_height="0.5dp"></RelativeLayout>
+            android:layout_height="0.5dp">
+
+        </RelativeLayout>
         <RelativeLayout
             android:background="@color/colorPrimaryDark"
             android:layout_marginTop="4dp"
@@ -62,6 +64,7 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
@@ -126,7 +129,6 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             android:src="@drawable/popular"
-            android:scaleType="fitCenter"
             />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/topface"
@@ -145,10 +147,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_size="mini"
-            app:fab_label="@string/karistir"
+            app:fab_label="@string/en_yakin"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
-            android:src="@drawable/mix"
+            android:src="@drawable/map"
             android:scaleType="fitCenter"
 
             />

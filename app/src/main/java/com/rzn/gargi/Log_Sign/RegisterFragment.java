@@ -207,7 +207,7 @@ public class RegisterFragment extends Fragment implements DatePickerDialog.OnDat
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                    if (man.isChecked()){
-                       final ModelUser user = new ModelUser("",ageinMilis,horocope,0,0,email,"MAN","",0.0,0.0,name,"","","",1,5,5.0,auth.getUid());
+                       final ModelUser user = new ModelUser("",ageinMilis,horocope,0,0,email,"MAN","",0.0,0.0,name,"","","",1,5,5.0,auth.getUid(),null);
                        final String currentUser =auth.getUid();
                         db.collection("allUser").document(currentUser).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -239,7 +239,7 @@ public class RegisterFragment extends Fragment implements DatePickerDialog.OnDat
 
                    }
                    else if (woman.isChecked()){
-                       final ModelUser user = new ModelUser("",ageinMilis,horocope,0,0,email,"WOMAN","",0.0,0.0,name,"","","",1,5,5.0,auth.getUid());
+                       final ModelUser user = new ModelUser("",ageinMilis,horocope,0,0,email,"WOMAN","",0.0,0.0,name,"","","",1,5,5.0,auth.getUid(),null);
                        final String currentUser =auth.getUid();
                        db.collection("allUser").document(currentUser).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                            @Override

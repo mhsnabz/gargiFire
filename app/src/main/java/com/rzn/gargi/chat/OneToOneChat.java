@@ -396,38 +396,64 @@ public class OneToOneChat extends AppCompatActivity {
             unlock.setVisibility(View.VISIBLE);
         }
 
-
-
-
-
     }
-
-    FirebaseFirestore notDb = FirebaseFirestore.getInstance();
-    private void sendNotification(String userId,String tokenId){
-        if (!tokenId.isEmpty()){
-
-            Map<String,Object> not=new HashMap<>();
-            not.put("from",auth.getUid());
-            not.put("type","msg");
-            not.put("getter",userId);
-            not.put("tokenID",tokenId);
-            not.put("name",userName);
-            notDb.collection("notification")
-                    .document(userId)
-                    .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentReference> task) {
-                    if (task.isSuccessful()){
-                        Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+    private void checkIsOnline(String userID, final CallBack<Boolean> isOnline){
+        notDb.collection("isOnline")
+                .document(auth.getUid())
+                .collection(auth.getUid())
+                .document(userID).get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getBoolean("isOnline")!=null){
+                        if (task.getResult().getBoolean("isOnline")){
+                            isOnline.returnTrue(true);
+                        }else isOnline.returnFalse(false);
                     }
                 }
-            }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Crashlytics.logException(e);
+            }
+        });
+    }
+    FirebaseFirestore notDb = FirebaseFirestore.getInstance();
+    private void sendNotification(final String userId, final String tokenId){
+        checkIsOnline(userId, new CallBack<Boolean>() {
+            @Override
+            public void returnFalse(Boolean _false) {
+                setNewBadge();
+                if (!tokenId.isEmpty()){
+
+                    Map<String,Object> not=new HashMap<>();
+                    not.put("from",auth.getUid());
+                    not.put("type","msg");
+                    not.put("getter",userId);
+                    not.put("tokenID",tokenId);
+                    not.put("name",userName);
+                    not.put("rate","");
+                    not.put("gender","");
+                    notDb.collection("notification")
+                            .document(userId)
+                            .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()){
+                                Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                            }
+                        }
+                    }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Crashlytics.logException(e);
+                        }
+                    });
                 }
-            });
-        }
+            }
+
+            @Override
+            public void returnTrue(Boolean _true) {
+
+            }
+        });
+
 
     }
     private void sendMsg(String currentUser, final String userId){
@@ -452,7 +478,7 @@ public class OneToOneChat extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isComplete()){
-                       setNewBadge();
+
                         refSender.set(map).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -498,6 +524,7 @@ public class OneToOneChat extends AppCompatActivity {
         super.onStop();
         stopTimer();
         msgListner.remove();
+        setOffline();
     }
     @Override
     protected void onPause() {
@@ -505,7 +532,9 @@ public class OneToOneChat extends AppCompatActivity {
 
         super.onPause();
         stopTimer();
+        setOffline();
     }
+
 
     @Override
     protected void onStart() {
@@ -523,6 +552,7 @@ public class OneToOneChat extends AppCompatActivity {
 
         super.onDestroy();
         msgListner.remove();
+        setOffline();
 
     }
 
@@ -531,6 +561,7 @@ public class OneToOneChat extends AppCompatActivity {
 
         super.onResume();
       //  startTimer(timer);
+        setOnline();
 
 
     }
@@ -552,6 +583,10 @@ public class OneToOneChat extends AppCompatActivity {
                     _unlock=true;
                 }
                 updateTimeTV(_timer);
+                if (l<3000){
+                    removeMatch(getIntent().getStringExtra("userId"),auth.getUid());
+
+                }
             }
 
             @Override
@@ -561,6 +596,8 @@ public class OneToOneChat extends AppCompatActivity {
         }.start();
         timerRunning = true;
     }
+
+
 
     private void updateTimeTV(TextView _timer) {
         int min =(int) _time/60000;
@@ -794,13 +831,13 @@ public class OneToOneChat extends AppCompatActivity {
         final Map<String  , Object> userIdOldChat = new HashMap<>();
         currentUserOldChat.put("getterUid",currentUser);
         currentUserOldChat.put("senderUid",userId);
-        currentUserOldChat.put("time", ServerValue.TIMESTAMP);
+        currentUserOldChat.put("time", FieldValue.serverTimestamp());
         currentUserOldChat.put("isOnline",false);
 
 
         userIdOldChat.put("getterUid",userId);
         userIdOldChat.put("senderUid",currentUser);
-        userIdOldChat.put("time", ServerValue.TIMESTAMP);
+        userIdOldChat.put("time", FieldValue.serverTimestamp());
         userIdOldChat.put("isOnline",false);
         mapDelete.put("getterUid",FieldValue.delete());
         mapDelete.put("isOnline",FieldValue.delete());

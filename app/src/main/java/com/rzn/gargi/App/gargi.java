@@ -69,7 +69,7 @@ public class gargi extends Application {
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                     //   getUser();
-
+                    deleteChat("ml20r64rnmXBpPHNpO8tbSW5Y8v1","xdmK5en0hAOU1ZeT8ORvMtEn97i1");
                     currentUser = firebaseAuth.getCurrentUser().getUid();
                     String tokenID = FirebaseInstanceId.getInstance().getToken();
                     Map<String,Object> map=new HashMap<>();
@@ -82,7 +82,7 @@ public class gargi extends Application {
                         @Override
                         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                             final String gender = documentSnapshot.getString("gender");
-                            if (!gender.isEmpty()){
+                            if (documentSnapshot.getString("gender")!=null){
                                 setChatSize(gender, firebaseAuth.getCurrentUser().getUid());
                                 setLimit(gender,currentUser);
                                 checkLimit(gender, currentUser, new CallBack<Boolean>() {
@@ -440,5 +440,25 @@ public class gargi extends Application {
        map.put("twitter","");
        db.collection(gender)
                .document(userID).set(map,SetOptions.merge());
+   }
+
+
+   private void deleteChat(final String id , final String uid){
+       final FirebaseFirestore db = FirebaseFirestore.getInstance();
+       db.collection("msg")
+               .document(uid)
+               .collection(id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+           @Override
+           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                   for (DocumentSnapshot dc : task.getResult().getDocuments()){
+                       db.collection("msg")
+                               .document(uid)
+                               .collection(id)
+                               .document(dc.getId()).delete();
+                   }
+                }
+           }
+       });
    }
 }

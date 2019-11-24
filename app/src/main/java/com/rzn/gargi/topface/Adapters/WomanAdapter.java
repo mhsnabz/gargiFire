@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.helper.ModelUser;
@@ -67,7 +68,7 @@ public class WomanAdapter extends FirestoreRecyclerAdapter<ModelUser,WomanAdapte
         holder.getClick(model.getClick());
         holder.getAge(model.getAge());
         holder.getBurc(model.getBurc());
-     //   holder.getCityName(model.getLat(),model.getLongLat());
+        holder.getCityName(model.getLocation());
         holder.calculateRate(model.getCount(),model.getTotalRate());
         int totalCount = getItemCount();
         TextView tv = holder.view.findViewById(R.id.number);
@@ -125,38 +126,41 @@ public class WomanAdapter extends FirestoreRecyclerAdapter<ModelUser,WomanAdapte
             TextView name = (TextView)view.findViewById(R.id.name);
             name.setText(_name);
         }
-        public void getCityName(double lat , double longLat) {
+        public void getCityName(GeoPoint _location) {
             TextView location = view.findViewById(R.id.locaiton);
 
-            if (lat!= 0  && longLat != 0  ){
-
+            if (_location!=null){
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 List<Address> addresses = null;
                 try {
-                    addresses = geocoder.getFromLocation(lat, longLat, 1);
+                    addresses = geocoder.getFromLocation(_location.getLatitude() ,  _location.getLongitude(), 1);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                String cityName = addresses.get(0).getAdminArea();
-                String city2 = addresses.get(0).getSubAdminArea();
-                String code = addresses.get(0).getCountryCode();
+                if (addresses!=null){
+                    String cityName = addresses.get(0).getAdminArea();
+                    String city2 = addresses.get(0).getSubAdminArea();
+                    String code = addresses.get(0).getCountryCode();
+                    if (city2==null && cityName ==null && code == null){
+                        // location.setVisibility(View.INVISIBLE);
 
-                if (city2==null && cityName ==null && code == null){
-                   // location.setVisibility(View.INVISIBLE);
-
-                    location.setText(R.string.konum_bilgisi_yok );
+                        location.setText(R.string.konum_bilgisi_yok );
+                    }
+                    else
+                        location.setText(city2+"/"+cityName+"/"+code);
+                }else {
+                    location.setText(R.string.konum_bilgisi_yok);
                 }
-                else
-                    location.setText(city2+"/"+cityName+"/"+code);
 
 
-            }else{
-                location.setVisibility(View.INVISIBLE);
-                location.setText(R.string.konum_bilgisi_yok );
-            }
+
+
+
+            }location.setText(R.string.konum_bilgisi_yok);
 
         }
+
         public void setImage(String _image){
             CircleImageView image = (CircleImageView)view.findViewById(R.id.profileImage);
             final ProgressBar loading = (ProgressBar)view.findViewById(R.id.loading);

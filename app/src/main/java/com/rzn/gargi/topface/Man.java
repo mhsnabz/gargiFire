@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.github.clans.fab.FloatingActionButton;
@@ -49,6 +50,7 @@ public class Man extends Fragment {
     ProgressBar progres;
     Dialog dialog;
     ManAdapter manAdapter;
+    TextView discp;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("MAN");
     public Man() {
@@ -62,7 +64,7 @@ public class Man extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_man, container, false);
         menu=(FloatingActionMenu)rootView.findViewById(R.id.menu);
-
+        discp =(TextView)rootView.findViewById(R.id.discp);
         orderByTopFace = (FloatingActionButton)rootView.findViewById(R.id.topface);
         orderByViews = (FloatingActionButton)rootView.findViewById(R.id.views);
         mix = (FloatingActionButton)rootView.findViewById(R.id.mix);
@@ -71,7 +73,7 @@ public class Man extends Fragment {
             public void onClick(View v) {
                 menu.close(true);
                 manAdapter.stopListening();
-
+                discp.setText(R.string.en_cok_puan_alan_kullanicilar);
                 setRecyclerViewTopFace(rootView,man);
                 manAdapter.startListening();
 
@@ -81,12 +83,15 @@ public class Man extends Fragment {
             @Override
             public void onClick(View v) {
                 manAdapter.stopListening();
-
+                discp.setText(R.string.en_populer);
                 setRecyclerView(rootView,man);
                 manAdapter.startListening();
+                menu.close(true);
 
             }
         });
+        discp.setText(R.string.en_populer);
+
         setRecyclerView(rootView,man);
 
         return rootView;

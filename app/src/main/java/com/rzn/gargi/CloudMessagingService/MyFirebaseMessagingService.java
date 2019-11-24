@@ -81,7 +81,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             manager.createNotificationChannel(channel1);
             Intent configureIntent = new Intent(getApplicationContext(), Messege.class);
             configureIntent.putExtra("extra", "123123");
-            configureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            configureIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channel);
             builder.setAutoCancel(true);
             builder.setWhen(System.currentTimeMillis());
@@ -90,10 +90,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             builder.setContentText(body);
             builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
             builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
-            PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), 0, configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+           PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), (int)(Math.random() * 100), configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(pendingClearScreenIntent);
             builder.setContentInfo("info");
-            manager.cancelAll();
+         //   manager.cancelAll();
             manager.notify(new Random().nextInt(),builder.build());
 
         }
@@ -111,11 +111,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //  builder.setDefaults(Notification.DEFAULT_VIBRATE);
 
             builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
-            PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), 0, configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingClearScreenIntent = PendingIntent.getActivity(getApplicationContext(), (int)(Math.random() * 100), configureIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(pendingClearScreenIntent);
 
             builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
-            manager.cancelAll();
+           // manager.cancelAll();
 
 
             manager.notify(new Random().nextInt(),builder.build());

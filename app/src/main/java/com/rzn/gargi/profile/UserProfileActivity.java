@@ -33,6 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -268,6 +269,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getInfo(String userId,String gender){
+        getLocation();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(gender)
                 .document(userId).get().addOnCompleteListener(this, new OnCompleteListener<DocumentSnapshot>() {
@@ -411,30 +413,36 @@ public class UserProfileActivity extends AppCompatActivity {
         ref.get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.getResult().get("lat")!=null && task.getResult().get("longLat")!=null){
-                    double lat= task.getResult().getLong("lat");
-                    double longLat=task.getResult().getLong("longLat");
+                if (task.isSuccessful()){
+                    if (task.getResult().getGeoPoint("location")!=null){
+                        GeoPoint locaiton = task.getResult().getGeoPoint("location");
+                        if (locaiton!=null){
+                            double lat=locaiton.getLatitude();
+                            double longLat=locaiton.getLongitude();
 
-                        Geocoder geocoder = new Geocoder(UserProfileActivity.this, Locale.getDefault());
-                        List<Address> addresses = null;
-                        try {
-                            addresses = geocoder.getFromLocation(lat, longLat, 1);
+                            Geocoder geocoder = new Geocoder(UserProfileActivity.this, Locale.getDefault());
+                            List<Address> addresses = null;
+                            try {
+                                addresses = geocoder.getFromLocation(lat, longLat, 1);
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            String cityName = addresses.get(0).getAdminArea();
+                            String city2 = addresses.get(0).getSubAdminArea();
+                            String code = addresses.get(0).getCountryCode();
+                            if (city2==null && cityName ==null && code == null){
+                                location_tv.setVisibility(View.GONE);
+
+                                location_tv.setText(R.string.konum_bilgisi_yok );
+                            }
+                            else
+                                location_tv.setText(city2+" / "+cityName+" / "+code);
                         }
-                        String cityName = addresses.get(0).getAdminArea();
-                        String city2 = addresses.get(0).getSubAdminArea();
-                        String code = addresses.get(0).getCountryCode();
-                        if (city2==null && cityName ==null && code == null){
-                            location_tv.setVisibility(View.GONE);
-
-                            location_tv.setText(R.string.konum_bilgisi_yok );
-                        }
-                        else
-                            location_tv.setText(city2+" / "+cityName+" / "+code);
+                    }
 
                 }
+
             }
         });
 
