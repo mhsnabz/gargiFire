@@ -39,6 +39,8 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
+import com.rzn.gargi.chat.OldOneToOneChat;
+import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.helper.RatingDialog;
 import com.rzn.gargi.helper.UserInfo;
@@ -409,7 +411,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
     private void getLocation(){
         FirebaseFirestore  db = FirebaseFirestore.getInstance();
-        DocumentReference ref = db.collection(gender).document(userId);
+        DocumentReference ref = db.collection(getIntent().getStringExtra("gender")).document(getIntent().getStringExtra("userId"));
         ref.get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -593,6 +595,21 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void back(View view)
     {
+        String _intent = getIntent().getStringExtra("intent");
+        if (_intent.equals("oldOne")){
+            Intent i = new Intent(UserProfileActivity.this, OldOneToOneChat.class);
+            i.putExtra("userId",getIntent().getStringExtra("userId"));
+            i.putExtra("gender",getIntent().getStringExtra("gender"));
+            startActivity(i);
+            finish();
+        }else if (_intent.equals("OneToOne")){
+            Intent i = new Intent(UserProfileActivity.this, OneToOneChat.class);
+            i.putExtra("userId",getIntent().getStringExtra("userId"));
+            i.putExtra("gender",getIntent().getStringExtra("gender"));
+            i.putExtra("timer",getIntent().getLongExtra("timer",0));
+            startActivity(i);
+            finish();
+        }else
         finish();
     }
     FirebaseFirestore notDb = FirebaseFirestore.getInstance();

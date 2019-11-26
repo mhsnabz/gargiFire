@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.SetOptions;
@@ -40,6 +41,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -244,6 +246,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
             FirebaseAuth auth = FirebaseAuth.getInstance();
             Map<String,Object> map = new HashMap<>();
             map.put("clik",1);
+            map.put("time", FieldValue.serverTimestamp());
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference ref = db.collection("MAN")
                     .document(userId)

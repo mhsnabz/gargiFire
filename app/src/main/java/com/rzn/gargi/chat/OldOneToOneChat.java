@@ -55,6 +55,7 @@ import com.rzn.gargi.R;
 import com.rzn.gargi.chat.msg_list.Adapter;
 import com.rzn.gargi.helper.CallBack;
 import com.rzn.gargi.helper.MessegesModel;
+import com.rzn.gargi.profile.UserProfileActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -256,6 +257,7 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(action_bar_view);
         final CircleImageView image=(CircleImageView)findViewById(R.id.profileImage);
+
         final TextView name=(TextView)findViewById(R.id.username);
         final ImageButton options =(ImageButton)findViewById(R.id.options);
         final ImageView verified =(ImageView)findViewById(R.id.verified);
@@ -413,6 +415,138 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
             }
         });
 
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getClick(getIntent().getStringExtra("userId"),getIntent().getStringExtra("gender"));
+
+            }
+        });
+
+    }
+    private void getClick(final String userID, final String gender){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (gender.equals("MAN")){
+            db.collection("WOMAN")
+                    .document(userID)
+                    .get().addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task!=null){
+                        if (task.getResult().getLong("click")!=null){
+                            setClik(task.getResult().getLong("click"),userID,gender);
+
+                        }
+                    }
+                }
+            }).addOnFailureListener(OldOneToOneChat.this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Crashlytics.logException(e);
+                }
+            });
+        }else if (gender.equals("WOMAN")){
+            db.collection("MAN")
+                    .document(userID)
+                    .get().addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task!=null){
+                        if (task.getResult().getLong("click")!=null){
+                            setClik(task.getResult().getLong("click"),userID,gender);
+
+                        }
+                    }
+                }
+            }).addOnFailureListener(OldOneToOneChat.this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Crashlytics.logException(e);
+                }
+            });
+        }
+
+    }
+    public void setClik(final long clik, final String userId, final String gender){
+        if (gender.equals("WOMAN")){
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            Map<String,Object> map = new HashMap<>();
+            map.put("clik",1);
+            map.put("time", FieldValue.serverTimestamp());
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference ref = db.collection("MAN")
+                    .document(userId)
+                    .collection("view")
+                    .document(auth.getUid());
+            ref.set(map, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        ubdateClik(clik,userId,gender);
+                    }
+                }
+            });
+        }else if (gender.equals("MAN")){
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            Map<String,Object> map = new HashMap<>();
+            map.put("clik",1);
+            map.put("time", FieldValue.serverTimestamp());
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference ref = db.collection("WOMAN")
+                    .document(userId)
+                    .collection("view")
+                    .document(auth.getUid());
+            ref.set(map, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        ubdateClik(clik,userId,gender);
+                    }
+                }
+            });
+        }
+
+
+    }
+    private void ubdateClik(long click, final String userId, String gender){
+        if (gender.equals("WOMAN")){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> map = new HashMap<>();
+            map.put("click",click+1);
+            db.document("MAN"+"/"+userId)
+                    .set(map,SetOptions.merge()).addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        Intent i = new Intent(OldOneToOneChat.this, UserProfileActivity.class);
+                        i.putExtra("gender","MAN");
+                        i.putExtra("userId",userId);
+                        i.putExtra("intent","oldOne");
+
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+        }else if (gender.equals("MAN")){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String,Object> map = new HashMap<>();
+            map.put("click",click+1);
+            db.document("WOMAN"+"/"+userId)
+                    .set(map,SetOptions.merge()).addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        Intent i = new Intent(OldOneToOneChat.this, UserProfileActivity.class);
+                        i.putExtra("gender","WOMAN");
+                        i.putExtra("userId",userId);
+                        i.putExtra("intent","oldOne");
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+        }
 
     }
     int count =0;
