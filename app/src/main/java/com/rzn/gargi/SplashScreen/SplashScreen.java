@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.rzn.gargi.Log_Sign.FaceOrGoogle;
 import com.rzn.gargi.Log_Sign.LoginSignUp;
 import com.rzn.gargi.R;
 import com.rzn.gargi.helper.Shard;
@@ -49,7 +50,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
                     if (currentUser==null){
-                        Intent intent = new Intent(SplashScreen.this, LoginSignUp.class);
+                        Intent intent = new Intent(SplashScreen.this, FaceOrGoogle.class);
                         startActivity(intent);
                         finish();
                     }else {

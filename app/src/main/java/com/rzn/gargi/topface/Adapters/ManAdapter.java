@@ -74,6 +74,7 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
         holder.getAge(model.getAge());
         holder.getBurc(model.getBurc());
         holder.getCityName(model.getLocation());
+        holder.setNameSplit(model.getName());
       //  holder.getCityName(model.getLat(),model.getLongLat());
         holder.calculateRate(model.getCount(),model.getTotalRate());
         int totalCount = getItemCount();
@@ -241,7 +242,15 @@ public class ManAdapter extends FirestoreRecyclerAdapter<ModelUser,ManAdapter.Vi
             point.setText(String.valueOf(rating));
 
         }
+        public void setNameSplit(String _name){
+            TextView name = (TextView)view.findViewById(R.id.name);
 
+            String currentString =_name;
+            String[] separated = currentString.split(" ");
+
+            name.setText(separated[0]); // this will contain "Fruit"
+
+        }
         public void setClik(final long clik, final String userId){
             FirebaseAuth auth = FirebaseAuth.getInstance();
             Map<String,Object> map = new HashMap<>();

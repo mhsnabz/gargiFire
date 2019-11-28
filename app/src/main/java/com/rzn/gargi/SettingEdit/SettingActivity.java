@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -84,12 +85,20 @@ public class SettingActivity extends AppCompatActivity {
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
+                AuthUI.getInstance()
+                        .signOut(SettingActivity.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Intent intent = new Intent(SettingActivity.this, SplashScreen.class);
 
-                Intent intent = new Intent(SettingActivity.this, SplashScreen.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
 
-                startActivity(intent);
-                finish();
+
             }
         });
 

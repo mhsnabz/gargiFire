@@ -599,13 +599,17 @@ public class UserProfileActivity extends AppCompatActivity {
         if (_intent.equals("oldOne")){
             Intent i = new Intent(UserProfileActivity.this, OldOneToOneChat.class);
             i.putExtra("userId",getIntent().getStringExtra("userId"));
-            i.putExtra("gender",getIntent().getStringExtra("gender"));
+            if (getIntent().getStringExtra("gender").equals("MAN"))
+            i.putExtra("gender","WOMAN");
+            else i.putExtra("gender","MAN");
             startActivity(i);
             finish();
         }else if (_intent.equals("OneToOne")){
             Intent i = new Intent(UserProfileActivity.this, OneToOneChat.class);
             i.putExtra("userId",getIntent().getStringExtra("userId"));
-            i.putExtra("gender",getIntent().getStringExtra("gender"));
+            if (getIntent().getStringExtra("gender").equals("MAN"))
+                i.putExtra("gender","WOMAN");
+            else i.putExtra("gender","MAN");
             i.putExtra("timer",getIntent().getLongExtra("timer",0));
             startActivity(i);
             finish();

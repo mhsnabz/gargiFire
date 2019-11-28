@@ -3,6 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_application_id" translatable="false">2542784245965305</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2542784245965305</string>
 
 
     <string name="library_name">DENEME</string>
@@ -121,8 +123,7 @@
     <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>
     <string name="nev">Yeni</string>
 
-    <string name="facebook_app_id">2326447654262106</string>
-    <string name="fb_login_protocol_scheme">fb2326447654262106</string>
+
     <string name="eslebilecegin_kimse_yok">Malesef Eşleşebileceğin Kimse Yok</string>
     <string name="yeni_bir_eslesmen_var_">Yeni Bir Eşleşmen Var</string>
     <string name="devam_et">Devam Et</string>
@@ -134,6 +135,7 @@
     <string name="rate">Yeni Bir Oy Aldınız</string>
     <string name="bir_hanımefendi_size">Bir Hanımefendi Size</string>
     <string name="en_yakin">En Yakındakiler</string>
+    <string name="bu_bilgilere_ihtiyacimiz_var">Bu Bilgilere İhtiyacımız Var</string>
 
 
 </resources>

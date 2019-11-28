@@ -68,8 +68,6 @@ public class gargi extends Application {
                 if (user!=null){
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                    //   getUser();
-                    deleteChat("ml20r64rnmXBpPHNpO8tbSW5Y8v1","xdmK5en0hAOU1ZeT8ORvMtEn97i1");
                     currentUser = firebaseAuth.getCurrentUser().getUid();
                     String tokenID = FirebaseInstanceId.getInstance().getToken();
                     Map<String,Object> map=new HashMap<>();

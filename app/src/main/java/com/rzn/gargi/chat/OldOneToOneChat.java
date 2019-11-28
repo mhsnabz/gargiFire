@@ -294,7 +294,10 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot!=null){
                     String _name = documentSnapshot.getString("name");
-                    name.setText(_name);
+                    String currentString =_name;
+                    String[] separated = currentString.split(" ");
+
+                    name.setText(separated[0]);
                     if (!documentSnapshot.getString("thumb_image").isEmpty()){
                         String url = documentSnapshot.getString("thumb_image");
                         Picasso.get().load(url)

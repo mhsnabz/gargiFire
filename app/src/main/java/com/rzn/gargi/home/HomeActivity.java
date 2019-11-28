@@ -282,10 +282,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
-                    String url = task.getResult().getString("profileImage");
+                    if (!task.getResult().getString("profileImage").isEmpty()){
 
-                    Picasso.get().load(url).resize(256,256).placeholder(R.drawable.looking_for)
-                            .into(centerImage);
+                        String url = task.getResult().getString("profileImage");
+
+                        Picasso.get().load(url).resize(256,256).placeholder(R.drawable.looking_for)
+                                .into(centerImage);
+                    }
+
                 }
             }
         }).addOnFailureListener(this, new OnFailureListener() {
@@ -294,20 +298,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 Crashlytics.logException(e);
             }
         });
-      /*  db.collection("MAN"+"match").addSnapshotListener(this,MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e==null){
-                    return;
-                }else {
-                    for (DocumentSnapshot ds : queryDocumentSnapshots.getDocuments() ){
-                        if (ds.getId().equals(auth.getUid())){
-                            centerImage.setVisibility(View.VISIBLE);
-                        }else centerImage.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });*/
 
         centerImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -996,160 +986,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
     }
-   /* private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean isServicesOK(){
-        Log.d("tag", "isServicesOK: checking google services version");
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeActivity.this);
-        if(available == ConnectionResult.SUCCESS){
-//everything is fine and the user can make map requests
-            Log.d("tag", "isServicesOK: Google Play Services is working");
-            return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-//an error occured but we can resolve it
-            Log.d("tag", "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(HomeActivity.this, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        }else{
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-    public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            buildAlertMessageNoGps();
-            return false;
-        }
-        return true;
-    }
 
-       ///TODO: Location Stufff
-  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("tag", "onActivityResult: called.");
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
-                    final double latitude = mLocation.getLatitude();
-                    final double longitude = mLocation.getLongitude();
-                    Log.d("lat", "getLocationPermission: "+latitude);
-                    Log.d("lat", "getLocationPermission: "+longitude);
-                    fetchLocation(latitude, longitude, auth.getCurrentUser().getUid());
-
-
-
-                }
-                else{
-                    getLocationPermission();
-                }
-            }
-        }
-    }
-
-    private void fetchLocation(double latitude, double longitude, final String uid)
-    {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final Map<String,Object> map = new HashMap<>();
-        map.put("lat",latitude);
-        map.put("longLat",longitude);
-        GeoPoint point = new GeoPoint(latitude,longitude);
-
-        final Map<String,Object> location= new HashMap<>();
-        location.put("location",point);
-
-        final DocumentReference ref = db.collection(gender).document(uid);
-        ref.update(location).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
-                    DocumentReference reference = db.collection("allUser").document(uid);
-                    reference.update(location).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Crashlytics.logException(e);
-                        }
-                    });
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Crashlytics.logException(e);
-            }
-        });
-
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-// If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-
-                    final double latitude = mLocation.getLatitude();
-                    final double longitude = mLocation.getLongitude();
-                   fetchLocation(latitude, longitude, auth.getCurrentUser().getUid());
-
-
-                }
-            }
-        }
-    }
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-    android.Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
-        mLocationPermissionGranted = true;
-        final double latitude = mLocation.getLatitude();
-        final double longitude = mLocation.getLongitude();
-        Log.d("lat", "getLocationPermission: "+latitude);
-        Log.d("lat", "getLocationPermission: "+longitude);
-        fetchLocation(latitude, longitude, auth.getCurrentUser().getUid());
-
-    } else {
-        ActivityCompat.requestPermissions(this,
-                new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-    }
-}
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-    */
 
     private void fetchLocation(double latitude, double longitude, final String uid)
     {
@@ -1248,7 +1085,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             googleApiClient.connect();
         }
 
-
         setList();
         getBadgeCount();
         final RelativeLayout rippleBackground =(RelativeLayout)findViewById(R.id.rippleBackground);
@@ -1296,6 +1132,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                           if (size>=2){
                               rippleBackground.setVisibility(View.GONE);
                               relLayList.setVisibility(View.VISIBLE);
+
                           }else {
                               rippleBackground.setVisibility(View.VISIBLE);
                               relLayList.setVisibility(View.GONE);

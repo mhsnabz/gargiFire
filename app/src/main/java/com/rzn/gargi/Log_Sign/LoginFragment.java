@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -55,7 +56,7 @@ public class LoginFragment extends Fragment {
     View rootView;
     private FirebaseFirestore firebaseFirestore;
     LoginButton fbLoginButton;
-
+    RelativeLayout faceOrGoogle;
     private static final String TAG = "FacebookLogin";
     private CallbackManager mCallbackManager;
 
@@ -70,6 +71,7 @@ public class LoginFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
        firebaseFirestore =FirebaseFirestore.getInstance();
         auth= FirebaseAuth.getInstance();
+        faceOrGoogle=(RelativeLayout)rootView.findViewById(R.id.faceOrGoogle);
         mCallbackManager = CallbackManager.Factory.create();
         email=(MaterialEditText)rootView.findViewById(R.id.email);
         password=(MaterialEditText)rootView.findViewById(R.id.password);
@@ -109,6 +111,13 @@ public class LoginFragment extends Fragment {
 
         progressDialog = new ProgressDialog(getContext());
 
+        faceOrGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),FaceOrGoogle.class);
+                startActivity(i);
+            }
+        });
         return rootView;
     }
     @Override

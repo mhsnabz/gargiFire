@@ -71,6 +71,7 @@ public class WomanAdapter extends FirestoreRecyclerAdapter<ModelUser,WomanAdapte
         holder.getCityName(model.getLocation());
         holder.calculateRate(model.getCount(),model.getTotalRate());
         int totalCount = getItemCount();
+        holder.setNameSplit(model.getName());
         TextView tv = holder.view.findViewById(R.id.number);
         tv.setText(String.valueOf(((position+1)))+".");
 
@@ -125,6 +126,15 @@ public class WomanAdapter extends FirestoreRecyclerAdapter<ModelUser,WomanAdapte
         public void getName(String _name){
             TextView name = (TextView)view.findViewById(R.id.name);
             name.setText(_name);
+        }
+        public void setNameSplit(String _name){
+            TextView name = (TextView)view.findViewById(R.id.name);
+
+            String currentString =_name;
+            String[] separated = currentString.split(" ");
+
+            name.setText(separated[0]); // this will contain "Fruit"
+
         }
         public void getCityName(GeoPoint _location) {
             TextView location = view.findViewById(R.id.locaiton);
