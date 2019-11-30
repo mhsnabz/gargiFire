@@ -136,6 +136,10 @@
     <string name="bir_hanımefendi_size">Bir Hanımefendi Size</string>
     <string name="en_yakin">En Yakındakiler</string>
     <string name="bu_bilgilere_ihtiyacimiz_var">Bu Bilgilere İhtiyacımız Var</string>
+    <string name="oy">Yeni Bir Oy</string>
+    <string name="gizlikik_politikasi">Gizlilik Politikası</string>
+    <string name="kullanici_sana_oy_verdi">Kullanıcı Size Oy Verdi</string>
+    <string name="size">Size</string>
 
 
 </resources>

@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.rzn.gargi.topface.Man;
+import com.rzn.gargi.topface.MyRates;
+import com.rzn.gargi.topface.MyViews;
 import com.rzn.gargi.topface.Woman;
 
 public class TopFaceFragmentPagerAdapter extends FragmentPagerAdapter
@@ -25,12 +27,12 @@ public class TopFaceFragmentPagerAdapter extends FragmentPagerAdapter
                 Woman woman = new
                         Woman();
                 return  woman;
-         /*   case 2:
+           case 2:
                 MyRates rates = new MyRates();
                     return rates;
             case 3:
                 MyViews views = new MyViews();
-                return views;*/
+                return views;
             default:
                 return null;
         }
@@ -38,6 +40,6 @@ public class TopFaceFragmentPagerAdapter extends FragmentPagerAdapter
 
     @Override
     public int getCount() {
-        return 2;
+        return 4;
     }
 }

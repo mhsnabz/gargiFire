@@ -23,10 +23,9 @@ public class ModelUser  {
     double rate;
     String id;
     GeoPoint location;
-    public ModelUser() {
-    }
+    String cityName;
 
-    public ModelUser(String about, long age, String burc, int chatCount, long click, String email, String gender, String job, double lat, double longLat, String name, String profileImage, String school, String thumb_image, long count, long totalRate, double rate, String id, GeoPoint location) {
+    public ModelUser(String about, long age, String burc, int chatCount, long click, String email, String gender, String job, double lat, double longLat, String name, String profileImage, String school, String thumb_image, long count, long totalRate, double rate, String id, GeoPoint location, String cityName) {
         this.about = about;
         this.age = age;
         this.burc = burc;
@@ -46,6 +45,15 @@ public class ModelUser  {
         this.rate = rate;
         this.id = id;
         this.location = location;
+        this.cityName = cityName;
+    }
+
+    public ModelUser() {
+    }
+
+
+    public String getCityName() {
+        return cityName;
     }
 
     public String getAbout() {

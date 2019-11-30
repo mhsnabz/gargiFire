@@ -129,5 +129,11 @@
  <string name="bir_hanımefendi_size">A Lady Gave You</string>
  <string name="rate">Someone Voted You</string>
  <string name="en_yakin">Most Nearby</string>
+    <string name="oy">Someone Voted You</string>
+    <string name="gizlikik_politikasi">Privacy Policy</string>
+    <string name="kullanici_sana_oy_verdi">Users Voted For You</string>
+    <string name="size">Gave You</string>
+
+
 </resources>
 

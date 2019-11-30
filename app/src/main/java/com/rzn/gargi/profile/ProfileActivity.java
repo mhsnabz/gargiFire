@@ -13,10 +13,12 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.firebase.ui.auth.data.model.User;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.Continuation;
@@ -69,7 +71,7 @@ import q.rorbin.badgeview.QBadgeView;
 import static java.util.Objects.*;
 
 public class ProfileActivity extends AppCompatActivity {
-    private static final String ALLOWED_CHARACTERS ="-_0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM+";
+    public static final String ALLOWED_CHARACTERS ="-_0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM+";
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     String currentUser=auth.getUid();
@@ -85,11 +87,13 @@ public class ProfileActivity extends AppCompatActivity {
     TextView rate_count,tvviewer,view_count;
     ArrayList<String> _images;
     ArrayList<Rate> rates;
+    RelativeLayout relJob  ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        relJob=(RelativeLayout)findViewById(R.id.relJob);
         rates = new ArrayList<>();
         gender = getIntent().getStringExtra("gender");
         if (gender==null){
@@ -255,6 +259,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         loadProfile();
+        getProfileInfo();
         getViewers();
         getBadgeCount();
 
@@ -273,6 +278,60 @@ public class ProfileActivity extends AppCompatActivity {
             System.exit(0);
         }
     }
+    private void getProfileInfo(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(gender)
+                .document(auth.getUid())
+                .get().addOnCompleteListener(ProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if (task.isSuccessful()){
+                    String _name = task.getResult().getString("name");
+                    name.setText(_name);
+                    if (task.getResult().getString("job")!=null && !task.getResult().getString("job").isEmpty()){
+                        String _job = task.getResult().getString("job");
+                        job.setText(_job);
+                    }else {
+                        relJob.setVisibility(View.GONE);
+                    }
+                    if (task.getResult().getLong("age")!=null)
+                    {
+                        age.setText(convert(task.getResult().getLong("age")));
+                    }
+                    if (task.getResult().getString("school")!=null && task.getResult().getString("school").isEmpty()){
+                        school.setText(task.getResult().getString("school"));
+                    }else {
+                        school.setVisibility(View.GONE);
+                    }
+
+                    if (task.getResult().getString("profileImage")!=null && !task.getResult().getString("profileImage").isEmpty()){
+                        Picasso.get().load(task.getResult().getString("profileImage"))
+                                .placeholder(R.drawable.upload_place_holder)
+                                .into(profileImage, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+
+                                    }
+                                })
+                        ;
+                    }else progressBar.setVisibility(View.GONE);
+
+
+                }
+            }
+        }).addOnFailureListener(ProfileActivity.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                    Crashlytics.logException(e);
+            }
+        });
+    }
     private void loadProfile() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference user = db.document(gender + "/" + currentUser);
@@ -280,31 +339,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     UserProfileClass user = documentSnapshot.toObject(UserProfileClass.class);
-            String _name=user.getName();
-            name.setText(_name);
-            String _job = user.getJob();
-            job.setText(_job);
-            age.setText(convert(user.getAge()));
-            school.setText(user.getSchool());
+
             view_count.setText(String.valueOf(user.getClick()));
             point.setText(String.valueOf(user.getRate()));
             rate_count.setText(String.valueOf(user.getCount()));
-            if (!user.getProfileImage().isEmpty()){
-                String _profileImage = user.getProfileImage();
-                String thum_image = user.getThumb_image();
-
-                Picasso.get().load(_profileImage).centerCrop().resize(256,256).into(profileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        progressBar.setEnabled(false);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
-            }else profileImage.setImageResource(R.drawable.upload_place_holder);
 
             }
         });

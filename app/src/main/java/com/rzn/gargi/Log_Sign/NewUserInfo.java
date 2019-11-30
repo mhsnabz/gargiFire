@@ -135,7 +135,7 @@ FirebaseFirestore db = FirebaseFirestore.getInstance();
         }
         else {
             if (man.isChecked()){
-                final ModelUser user = new ModelUser("",_ageinMilis,horoscope,0,0,_email,"MAN","",0.0,0.0,_name,"","","",1,5,5.0,_uid,null);
+                final ModelUser user = new ModelUser("",_ageinMilis,horoscope,0,0,_email,"MAN","",0.0,0.0,_name,"","","",1,5,5.0,_uid,null,null);
                 final String currentUser =auth.getUid();
                 db.collection("allUser").document(currentUser).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -165,7 +165,7 @@ FirebaseFirestore db = FirebaseFirestore.getInstance();
                     }
                 });
             }else if (woman.isChecked()){
-                final ModelUser user = new ModelUser("",_ageinMilis,horoscope,0,0,_email,"MAN","",0.0,0.0,_name,"","","",1,5,5.0,_uid,null);
+                final ModelUser user = new ModelUser("",_ageinMilis,horoscope,0,0,_email,"MAN","",0.0,0.0,_name,"","","",1,5,5.0,_uid,null,null);
                 final String currentUser =auth.getUid();
                 db.collection("allUser").document(currentUser).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

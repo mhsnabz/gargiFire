@@ -108,6 +108,7 @@
                     android:layout_centerInParent="true"
                     android:id="@+id/profileImage"
                     android:layout_width="150dp"
+                    android:src="@drawable/upload_place_holder"
                     android:layout_height="150dp"
 
                     />

@@ -585,22 +585,38 @@ public class OneToOneChat extends AppCompatActivity {
             public void returnFalse(Boolean _false) {
                 setNewBadge();
                 if (!tokenId.isEmpty()){
-
-                    Map<String,Object> not=new HashMap<>();
-                    not.put("from",auth.getUid());
-                    not.put("type","msg");
-                    not.put("getter",userId);
-                    not.put("tokenID",tokenId);
-                    not.put("name",userName);
-                    not.put("rate","");
-                    not.put("gender","");
-                    notDb.collection("notification")
-                            .document(userId)
-                            .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {
+                    notDb.collection("notificationSetting")
+                            .document(userId).get().addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()){
-                                Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                                if (task.getResult().getBoolean("msg")!=null){
+                                    if (task.getResult().getBoolean("msg")==true){
+                                        Map<String,Object> not=new HashMap<>();
+                                        not.put("from",auth.getUid());
+                                        not.put("type","msg");
+                                        not.put("getter",userId);
+                                        not.put("tokenID",tokenId);
+                                        not.put("name",userName);
+                                        not.put("rate","");
+                                        not.put("gender","");
+                                        notDb.collection("notification")
+                                                .document(userId)
+                                                .collection("notification").add(not).addOnCompleteListener(OneToOneChat.this, new OnCompleteListener<DocumentReference>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                if (task.isSuccessful()){
+                                                    Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                                                }
+                                            }
+                                        }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Crashlytics.logException(e);
+                                            }
+                                        });
+                                    }
+                                }
                             }
                         }
                     }).addOnFailureListener(OneToOneChat.this, new OnFailureListener() {
@@ -609,6 +625,7 @@ public class OneToOneChat extends AppCompatActivity {
                             Crashlytics.logException(e);
                         }
                     });
+
                 }
             }
 

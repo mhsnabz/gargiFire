@@ -9,9 +9,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.android.gms.location.LocationListener;
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,10 +23,13 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -99,6 +105,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -146,7 +153,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = permissionsToRequest(permissions);
@@ -161,7 +167,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 addConnectionCallbacks(this).
                 addOnConnectionFailedListener(this).build();
         mLocation = new SimpleLocation(this);
-      //  checkMapServices();
+
         noOneIsExist=new Dialog(this);
         newMatchDialog= new Dialog(this);
         yeterinceEslesmenVar= new Dialog(this);
@@ -477,6 +483,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             System.exit(0);
         }
     }
+
     private  void setNewMatchForMan( final String userId){
         final long[] size = {manSize};
         final Map<String , Object> mapCurrenUser = new HashMap<>();
@@ -923,6 +930,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         mLocation.beginUpdates();*/
     }
+
     @Override
     protected void onPause() {
 
@@ -936,40 +944,59 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     FirebaseFirestore notDb=FirebaseFirestore.getInstance();
     private void sendNotification(final String userId){
-        notDb.collection("allUser")
+        notDb.collection("notificationSetting")
                 .document(userId)
                 .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
-                    if (task.getResult().getString("tokenID")!=null ){
-                        Map<String,Object> not=new HashMap<>();
-                        not.put("from",auth.getUid());
-                        not.put("type","match");
-                        not.put("getter",userId);
-                        not.put("tokenID",task.getResult().getString("tokenID"));
-                        not.put("name",userName);
-                        not.put("rate","");
-                        not.put("gender","");
-                        notDb.collection("notification")
-                                .document(userId)
-                                .collection("notification").add(not).addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()){
-                                    Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                    if (task.getResult().getBoolean("match")!=null){
+                        if (task.getResult().getBoolean("match")==true){
+                            notDb.collection("allUser")
+                                    .document(userId)
+                                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        if (task.getResult().getString("tokenID")!=null ){
+                                            Map<String,Object> not=new HashMap<>();
+                                            not.put("from",auth.getUid());
+                                            not.put("type","match");
+                                            not.put("getter",userId);
+                                            not.put("tokenID",task.getResult().getString("tokenID"));
+                                            not.put("name",userName);
+                                            not.put("rate","");
+                                            not.put("gender","");
+                                            notDb.collection("notification")
+                                                    .document(userId)
+                                                    .collection("notification").add(not).addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentReference>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                    if (task.isSuccessful()){
+                                                        Log.d("sendNotification", "onComplete: "+"task.isSuccessful");
+                                                    }
+                                                }
+                                            }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Crashlytics.logException(e);
+                                                }
+                                            });
+                                        }
+                                    }
                                 }
-                            }
-                        }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Crashlytics.logException(e);
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
+        }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
         });
+
 
 
     }
@@ -991,23 +1018,56 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     private void fetchLocation(double latitude, double longitude, final String uid)
     {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final Map<String,Object> map = new HashMap<>();
-        map.put("lat",latitude);
-        map.put("longLat",longitude);
-        GeoPoint point = new GeoPoint(latitude,longitude);
 
         final Map<String,Object> location= new HashMap<>();
+        GeoPoint point = new GeoPoint(latitude,longitude);
+        if (point!=null) {
+
+            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(point.getLatitude(), point.getLongitude(), 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (addresses != null) {
+                String cityName = addresses.get(0).getAdminArea();
+                String city2 = addresses.get(0).getSubAdminArea();
+                String code = addresses.get(0).getCountryCode();
+                if (city2 == null && cityName == null && code == null) {
+
+                    //location.setText(R.string.konum_bilgisi_yok);
+                    location.put("cityName","");
+                } else
+                    location.put("cityName",city2 + "/" + cityName + "/" + code);
+                Map<String, Object> map = new HashMap<>();
+                map.put("city", cityName);
+                map.put("city2", city2);
+                map.put("country", code);
+                db.collection(gender)
+                        .document(uid)
+                        .set(map,SetOptions.merge());
+
+            } else {
+                location.put("cityName","");
+            }
+        }
+
         location.put("location",point);
 
         final DocumentReference ref = db.collection(gender).document(uid);
-        ref.update(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        ref.set(location,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     DocumentReference reference = db.collection("allUser").document(uid);
-                    reference.update(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    reference.set(location,SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                        public void onComplete(@NonNull Task<Void> task)
+                        {
+
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -1080,7 +1140,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         super.onStart();
-
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
@@ -1163,6 +1222,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     }
+
     private void checkAnyIsExist(String gender, final CallBack<Boolean> isExist){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference ref ;
@@ -1278,7 +1338,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             TextView seen = (TextView)itemView.findViewById(R.id.seen);
             final TextView name = (TextView)itemView.findViewById(R.id.name);
-            TextView location = itemView.findViewById(R.id.locaiton);
+            TextView location = itemView.findViewById(R.id.userLocation);
             final CircleImageView image = (CircleImageView)itemView.findViewById(R.id.profileImage);
             final ProgressBar loading = (ProgressBar)itemView.findViewById(R.id.loading);
             TextView _age = (TextView)itemView.findViewById(R.id.age);
@@ -1603,4 +1663,66 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
         }
     }
+
+    private void setSetting(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("WOMAN")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot ds : task.getResult().getDocuments()){
+                        set(ds.getId());
+                    }
+                }
+            }
+        });
+    }
+
+
+    private void set(final String id){
+
+       db.collection("WOMAN")
+               .document(id)
+               .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+           @Override
+           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    if (task.getResult().getGeoPoint("location")!=null){
+                      GeoPoint  _location=task.getResult().getGeoPoint("location");
+                        if (_location!=null){
+                            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
+                            List<Address> addresses = null;
+                            try {
+                                addresses = geocoder.getFromLocation(_location.getLatitude() ,  _location.getLongitude(), 1);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (addresses!=null) {
+                                String cityName = addresses.get(0).getAdminArea();
+                                String city2 = addresses.get(0).getSubAdminArea();
+                                String code = addresses.get(0).getCountryCode();
+
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("city", cityName);
+                                map.put("city2", city2);
+                                map.put("country", code);
+                                db.collection("WOMAN")
+                                        .document(id)
+                                        .set(map,SetOptions.merge());
+                            }
+
+
+
+                        }
+                    }
+                }
+           }
+       });
+
+
+    }
+
+
 }

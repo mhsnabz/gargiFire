@@ -96,6 +96,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         dialog= new Dialog(this);
+        rel_rate=(RelativeLayout)findViewById(R.id.relLay_rate);
         userId= getIntent().getStringExtra("userId");
          gender= getIntent().getStringExtra("gender");
         relAbout =(RelativeLayout)findViewById(R.id.relLay_about);
@@ -119,37 +120,119 @@ public class UserProfileActivity extends AppCompatActivity {
         twitter=(CircleImageView)findViewById(R.id.twit);
         ratingBar=(ScaleRatingBar)findViewById(R.id.rate);
         getInfo(getIntent().getStringExtra("userId"),getIntent().getStringExtra("gender"));
-        ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
-            @Override
-            public void onRatingChange(BaseRatingBar ratingBar, final float rating, boolean fromUser) {
-                if (fromUser){
-                    if (rating>0){
-                        Map<String,Object> crrntUser =new HashMap<>();
-                        final Map<String,Long> rate = new HashMap<>();
-                        rate.put("rate",(long)rating);
-                        crrntUser.put(auth.getUid(),rate);
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("rate")
-                                .document(userId)
-                                .collection(userId)
-                                .document(auth.getUid())
-                                .set(rate, SetOptions.merge())
-                                .addOnCompleteListener(UserProfileActivity.this
-                                        , new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    setRate(old_rate,(long)rating,toplamOy,oySayisi,getIntent().getStringExtra("gender"),getIntent().getStringExtra("userId"));
-                                                    sendNotification(getIntent().getStringExtra("userId"),String.valueOf(rating));
-                                                }
-                                            }
-                                        });
+        if (getIntent().getStringExtra("myGender")!=null&&getIntent().getStringExtra("gender")!=null){
+            if (getIntent().getStringExtra("myGender").equals(getIntent().getStringExtra("gender"))){
+                Log.d("gender", "onCreate_gender: "+getIntent().getStringExtra("myGender"));
+                Log.d("gender", "onCreate_gender: "+getIntent().getStringExtra("gender"));
+                rel_rate.setVisibility(View.GONE);
+                ratingBar.setVisibility(View.GONE);
+            }else {
+                ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
+                    @Override
+                    public void onRatingChange(BaseRatingBar ratingBar, final float rating, boolean fromUser) {
+                        Log.d("gender", "onCreate_gender: "+getIntent().getStringExtra("myGender"));
+                        Log.d("gender", "onCreate_gender: "+getIntent().getStringExtra("gender"));
+                        if (fromUser){
+                            if (rating>0){
+                                Map<String,Object> crrntUser =new HashMap<>();
+                                final Map<String,Long> rate = new HashMap<>();
+                                rate.put("rate",(long)rating);
+                                crrntUser.put(auth.getUid(),rate);
+                                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("rate")
+                                        .document(userId)
+                                        .collection(userId)
+                                        .document(auth.getUid())
+                                        .set(rate, SetOptions.merge())
+                                        .addOnCompleteListener(UserProfileActivity.this
+                                                , new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()){
+                                                            setRate(old_rate,(long)rating,toplamOy,oySayisi,getIntent().getStringExtra("gender"),getIntent().getStringExtra("userId"));
+                                                            db.collection("notificationSetting")
+                                                                    .document(getIntent().getStringExtra("userId"))
+                                                                    .get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                    if (task.isSuccessful()){
+                                                                        if (task.getResult().getBoolean("rate")!=null){
+                                                                            if (task.getResult().getBoolean("rate")==true){
+                                                                                sendNotification(getIntent().getStringExtra("userId"),String.valueOf(rating));
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }).addOnFailureListener(UserProfileActivity.this, new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Crashlytics.logException(e);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                            }
+
+
+                        }
                     }
-
-
-                }
+                });
             }
-        });
+        }else {
+            ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
+                @Override
+                public void onRatingChange(BaseRatingBar ratingBar, final float rating, boolean fromUser) {
+
+                    if (fromUser){
+                        if (rating>0){
+                            Map<String,Object> crrntUser =new HashMap<>();
+                            final Map<String,Long> rate = new HashMap<>();
+                            rate.put("rate",(long)rating);
+                            crrntUser.put(auth.getUid(),rate);
+                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("rate")
+                                    .document(userId)
+                                    .collection(userId)
+                                    .document(auth.getUid())
+                                    .set(rate, SetOptions.merge())
+                                    .addOnCompleteListener(UserProfileActivity.this
+                                            , new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()){
+                                                        setRate(old_rate,(long)rating,toplamOy,oySayisi,getIntent().getStringExtra("gender"),getIntent().getStringExtra("userId"));
+                                                        db.collection("notificationSetting")
+                                                                .document(getIntent().getStringExtra("userId"))
+                                                                .get().addOnCompleteListener(UserProfileActivity.this, new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                if (task.isSuccessful()){
+                                                                    if (task.getResult().getBoolean("rate")!=null){
+                                                                        if (task.getResult().getBoolean("rate")==true){
+                                                                            sendNotification(getIntent().getStringExtra("userId"),String.valueOf(rating));
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }).addOnFailureListener(UserProfileActivity.this, new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Crashlytics.logException(e);
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                        }
+
+
+                    }
+                }
+            });
+        }
+
+
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -499,7 +582,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     }
                     else{
                         old_rate =0;
-                        Log.d("oldRate", "onSuccess: "+(float)documentSnapshot.getLong("rate"));
                     }
                 }
             }
@@ -595,26 +677,29 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void back(View view)
     {
-        String _intent = getIntent().getStringExtra("intent");
-        if (_intent.equals("oldOne")){
-            Intent i = new Intent(UserProfileActivity.this, OldOneToOneChat.class);
-            i.putExtra("userId",getIntent().getStringExtra("userId"));
-            if (getIntent().getStringExtra("gender").equals("MAN"))
-            i.putExtra("gender","WOMAN");
-            else i.putExtra("gender","MAN");
-            startActivity(i);
-            finish();
-        }else if (_intent.equals("OneToOne")){
-            Intent i = new Intent(UserProfileActivity.this, OneToOneChat.class);
-            i.putExtra("userId",getIntent().getStringExtra("userId"));
-            if (getIntent().getStringExtra("gender").equals("MAN"))
-                i.putExtra("gender","WOMAN");
-            else i.putExtra("gender","MAN");
-            i.putExtra("timer",getIntent().getLongExtra("timer",0));
-            startActivity(i);
-            finish();
-        }else
-        finish();
+        if (getIntent().getStringExtra("intent")!=null){
+            String _intent = getIntent().getStringExtra("intent");
+            if (_intent.equals("oldOne")){
+                Intent i = new Intent(UserProfileActivity.this, OldOneToOneChat.class);
+                i.putExtra("userId",getIntent().getStringExtra("userId"));
+                if (getIntent().getStringExtra("gender").equals("MAN"))
+                    i.putExtra("gender","WOMAN");
+                else i.putExtra("gender","MAN");
+                startActivity(i);
+                finish();
+            }else if (_intent.equals("OneToOne")){
+                Intent i = new Intent(UserProfileActivity.this, OneToOneChat.class);
+                i.putExtra("userId",getIntent().getStringExtra("userId"));
+                if (getIntent().getStringExtra("gender").equals("MAN"))
+                    i.putExtra("gender","WOMAN");
+                else i.putExtra("gender","MAN");
+                i.putExtra("timer",getIntent().getLongExtra("timer",0));
+                startActivity(i);
+                finish();
+            }else
+                finish();
+        }else finish();
+
     }
     FirebaseFirestore notDb = FirebaseFirestore.getInstance();
     private void sendNotification(final String userId, final String rate){

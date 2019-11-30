@@ -37,7 +37,7 @@ import q.rorbin.badgeview.QBadgeView;
 public class TopFaceActivity extends AppCompatActivity {
 
     ViewPager mainViewPager;
-    ImageView man , woman;
+    ImageView man , woman,rates,views;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     String currentUser=auth.getUid();
     String gender;
@@ -69,8 +69,8 @@ public class TopFaceActivity extends AppCompatActivity {
 
         man =(ImageView) findViewById(R.id.man);
         woman =(ImageView) findViewById(R.id.woman);
-        // rates =(ImageView) findViewById(R.id.rates);
-        // views =(ImageView) findViewById(R.id.views);
+        rates =(ImageView) findViewById(R.id.rates);
+         views =(ImageView) findViewById(R.id.views);
 
         woman.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +86,7 @@ public class TopFaceActivity extends AppCompatActivity {
 
             }
         });
-       /* rates.setOnClickListener(new View.OnClickListener() {
+      rates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mainViewPager.setCurrentItem(2);
@@ -99,7 +99,7 @@ public class TopFaceActivity extends AppCompatActivity {
                 mainViewPager.setCurrentItem(3);
 
             }
-        });*/
+        });
         pagerApapter = new TopFaceFragmentPagerAdapter(getSupportFragmentManager());
         mainViewPager = (ViewPager)findViewById(R.id.mainViewPager);
         mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -215,21 +215,42 @@ public class TopFaceActivity extends AppCompatActivity {
             woman.setBackground(getDrawable(R.drawable.tab_unselected));
             man.setImageResource(R.drawable.man_selected);
             woman.setImageResource(R.drawable.woman_unselected);
-            //  views.setImageResource(R.drawable.seen_white);
-            // rates.setImageResource(R.drawable.topface_white);
+              views.setImageResource(R.drawable.seen_white);
+             rates.setImageResource(R.drawable.topface_white);
 
 
         }
         if (i==1){
             woman.setBackground(getDrawable(R.drawable.tab_selected));
             man.setBackground(getDrawable(R.drawable.tab_unselected));
-            //   views.setBackground(getDrawable(R.drawable.tab_unselected));
-            //rates.setBackground(getDrawable(R.drawable.tab_unselected));
+               views.setBackground(getDrawable(R.drawable.tab_unselected));
+            rates.setBackground(getDrawable(R.drawable.tab_unselected));
             man.setImageResource(R.drawable.man_unselected);
             woman.setImageResource(R.drawable.woman_selected);
-            //views.setImageResource(R.drawable.seen_white);
-            //rates.setImageResource(R.drawable.topface_white);
+            views.setImageResource(R.drawable.seen_white);
+            rates.setImageResource(R.drawable.topface_white);
 
+        }
+           if (i==2)
+        {
+            woman.setBackground(getDrawable(R.drawable.tab_unselected));
+            man.setBackground(getDrawable(R.drawable.tab_unselected));
+            views.setBackground(getDrawable(R.drawable.tab_unselected));
+            rates.setBackground(getDrawable(R.drawable.tab_selected));
+            man.setImageResource(R.drawable.man_unselected);
+            woman.setImageResource(R.drawable.woman_unselected);
+            rates.setImageResource(R.drawable.topface_blue);
+            views.setImageResource(R.drawable.seen_white);
+            }
+        if (i==3){
+            woman.setBackground(getDrawable(R.drawable.tab_unselected));
+            man.setBackground(getDrawable(R.drawable.tab_unselected));
+            views.setBackground(getDrawable(R.drawable.tab_selected));
+            rates.setBackground(getDrawable(R.drawable.tab_unselected));
+            man.setImageResource(R.drawable.man_unselected);
+            woman.setImageResource(R.drawable.woman_unselected);
+            rates.setImageResource(R.drawable.topface_white);
+            views.setImageResource(R.drawable.seen_blue);
         }
 
 

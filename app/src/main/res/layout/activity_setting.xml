@@ -242,6 +242,7 @@
                         />
 
                     <TextView
+                        android:onClick="rateUs"
                         android:background="?attr/selectableItemBackground"
                         android:fontFamily="@font/nunito_sans_semibold"
                         android:layout_width="match_parent"
@@ -294,7 +295,6 @@
                         android:textSize="15dp"
                         android:textColor="#000"
                         />
-
                     <TextView
                         android:background="?attr/selectableItemBackground"
                         android:fontFamily="@font/nunito_sans_semibold"
@@ -302,9 +302,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textSize="15dp"
+                        android:id="@+id/pravicyPolicy"
                         android:textColor="#000"
                         android:layout_margin="8dp"
                         android:text="@string/hizmet_kosullari"
+                        />
+                    <TextView
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="@font/nunito_sans_semibold"
+                        android:layout_below="@id/pravicyPolicy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="15dp"
+                        android:textColor="#000"
+                        android:layout_margin="8dp"
+                        android:text="@string/gizlikik_politikasi"
                         />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>

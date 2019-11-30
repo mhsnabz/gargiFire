@@ -15,19 +15,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.marcoscg.easylicensesdialog.EasyLicensesDialogCompat;
-import com.rzn.gargi.Log_Sign.LoginSignUp;
 import com.rzn.gargi.R;
 import com.rzn.gargi.SplashScreen.SplashScreen;
-import com.rzn.gargi.profile.ProfileActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ImageButton veriftyImage;
@@ -135,4 +131,53 @@ public class SettingActivity extends AppCompatActivity {
         //  startActivity(i);
     }
 
+    public void rateUs(View view) {
+
+
+
+            final RatingDialog ratingDialog = new RatingDialog.Builder(this)
+                    .icon(getDrawable(R.drawable.big_logo))
+                    .session(1)
+                    .threshold(3)
+                    .title("How was your experience with us?")
+                    .titleTextColor(R.color.black)
+                    .negativeButtonText("Never")
+                    .positiveButtonTextColor(R.color.black)
+                    .negativeButtonTextColor(R.color.black)
+                    .formTitle("Submit Feedback")
+                    .formHint("Tell us where we can improve")
+                    .formSubmitText("Submit")
+                    .formCancelText("Cancel")
+                    .ratingBarColor(R.color.colorAccent)
+                    .playstoreUrl("https://play.google.com/store/apps/details?id=com.rzn.gargi")
+                    .onThresholdCleared(new RatingDialog.Builder.RatingThresholdClearedListener() {
+                        @Override
+                        public void onThresholdCleared(RatingDialog ratingDialog, float rating, boolean thresholdCleared) {
+                            //do something
+                            ratingDialog.dismiss();
+                        }
+                    })
+                    .onThresholdFailed(new RatingDialog.Builder.RatingThresholdFailedListener() {
+                        @Override
+                        public void onThresholdFailed(RatingDialog ratingDialog, float rating, boolean thresholdCleared) {
+                            //do something
+                            ratingDialog.dismiss();
+                        }
+                    })
+                    .onRatingChanged(new RatingDialog.Builder.RatingDialogListener() {
+                        @Override
+                        public void onRatingSelected(float rating, boolean thresholdCleared) {
+
+                        }
+                    })
+                    .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
+                        @Override
+                        public void onFormSubmitted(String feedback) {
+
+                        }
+                    }).build();
+
+            ratingDialog.show();
+
+    }
 }
