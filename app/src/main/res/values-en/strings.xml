@@ -133,6 +133,7 @@
     <string name="gizlikik_politikasi">Privacy Policy</string>
     <string name="kullanici_sana_oy_verdi">Users Voted For You</string>
     <string name="size">Gave You</string>
+    <string name="bir_tane_daha_eslesme">   "   "+1 Match</string>
 
 
 </resources>

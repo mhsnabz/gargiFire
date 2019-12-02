@@ -140,6 +140,8 @@
     <string name="gizlikik_politikasi">Gizlilik Politikası</string>
     <string name="kullanici_sana_oy_verdi">Kullanıcı Size Oy Verdi</string>
     <string name="size">Size</string>
+    <string name="bir_reklam_seyret">Bir Reklam Seyret</string>
+    <string name="bir_tane_daha_eslesme">+1 Eşleme</string>
 
 
 </resources>

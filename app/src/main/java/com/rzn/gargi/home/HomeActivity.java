@@ -6,20 +6,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.codemybrainsout.ratingdialog.RatingDialog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.location.LocationListener;
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,13 +27,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,10 +57,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.hash.HashingOutputStream;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -79,10 +74,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.chat.ChatActivity;
-import com.rzn.gargi.chat.OneToOneChat;
-import com.rzn.gargi.chat.msg_list.Adapter;
 import com.rzn.gargi.helper.CallBack;
-import com.rzn.gargi.helper.CallBackLimit;
 import com.rzn.gargi.helper.bottomNavigationHelper;
 import com.rzn.gargi.profile.ProfileActivity;
 import com.rzn.gargi.topface.TopFaceActivity;
@@ -90,15 +82,8 @@ import com.skyfishjy.library.RippleBackground;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Document;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -107,15 +92,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import im.delight.android.location.SimpleLocation;
 import q.rorbin.badgeview.QBadgeView;
 
+import static com.rzn.gargi.profile.ProfileActivity.ALLOWED_CHARACTERS;
+
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, RewardedVideoAdListener {
+
+    private RewardedVideoAd mRewardedVideoAd;
+    public static long MAN_LIMIT = 5;
+    public static long WOMAN_LIMIT = 35;
+
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private SimpleLocation mLocation;
      CoordinatorLayout coordinatorLayoutLay;
@@ -153,6 +145,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+        loadRewardedVideoAd();
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         permissionsToRequest = permissionsToRequest(permissions);
@@ -310,7 +306,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onClick(View v)
             {
                 if (gender.equals("MAN")){
-                    if (manLimit<10){
+                    if (manLimit<MAN_LIMIT){
                     if (manSize<2){
 
                             rippleBackground.startRippleAnimation();
@@ -323,7 +319,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                             setGunlukEslesmeLimit("MAN",auth.getUid());
                     }
                 }else if (gender.equals("WOMAN")){
-                    if (womanLimit<35){
+                        if (womanLimit<WOMAN_LIMIT){
                         if (womanSize<6){
                             rippleBackground.startRippleAnimation();
                             lookForNewMatchForWOMAN();
@@ -437,7 +433,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                                         result++;
                                         lookForNewMatchForWOMAN();
                                     }else {
-                                        if (womanSize <6 && womanLimit<35){
+                                        if (womanSize <6 && womanLimit<WOMAN_LIMIT){
                                             refCurrenUser.set(mapCurrenUser);
                                             refUserId.set(mapUserId);
 
@@ -453,7 +449,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                                             sendNotification(userId);
 
                                             showDialog();
-                                            if (womanSize<6 && womanLimit<35)
+                                            if (womanSize<6 && womanLimit<WOMAN_LIMIT)
                                                 lookForNewMatchForWOMAN();
                                             else return;
                                         }else {
@@ -539,7 +535,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                                         result++;
                                         lookForNewMatchForMAN();
                                     }else {
-                                        if (manSize <2 && manLimit<10){
+                                        if (manSize <2 && manLimit<MAN_LIMIT){
                                             refCurrenUser.set(mapCurrenUser);
                                             refUserId.set(mapUserId);
                                             manSize++;
@@ -554,7 +550,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                                             sendNotification(userId);
                                             showDialog();
 
-                                            if (manSize<2 && manLimit<10)
+                                            if (manSize<2 && manLimit<MAN_LIMIT)
                                                 lookForNewMatchForMAN();
                                             else return;
                                         }else {
@@ -589,6 +585,23 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         gunlukEslesmeLimit.show();
         TextView timer =(TextView)gunlukEslesmeLimit.findViewById(R.id.timer);
         Button kapat =(Button) gunlukEslesmeLimit.findViewById(R.id.cancel);
+        final Button ads =(Button) gunlukEslesmeLimit.findViewById(R.id.video);
+
+        if (mRewardedVideoAd.isLoaded()) {
+            ads.setVisibility(View.VISIBLE);
+        }else {
+            ads.setVisibility(View.GONE);
+        }
+        ads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                    gunlukEslesmeLimit.dismiss();
+                }
+            }
+        });
         kapat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -606,15 +619,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()){
-                        Date time = task.getResult().getDate("time");
-                        long second =time.getTime();
-                        Date date = Timestamp.now().toDate();
-                        long currentTime=date.getTime();
-                        long value = second+(24*60*60000)-currentTime;
-                        if (value<0){
-                            deleteLimit(auth.getUid());
+                        if (task.getResult().getDate("time")!=null){
+                            Date time = task.getResult().getDate("time");
+                            long second =time.getTime();
+                            Date date = Timestamp.now().toDate();
+                            long currentTime=date.getTime();
+                            long value = second+(24*60*60000)-currentTime;
+                            if (value<0){
+                                deleteLimit(auth.getUid());
+                            }
+                            startTimer(timer,value);
                         }
-                        startTimer(timer,value);
+
                     }
                 }
             });
@@ -625,16 +641,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()){
-                        Date time = task.getResult().getDate("time");
-                        long second =time.getTime();
-                        Date date = Timestamp.now().toDate();
-                        long currentTime=date.getTime();
-                        long value = second+(24*60*60000)-currentTime;
-                        if (value<0){
-                            deleteLimit(auth.getUid());
+                        if (task.getResult().getDate("time")!=null){
+                            Date time = task.getResult().getDate("time");
+                            long second =time.getTime();
+                            Date date = Timestamp.now().toDate();
+                            long currentTime=date.getTime();
+                            long value = second+(24*60*60000)-currentTime;
+                            if (value<0){
+                                deleteLimit(auth.getUid());
+                            }
+                            startTimer(timer,value);
                         }
-                         startTimer(timer,value);
-
                     }
                 }
             });
@@ -684,19 +701,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
         String time = String.format("%02d:%02d:%02d", hour, minute, second);
         _timer.setText(time);
-       /* int hour=(int) _time % 60;
-        int min =(int) _time/60000;
-        int second = (int) _time % 60000/1000;
-        String timeLeftString;
-        timeLeftString = ""+hour;
-        timeLeftString+=":";
-        timeLeftString += ""+min;
-        timeLeftString+=":";
-        if (second< 10) timeLeftString +=0;
-        timeLeftString += second;
-        _timer.setText(timeLeftString);*/
-        // if (_time<=1500)
-        //     removeMatch(_time);
+
 
     }
     private void setBadge(String userId, String currentUser){
@@ -779,7 +784,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         Map<String ,Object> map = new HashMap<>();
         map.put("user",userId);
         Map<String,Object> userMap = new HashMap<>();
-        userMap.put(userId,map);
+        userMap.put(userId,userId);
         db.collection("limit")
                 .document(auth.getUid())
                 .set(userMap,SetOptions.merge());
@@ -788,7 +793,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         Map<String ,Object> map = new HashMap<>();
         map.put("user",auth.getUid());
         Map<String,Object> userMap = new HashMap<>();
-        userMap.put(auth.getUid(),map);
+        userMap.put(auth.getUid(),auth.getUid());
         db.collection("limit")
                 .document(userId)
                 .set(userMap,SetOptions.merge());
@@ -882,7 +887,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -894,7 +899,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 startActivity(i);
 
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -906,7 +911,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 startActivity(i);
 
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -914,25 +919,18 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onResume() {
-
+        mRewardedVideoAd.resume(this);
         super.onResume();
 
         if (!checkPlayServices()) {
             Toast.makeText(HomeActivity.this,"You need to install Google Play Services to use the App properly",Toast.LENGTH_LONG).show();
         }
-      /*  if(checkMapServices()){
-            if(mLocationPermissionGranted){
-                mLocation.beginUpdates();
-            }
-            else{
-                getLocationPermission();
-            }
-        }
-        mLocation.beginUpdates();*/
+
     }
 
     @Override
     protected void onPause() {
+        mRewardedVideoAd.resume(this);
 
 
         super.onPause();
@@ -1104,6 +1102,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onDestroy() {
+        mRewardedVideoAd.resume(this);
+
         super.onDestroy();
 
     }
@@ -1139,7 +1139,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     @Override
     protected void onStart() {
+
         super.onStart();
+        deleteOneLimit();
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
@@ -1294,6 +1296,51 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded()
+    {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed()
+    {
+            loadRewardedVideoAd();
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem)
+    {
+        removeFromlimit(limitUser);
+
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+       loadRewardedVideoAd();
+    }
+
+    @Override
+    public void onRewardedVideoCompleted()
+    {
 
     }
 
@@ -1724,5 +1771,54 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
+    private void loadRewardedVideoAd() {
+       if (!mRewardedVideoAd.isLoaded()){
+           mRewardedVideoAd.loadAd("ca-app-pub-1362663023819993/9490956372",
+                   new AdRequest.Builder().build());
+       }
 
+    }
+    ArrayList<String> limitUser = new ArrayList<>();
+    private void deleteOneLimit() {
+        db.collection("limit")
+                .document(auth.getUid())
+                .get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot)
+            {
+                if (documentSnapshot.exists()){
+                    Map<String, Object>map = new HashMap<>();
+                    map = documentSnapshot.getData();
+                    //  Log.d("deleteLimit", "onSuccess: "+map.values());
+                    for (Map.Entry<String, Object> e : map.entrySet()) {
+                        limitUser.add(e.getValue().toString());
+                    }
+                }
+
+            }
+        }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    private void removeFromlimit(ArrayList<String> users){
+        if (users!=null){
+            Map<String,Object> map = new HashMap<>();
+            map.put(users.get(0),FieldValue.delete());
+            db.collection("limit")
+                    .document(auth.getUid()).set(map,SetOptions.merge());
+        }
+    }
+    private  String getRandomString(final int sizeOfRandomString){
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
+        for(int i=0;i<sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        Log.d("randomStrign", "getRandomString: "+sb.toString());
+
+        return sb.toString();
+    }
 }

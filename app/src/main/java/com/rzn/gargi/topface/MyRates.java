@@ -1,6 +1,10 @@
 package com.rzn.gargi.topface;
 
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,21 +23,31 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
+import com.rzn.gargi.profile.UserProfileActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.rzn.gargi.profile.ProfileActivity.ALLOWED_CHARACTERS;
 
 
 /**
@@ -43,6 +57,7 @@ public class MyRates extends Fragment {
     View rootView;
     TextView myRates;
     RecyclerView list;
+    Dialog dialog;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth auth = FirebaseAuth.getInstance();
     ArrayList<String> users;
@@ -68,7 +83,7 @@ public class MyRates extends Fragment {
         list.setLayoutManager(layoutManager);
         adapter=new VotersAdapter(users);
         list.setAdapter(adapter);
-
+        dialog=new Dialog(getContext());
         getMyVoterId();
         return rootView;
     }
@@ -146,9 +161,20 @@ public class MyRates extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyRates.ViewHolder holder, int i) {
+        public void onBindViewHolder(@NonNull final MyRates.ViewHolder holder, final int i) {
             holder.loadUsers(userId.get(i));
             holder.getRate(userId.get(i));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        dialog.setContentView(R.layout.wait_dialog);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                        holder.setClick(userId.get(i));
+                    }
+
+            });
         }
 
         @Override
@@ -189,8 +215,10 @@ public class MyRates extends Fragment {
                                      }
                                  });
                      }else progressBar.setVisibility(View.GONE);
-                     name.setText(task.getResult().getString("name"));
+                     String currentString =task.getResult().getString("name");
+                     String[] separated = currentString.split(" ");
 
+                     name.setText(separated[0]);
 
                  }
                 }
@@ -222,6 +250,91 @@ public class MyRates extends Fragment {
                  }
             });
         }
+        public void setClick(final String userId)
+        {
+            db.collection("allUser")
+                    .document(userId)
+                    .get().addOnCompleteListener(getActivity(), new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                        if (task.getResult()!=null){
+                            final String gender = task.getResult().getString("gender");
+                            db.collection(gender)
+                                    .document(userId)
+                                    .get().addOnCompleteListener(getActivity(), new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        if (task.getResult()!=null){
+                                            long click = task.getResult().getLong("click");
+                                            _setClik(click,userId,gender);
+                                        }
+                                    }
+                                }
+                            }).addOnFailureListener(getActivity(), new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Crashlytics.logException(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            }).addOnFailureListener(getActivity(), new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Crashlytics.logException(e);
+                }
+            });
+        }
     }
 
+    public void _setClik(final long clik, final String userId, final String gender){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Map<String,Object> map = new HashMap<>();
+        map.put(getRandomString(10),1);
+        map.put("time", FieldValue.serverTimestamp());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference ref = db.collection(gender)
+                .document(userId)
+                .collection("view")
+                .document(auth.getUid());
+        ref.set(map, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    ubdateClik(clik,userId,gender);
+                }
+            }
+        });
+
+    }
+    private  String getRandomString(final int sizeOfRandomString){
+        final Random random=new Random();
+        final StringBuilder sb=new StringBuilder(sizeOfRandomString);
+        for(int i=0;i<sizeOfRandomString;++i)
+            sb.append(ALLOWED_CHARACTERS.charAt(random.nextInt(ALLOWED_CHARACTERS.length())));
+        Log.d("randomStrign", "getRandomString: "+sb.toString());
+
+        return sb.toString();
+    }
+    private void ubdateClik(long click, final String userId, final String gender){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String,Object> map = new HashMap<>();
+        map.put("click",click+1);
+        db.document(gender+"/"+userId)
+                .set(map, SetOptions.merge()).addOnSuccessListener(getActivity(), new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent i = new Intent(getActivity(), UserProfileActivity.class);
+                i.putExtra("userId",userId);
+                i.putExtra("gender",gender);
+
+               // i.putExtra("myGender",getActivity().getIntent().getStringExtra("gender"));
+                dialog.dismiss();
+                getActivity().startActivity(i);
+            }
+        });
+    }
 }

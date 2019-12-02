@@ -11,7 +11,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'com.codemybrainsout.rating:ratingdialog:1.0.8'
+    implementation 'com.google.firebase:firebase-ads:18.3.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

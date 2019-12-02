@@ -371,37 +371,45 @@ public class UserProfileActivity extends AppCompatActivity {
                         }else relJobSchool.setVisibility(View.VISIBLE);
 
 
-                        if (task.getResult().getString("face").isEmpty()
-                            && task.getResult().getString("insta").isEmpty()&&
-                                task.getResult().getString("snap").isEmpty()&&
-                                task.getResult().getString("twitter").isEmpty()  ){
-                            relSocial.setVisibility(View.GONE);
-                        }else{
-                            relSocial.setVisibility(View.VISIBLE);
+                    if (task.getResult().getString("face")!=null
+                            && task.getResult().getString("insta")!=null&&
+                            task.getResult().getString("snap")!=null&&
+                            task.getResult().getString("twitter")!=null )
+                            {
 
-                            if (!task.getResult().getString("face").isEmpty()){
-                                facebook.setVisibility(View.VISIBLE);
-                                facebookUrl = facebookUrl + task.getResult().getString("face");
+                                if (task.getResult().getString("face").isEmpty()
+                                        && task.getResult().getString("insta").isEmpty()&&
+                                        task.getResult().getString("snap").isEmpty()&&
+                                        task.getResult().getString("twitter").isEmpty()  ){
+                                    relSocial.setVisibility(View.GONE);
+                                }else{
+                                    relSocial.setVisibility(View.VISIBLE);
+                                    if (!task.getResult().getString("face").isEmpty()){
+                                        facebook.setVisibility(View.VISIBLE);
+                                        facebookUrl = facebookUrl + task.getResult().getString("face");
 
-                            }else facebook.setVisibility(View.GONE);
+                                    }else facebook.setVisibility(View.GONE);
 
-                            if (!task.getResult().getString("insta").isEmpty()){
-                                insta.setVisibility(View.VISIBLE);
-                                instaUrl = instaUrl + task.getResult().getString("insta");
-                            }else insta.setVisibility(View.GONE);
+                                    if (!task.getResult().getString("insta").isEmpty()){
+                                        insta.setVisibility(View.VISIBLE);
+                                        instaUrl = instaUrl + task.getResult().getString("insta");
+                                    }else insta.setVisibility(View.GONE);
 
-                            if (!task.getResult().getString("snap").isEmpty()){
-                                snap.setVisibility(View.VISIBLE);
-                                snapchatUrl = snapchatUrl + task.getResult().getString("snap");
+                                    if (!task.getResult().getString("snap").isEmpty()){
+                                        snap.setVisibility(View.VISIBLE);
+                                        snapchatUrl = snapchatUrl + task.getResult().getString("snap");
 
-                            }else snap.setVisibility(View.GONE);
+                                    }else snap.setVisibility(View.GONE);
 
-                            if (!task.getResult().getString("twitter").isEmpty()){
-                                twitter.setVisibility(View.VISIBLE);
-                                twitterUrl = twitterUrl +task.getResult().getString("twitter");
+                                    if (!task.getResult().getString("twitter").isEmpty()){
+                                        twitter.setVisibility(View.VISIBLE);
+                                        twitterUrl = twitterUrl +task.getResult().getString("twitter");
 
-                            }else twitter.setVisibility(View.GONE);
-                        }
+                                    }else twitter.setVisibility(View.GONE);
+                                }
+                            }else   relSocial.setVisibility(View.GONE);
+
+
 
 
 

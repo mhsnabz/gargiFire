@@ -1,5 +1,6 @@
 package com.rzn.gargi.chat.msg_list;
 
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,11 +68,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 case VIEW_TYPE_MESSAGE_RECIEVED:
                     holder._msg.setText(messages.getMsg());
                     holder.convertime(messages.getTime());
+                    Linkify.addLinks(holder._msg, Linkify.ALL);
                 break;
                 case VIEW_TYPE_MESSAGE_SENT:
                     holder._msg.setText(messages.getMsg());
                     holder.convertime(messages.getTime());
-
+                    Linkify.addLinks(holder._msg, Linkify.ALL);
                     break;
                     default:
                     return;

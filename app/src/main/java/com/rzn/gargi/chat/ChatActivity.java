@@ -242,7 +242,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 startActivity(i);
 
-                overridePendingTransition(R.anim.slide_in_left,0);
+                overridePendingTransition(0,0);
 
             }
         });
@@ -253,7 +253,7 @@ public class ChatActivity extends AppCompatActivity {
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_left,0);
+                overridePendingTransition(0,0);
 
             }
         });
@@ -264,7 +264,7 @@ public class ChatActivity extends AppCompatActivity {
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                overridePendingTransition(0, 0);
 
             }
         });

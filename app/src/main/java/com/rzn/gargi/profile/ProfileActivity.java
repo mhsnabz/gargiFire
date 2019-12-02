@@ -192,7 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_left,0);
+                overridePendingTransition(0,0);
 
 
             }
@@ -204,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_left,0);
+                overridePendingTransition(0,0);
             }
         });
         v3.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +214,7 @@ public class ProfileActivity extends AppCompatActivity {
                 i.putExtra("gender",gender);
 
                 startActivity(i);
-                overridePendingTransition(R.anim.slide_in_left,0);
+                overridePendingTransition(0,0);
             }
         });
 

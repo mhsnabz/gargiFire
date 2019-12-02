@@ -49,6 +49,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.rzn.gargi.home.HomeActivity.MAN_LIMIT;
+import static com.rzn.gargi.home.HomeActivity.WOMAN_LIMIT;
+
 public class gargi extends Application {
     String currentUser;
     @Override
@@ -66,6 +69,7 @@ public class gargi extends Application {
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user!=null){
+                    getUser();
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
                     currentUser = firebaseAuth.getCurrentUser().getUid();
                     String tokenID = FirebaseInstanceId.getInstance().getToken();
@@ -212,7 +216,7 @@ public class gargi extends Application {
                     if (e==null){
                         if (documentSnapshot!=null){
                             if (documentSnapshot.getData()!=null){
-                                if (documentSnapshot.getData().size()<10){
+                                if (documentSnapshot.getData().size()<MAN_LIMIT){
                                     limit.returnFalse(false);
                                     Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
 
@@ -238,7 +242,7 @@ public class gargi extends Application {
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     if (documentSnapshot!=null){
                         if (documentSnapshot.getData()!=null){
-                            if (documentSnapshot.getData().size()<35){
+                            if (documentSnapshot.getData().size()<WOMAN_LIMIT){
                                 limit.returnFalse(false);
                                 Log.d("LimitAndSize", "returnFalse: "+"size = " + documentSnapshot.getData().size());
 
@@ -413,15 +417,13 @@ public class gargi extends Application {
    }
 
    private void getUser(){
-       FirebaseFirestore db = FirebaseFirestore.getInstance();
+       final FirebaseFirestore db = FirebaseFirestore.getInstance();
        CollectionReference ref = db.collection("WOMAN");
        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
            @Override
            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
             for (DocumentSnapshot dc : queryDocumentSnapshots.getDocuments()){
-               // getUserInfo(dc.getId(),0);
-                Log.d("userId", "onSuccess: "+dc.getId());
-                setSocial("WOMAN",dc.getId());
+               getUserInfo(dc.getId(),0);
             }
            }
        });
