@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,21 +21,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.rzn.gargi.Log_Sign.FaceOrGoogle;
 import com.rzn.gargi.R;
+import com.rzn.gargi.helper.ForceUpdateChecker;
 import com.rzn.gargi.helper.Shard;
 import com.rzn.gargi.home.HomeActivity;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity{
     String currentUser;
     ImageView logo;
-
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        progressBar=(ProgressBar)findViewById(R.id.progres);
+
         logo =(ImageView)findViewById(R.id.logo);
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.mytransistion);
 
         logo.startAnimation(animation);
+
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -42,7 +48,6 @@ public class SplashScreen extends AppCompatActivity {
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }finally {
-
                     currentUser = FirebaseAuth.getInstance().getUid();
 
 
@@ -92,5 +97,7 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
 

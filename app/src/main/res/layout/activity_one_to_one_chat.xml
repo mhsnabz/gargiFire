@@ -25,7 +25,7 @@
       android:layout_marginTop="2dp"
       android:id="@+id/mgs_bar"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
+      android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
       >
       <include layout="@layout/msg_bar"></include>

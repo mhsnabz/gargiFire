@@ -215,10 +215,13 @@ public class MyRates extends Fragment {
                                      }
                                  });
                      }else progressBar.setVisibility(View.GONE);
-                     String currentString =task.getResult().getString("name");
-                     String[] separated = currentString.split(" ");
+                     if (task.getResult().getString("name")!=null){
+                         String currentString =task.getResult().getString("name");
+                         String[] separated = currentString.split(" ");
 
-                     name.setText(separated[0]);
+                         name.setText(separated[0]);
+                     }
+
 
                  }
                 }

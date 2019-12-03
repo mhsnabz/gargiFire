@@ -15,6 +15,7 @@ import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.MessegesModel;
 import com.rzn.gargi.helper.MsgListModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECIEVED = 2;
     private static final int VIEW_TYPE_MESSAGE_ADMIN = 3;
+
     private List<MessegesModel> mMessageList;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     public Adapter(List<MessegesModel> mMessageList) {

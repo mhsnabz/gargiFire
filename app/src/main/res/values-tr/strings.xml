@@ -126,5 +126,11 @@
     <string name="size">Size</string>
     <string name="bir_reklam_seyret">Bir Reklam Seyret</string>
     <string name="bir_tane_daha_eslesme">+1 Eşleme</string>
+    <string name="kullanıcı_profilinizi_goruntuledi">Kullanıcı Profilinizi Görüntüledi</string>
+    <string name="kere_profilini_goruntuledi">Kere Profilini Görüntüledi</string>
+    <string name="guncelle">Güncelle</string>
+    <string name="hayır_tsk">Hayır,Teşekürler</string>
+    <string name="uygulamaniz_güncel_degil">Uygulamanız Güncel Değil</string>
+    <string name="telefon_numarasi_ayarlari">Telefon Numarası Ayarları</string>
 
 </resources>

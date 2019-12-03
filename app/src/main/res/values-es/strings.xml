@@ -117,4 +117,38 @@
     <string name="dun">ayer</string>
     <string name="gun_once">hace días</string>
     <string name="gizlikik_politikasi">Política de Privacidad</string>Privacy Policy.
+
+
+
+
+    <string name="yeni_bir_eslesmen_var_">Tienes Un Nuevo Match</string>
+    <string name="devam_et">Continuar</string>
+    <string name="mesaj_gonder">Enviar un Msj</string>
+    <string name="kapat">Cerca</string>
+
+    <string name="yeterince_eslesmen_var">Yeterince Eşleşmen Var</string>
+    <string name="resim_yukleniyor">RESİM YUKLENİYOR</string>
+    <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>
+    <string name="nev">Yeni</string>
+
+
+    <string name="eslebilecegin_kimse_yok">Malesef Eşleşebileceğin Kimse Yok</string>
+
+    <string name="sana_yeni_bir_mesaj_gonderdi">Sent You a New Message</string>
+    <string name="bir_beyefendi_size">Bir Beyefendi Size</string>
+    <string name="puan_verdi">Puan Verdi</string>
+    <string name="rate">Yeni Bir Oy Aldınız</string>
+    <string name="bir_hanımefendi_size">Bir Hanımefendi Size</string>
+    <string name="en_yakin">En Yakındakiler</string>
+    <string name="bu_bilgilere_ihtiyacimiz_var">Bu Bilgilere İhtiyacımız Var</string>
+    <string name="oy">Yeni Bir Oy</string>
+    <string name="kullanici_sana_oy_verdi">Kullanıcı Size Oy Verdi</string>
+    <string name="size">Size</string>
+    <string name="bir_reklam_seyret">Bir Reklam Seyret</string>
+    <string name="bir_tane_daha_eslesme">+1 Eşleme</string>
+    <string name="kullanıcı_profilinizi_goruntuledi">Kullanıcı Profilinizi Görüntüledi</string>
+    <string name="kere_profilini_goruntuledi">Kere Profilini Görüntüledi</string>
+    <string name="guncelle">Güncelle</string>
+    <string name="hayır_tsk">Hayır,Teşekürler</string>
+    <string name="uygulamaniz_güncel_degil">Uygulamanız Güncel Değil</string>
 </resources>

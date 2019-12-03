@@ -32,8 +32,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.rzn.gargi.chat.OneToOneChat;
 import com.rzn.gargi.helper.CallBack;
+import com.rzn.gargi.helper.ForceUpdateChecker;
 import com.rzn.gargi.helper.Rate;
 import com.rzn.gargi.home.HomeActivity;
 import com.rzn.gargi.profile.UserProfileActivity;
@@ -56,7 +58,23 @@ public class gargi extends Application {
     String currentUser;
     @Override
     public void onCreate() {
-
+        final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        Map<String, Object> remoteConfigDefaults = new HashMap();
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.9");
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
+                "https://play.google.com/store/apps/details?id=com.rzn.gargi");
+        firebaseRemoteConfig.setDefaults(remoteConfigDefaults);
+        firebaseRemoteConfig.fetch(60)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("remoteCongif", "remote config is fetched.");
+                            firebaseRemoteConfig.activateFetched();
+                        }
+                    }
+                });
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttp3Downloader(this,Integer.MAX_VALUE));
@@ -69,7 +87,7 @@ public class gargi extends Application {
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user!=null){
-                    getUser();
+                  //  getUser();
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
                     currentUser = firebaseAuth.getCurrentUser().getUid();
                     String tokenID = FirebaseInstanceId.getInstance().getToken();

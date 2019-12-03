@@ -29,6 +29,7 @@ public class SettingActivity extends AppCompatActivity {
     ImageButton veriftyImage;
     Toolbar toolbar;
     Button logOut;
+    TextView headerEmail;
     TextView verfity,emailAdres,password,about;
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     Dialog dialog;
@@ -36,9 +37,16 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        headerEmail=(TextView)findViewById(R.id.headerEmail);
         dialog=new Dialog(this);
         emailAdres=(TextView)findViewById(R.id.emailAdres);
-        emailAdres.setText(firebaseUser.getEmail());
+        if (firebaseUser.getEmail()!=null){
+            emailAdres.setText(firebaseUser.getEmail());
+        }else if (firebaseUser.getPhoneNumber()!=null){
+            headerEmail.setText(getResources().getString(R.string.telefon_numarasi_ayarlari));
+            emailAdres.setText(firebaseUser.getPhoneNumber());
+        }
+
         veriftyImage=(ImageButton)findViewById(R.id.verfityImafge);
         verfity=(TextView)findViewById(R.id.verfity);
         about=(TextView)findViewById(R.id.about);
@@ -59,6 +67,7 @@ public class SettingActivity extends AppCompatActivity {
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
+                if (firebaseUser.getEmail()!=null)
                 firebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -69,10 +78,16 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        if (firebaseUser.isEmailVerified())
-        {
+        if (firebaseUser.getPhoneNumber()!=null){
             verfity.setVisibility(View.INVISIBLE);
             veriftyImage.setVisibility(View.VISIBLE);
+        }else  if (firebaseUser.getEmail()!=null )
+        {
+            if (firebaseUser.isEmailVerified()){
+                verfity.setVisibility(View.INVISIBLE);
+                veriftyImage.setVisibility(View.VISIBLE);
+            }
+
         }
 
 

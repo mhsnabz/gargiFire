@@ -57,10 +57,10 @@
             android:layout_toEndOf="@id/relLay_image"
             android:fontFamily="@font/nunito_sans_semibold"
             android:layout_marginTop="4dp"
-            android:textColor="@color/black"
             android:layout_marginLeft="12dp"
+            android:textColor="@color/black"
             android:textSize="14dp"
-            android:text="Loading..."
+            android:text="name"
 
             />
 
@@ -77,7 +77,17 @@
             android:layout_marginRight="4dp"
             android:layout_marginLeft="12dp"
             ></TextView>
-
+        <TextView
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ratesText"
+            android:layout_marginRight="4dp"
+            android:textSize="8dp"
+            android:layout_marginLeft="12dp"
+            android:layout_toEndOf="@id/relLay_image"
+           android:id="@+id/time"
+            ></TextView>
         <ImageView
             android:id="@+id/rigth"
             android:layout_width="25dp"

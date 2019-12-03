@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".topface.MyRates">
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ratesCount"
         android:textAlignment="center"
-        android:text="15 rated you"
+        android:text="Loading..."
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:fontFamily="@font/nunito_sans_semibold"

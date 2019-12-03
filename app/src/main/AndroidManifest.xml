@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Log_Sign.PhoneRegister"></activity>
+        <activity android:name=".Log_Sign.PhoneRegister" />
         <activity android:name=".Log_Sign.NewUserInfo" />
         <activity android:name=".Log_Sign.FaceOrGoogle" />
         <activity android:name=".chat.OldOneToOneChat" />
@@ -81,7 +81,7 @@
             android:resource="@array/preloaded_fonts" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1362663023819993~3211374127"/>
+            android:value="ca-app-pub-1362663023819993~3211374127" />
     </application>
 
 </manifest>

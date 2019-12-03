@@ -118,7 +118,6 @@
  <string name="resim_yukleniyor">Image Is Uploading</string>
  <string name="lutfen_bekleniyiz">Please Wait!</string>
  <string name="nev">New</string>
- <string name="eslebilecegin_kimse_yok">Malesef Eşleşebileceğin Kimse Yok</string>
  <string name="yeni_bir_eslesmen_var_">You Have New Match</string>
  <string name="mesaj_gonder">Send A Msg</string>
  <string name="kapat">Close</string>
@@ -133,8 +132,15 @@
     <string name="gizlikik_politikasi">Privacy Policy</string>
     <string name="kullanici_sana_oy_verdi">Users Voted For You</string>
     <string name="size">Gave You</string>
-    <string name="bir_tane_daha_eslesme">   "   "+1 Match</string>
-
+    <string name="bir_tane_daha_eslesme">"   "+1 Match</string>
+    <string name="kere_profilini_goruntuledi">Times Viewed Your Profile </string>
+    <string name="guncelle">Update</string>
+    <string name="hayır_tsk">No,Thanks</string>
+    <string name="uygulamaniz_güncel_degil">You Need to Update Gargii</string>
+    <string name="bir_reklam_seyret">Watch an Ad</string>
+    <string name="kullanıcı_profilinizi_goruntuledi">Users Viewed Your Profile</string>
+    <string name="bu_bilgilere_ihtiyacimiz_var">We Need These Information</string>
+    <string name="eslebilecegin_kimse_yok">Unfortunately, No One Exist To Can Match</string>
 
 </resources>
 

@@ -28,6 +28,7 @@ import android.location.Geocoder;
 import android.location.Location;
 
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -75,6 +76,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.rzn.gargi.R;
 import com.rzn.gargi.chat.ChatActivity;
 import com.rzn.gargi.helper.CallBack;
+import com.rzn.gargi.helper.ForceUpdateChecker;
 import com.rzn.gargi.helper.bottomNavigationHelper;
 import com.rzn.gargi.profile.ProfileActivity;
 import com.rzn.gargi.topface.TopFaceActivity;
@@ -102,11 +104,12 @@ import static com.rzn.gargi.profile.ProfileActivity.ALLOWED_CHARACTERS;
 
 
 public class HomeActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, RewardedVideoAdListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, RewardedVideoAdListener, ForceUpdateChecker.OnUpdateNeededListener {
 
     private RewardedVideoAd mRewardedVideoAd;
     public static long MAN_LIMIT = 5;
     public static long WOMAN_LIMIT = 35;
+    Dialog update;
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private SimpleLocation mLocation;
@@ -145,6 +148,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        update=new Dialog(this);
+        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(this);
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
@@ -386,12 +391,15 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         mapCurrenUser.put("senderUid",userId);
         mapCurrenUser.put("getterUid",currentUser);
         mapCurrenUser.put("time", FieldValue.serverTimestamp());
+        mapCurrenUser.put("isTyping", false);
+
         mapCurrenUser.put("timer",1800000);
 
         mapUserId.put("isOnline",false);
         mapUserId.put("senderUid",currentUser);
         mapUserId.put("getterUid",userId);
         mapUserId.put("timer",1800000);
+        mapUserId.put("isTyping", false);
         mapUserId.put("time",FieldValue.serverTimestamp());
 
         final DocumentReference refCurrenUser = db
@@ -480,6 +488,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+
+
+
     private  void setNewMatchForMan( final String userId){
         final long[] size = {manSize};
         final Map<String , Object> mapCurrenUser = new HashMap<>();
@@ -490,13 +501,14 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         mapCurrenUser.put("getterUid",currentUser);
         mapCurrenUser.put("time", FieldValue.serverTimestamp());
         mapCurrenUser.put("timer",1800000);
+        mapCurrenUser.put("isTyping",false);
 
         mapUserId.put("isOnline",false);
         mapUserId.put("senderUid",currentUser);
         mapUserId.put("getterUid",userId);
         mapUserId.put("timer",1800000);
         mapUserId.put("time",FieldValue.serverTimestamp());
-
+        mapUserId.put("isTyping",false);
         final DocumentReference refCurrenUser = db
                 .collection("msgList")
                 .document(currentUser)
@@ -1344,6 +1356,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
+
     public class macthList extends RecyclerView.Adapter<HomeActivity.ViewHolder>{
 
        List<String> userId;
@@ -1820,5 +1833,37 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.d("randomStrign", "getRandomString: "+sb.toString());
 
         return sb.toString();
+    }
+
+    @Override
+    public void onUpdateNeeded(final String updateUrl) {
+        update.setContentView(R.layout.update_dialog);
+        update.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        update.setCancelable(false);
+        update.setCanceledOnTouchOutside(false);
+        update.show();
+        Button no =(Button) update.findViewById(R.id.no);
+        Button yes =(Button) update.findViewById(R.id.yes);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectStore(updateUrl);
+            }
+        });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                update.dismiss();
+                finishAffinity();
+                System.exit(0);
+
+            }
+        });
+
+    }
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

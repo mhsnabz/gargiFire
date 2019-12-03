@@ -54,11 +54,15 @@ import com.rzn.gargi.helper.MessegesModel;
 import com.rzn.gargi.profile.UserProfileActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.udevel.widgetlab.TypingIndicatorView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -85,24 +89,48 @@ public class OneToOneChat extends AppCompatActivity {
     Dialog dialog_options,report_dilaog;
     Dialog time_dialog,dialog_areYouSure ;
     String tokenId,userName;
+    TypingIndicatorView typingIndicatorView;
+    FirebaseFirestore dbIstypinf = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_one_to_one_chat);
-        msg=(TextInputEditText)findViewById(R.id.msg);
+        msg=(TextInputEditText)findViewById(R.id.msg_edittext);
         mikrofon=(ImageButton) findViewById(R.id.mikrofon);
         wait=new Dialog(this);
         _time=getIntent().getLongExtra("timer",0);
         msgges= new ArrayList<>();
         send=(FloatingActionButton)findViewById(R.id.send);
         mikrofon.setVisibility(View.GONE);
+        typingIndicatorView=(TypingIndicatorView)findViewById(R.id.typing);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMsg(auth.getUid(),getIntent().getStringExtra("userId"));
             }
         });
+        dbIstypinf.collection("msgList")
+                .document(auth.getUid())
+                .collection(auth.getUid())
+                .document(getIntent().getStringExtra("userId"))
+                .addSnapshotListener(OneToOneChat.this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e==null){
+                        if (documentSnapshot.getBoolean("isTyping")!=null){
+                            if (documentSnapshot.getBoolean("isTyping")){
+                                typingIndicatorView.setVisibility(View.VISIBLE);
+                            }else typingIndicatorView.setVisibility(View.GONE);
+
+                        }
+                    }else  typingIndicatorView.setVisibility(View.GONE);
+                    }
+                });
+
         msg.addTextChangedListener(new TextWatcher() {
+            boolean isTyping = false;
+            private Timer timer = new Timer();
+            private final long DELAY = 2500;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -111,10 +139,34 @@ public class OneToOneChat extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+               if (s.length()>0){
+                   isTyping = true;
+                   Log.d("isText", "started typing");
+                   setIsTyping(isTyping);
+               }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                Log.d("", "");
+                if(!isTyping) {
+                    Log.d("isText", "started typing");
+                    // Send notification for start typing event
+                    isTyping = true;
+                }
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                isTyping = false;
+                                Log.d("isText", "stopped typing");
+                                setIsTyping(isTyping);
+                            }
+                        },
+                        DELAY
+                );
 
             }
         });
@@ -150,6 +202,17 @@ public class OneToOneChat extends AppCompatActivity {
         msg_list.setAdapter(mAdapter);
 
         getMsg();
+    }
+
+    private void setIsTyping(boolean isTyping){
+        Map<String,Object> map = new HashMap<>();
+        map.put("isTyping",isTyping);
+        dbIstypinf.collection("msgList")
+                .document(getIntent().getStringExtra("userId"))
+                .collection(getIntent().getStringExtra("userId"))
+                .document(auth.getUid()).set(map,SetOptions.merge());
+
+
     }
     ListenerRegistration msgListner;
     private void getMsg(){
