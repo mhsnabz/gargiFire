@@ -91,6 +91,7 @@ public class OneToOneChat extends AppCompatActivity {
     String tokenId,userName;
     TypingIndicatorView typingIndicatorView;
     FirebaseFirestore dbIstypinf = FirebaseFirestore.getInstance();
+    boolean isTyping = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,10 @@ public class OneToOneChat extends AppCompatActivity {
         send=(FloatingActionButton)findViewById(R.id.send);
         mikrofon.setVisibility(View.GONE);
         typingIndicatorView=(TypingIndicatorView)findViewById(R.id.typing);
-        send.setOnClickListener(new View.OnClickListener() {
+        send.setOnClickListener(
+
+                new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 sendMsg(auth.getUid(),getIntent().getStringExtra("userId"));
@@ -128,7 +132,7 @@ public class OneToOneChat extends AppCompatActivity {
                 });
 
         msg.addTextChangedListener(new TextWatcher() {
-            boolean isTyping = false;
+
             private Timer timer = new Timer();
             private final long DELAY = 2500;
             @Override
@@ -665,6 +669,7 @@ public class OneToOneChat extends AppCompatActivity {
 
     }
     private void sendMsg(String currentUser, final String userId){
+        isTyping=false;
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final DocumentReference refSender = db.collection("msg")
                 .document(currentUser)
@@ -703,6 +708,7 @@ public class OneToOneChat extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isComplete()){
+
                                                 Log.d("tag", "onComplete: "+task);
                                                 DocumentReference ref = db
                                                         .collection("msgList")

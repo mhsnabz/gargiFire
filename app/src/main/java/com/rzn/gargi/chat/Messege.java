@@ -20,6 +20,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -132,7 +133,7 @@ public class Messege extends Fragment {
             Log.d("tag", "onBindViewHolder: "+model.getSenderUid());
             holder.getInfo(model.getSenderUid());
             holder.getBadgeCount(model.getSenderUid());
-            //  holder.getTimeAgo(model.getTime());
+             holder.getTimeAgo(model.getTime());
             Log.d("time", "onBindViewHolder: "+model.getTime());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -192,45 +193,49 @@ public class Messege extends Fragment {
                 TextView time = (TextView)view.findViewById(R.id.time);
 
             }
-            public  void getTimeAgo(long time) {
+            public  void getTimeAgo(Timestamp _time) {
                 TextView timeAgo = (TextView)view.findViewById(R.id.time);
+                if (_time!=null){
+                    long time =_time.getSeconds();
 
-                int SECOND_MILLIS = 1000;
-                int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-                int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-                final int DAY_MILLIS = 24 * HOUR_MILLIS;
-                if (time < 1000000000000L) {
-                    // if timestamp given in seconds, convert to millis
-                    time *= 1000;
+                        int SECOND_MILLIS = 1000;
+                    int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+                    int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+                    final int DAY_MILLIS = 24 * HOUR_MILLIS;
+                    if (time < 1000000000000L) {
+                        // if timestamp given in seconds, convert to millis
+                        time *= 1000;
+                    }
+
+                    long now = Calendar.getInstance().getTimeInMillis();
+                    if (time > now || time <= 0) {
+                        timeAgo.setText("");
+                    }
+
+                    // TODO: localize
+                    final long diff = now - time;
+                    if (diff < MINUTE_MILLIS) {
+                        timeAgo.setText(getResources().getString(R.string.simdi));
+                    } else if (diff < 2 * MINUTE_MILLIS) {
+                        timeAgo.setText(getResources().getString(R.string.bir_kac_dk_once));
+                    } else if (diff < 50 * MINUTE_MILLIS) {
+                        String _Time =String.valueOf(diff / MINUTE_MILLIS) + getResources().getString(R.string.dk_once);
+                        timeAgo.setText(_Time);
+                    } else if (diff < 90 * MINUTE_MILLIS) {
+                        timeAgo.setText(getResources().getString(R.string.bir_saat_once));
+                    } else if (diff < 24 * HOUR_MILLIS) {
+                        String _Time =String.valueOf(diff / HOUR_MILLIS) + getResources().getString(R.string.saat_once);
+                        timeAgo.setText(_Time);
+
+                    } else if (diff < 48 * HOUR_MILLIS) {
+                        timeAgo.setText(getResources().getString(R.string.dun));
+                    } else {
+                        String _Time =String.valueOf(diff / DAY_MILLIS)+ getResources().getString(R.string.gun_once);
+                        timeAgo.setText(_Time);
+
+                    }
                 }
 
-                long now = Calendar.getInstance().getTimeInMillis();
-                if (time > now || time <= 0) {
-                    timeAgo.setText("");
-                }
-
-                // TODO: localize
-                final long diff = now - time;
-                if (diff < MINUTE_MILLIS) {
-                    timeAgo.setText("şimdi");
-                } else if (diff < 2 * MINUTE_MILLIS) {
-                    timeAgo.setText("Bir Kaç Dk Önce");
-                } else if (diff < 50 * MINUTE_MILLIS) {
-                    String _time =String.valueOf(diff / MINUTE_MILLIS) + "Dk Önce";
-                    timeAgo.setText(_time);
-                } else if (diff < 90 * MINUTE_MILLIS) {
-                    timeAgo.setText("Bir Saat Önce");
-                } else if (diff < 24 * HOUR_MILLIS) {
-                    String _time =String.valueOf(diff / HOUR_MILLIS) + "Saat Önce";
-                    timeAgo.setText(_time);
-
-                } else if (diff < 48 * HOUR_MILLIS) {
-                    timeAgo.setText("Dün");
-                } else {
-                    String _time =String.valueOf(diff / DAY_MILLIS)+ "Gün Önce";
-                    timeAgo.setText(_time);
-
-                }
             }
 
             public void getBadgeCount(final String userId){

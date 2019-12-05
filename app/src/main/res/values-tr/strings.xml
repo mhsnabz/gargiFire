@@ -99,11 +99,11 @@
     <string name="lutfen_cinisinizyetiniz_giriniz">Lütfen Cinsiyetinizi Giriniz</string>
     <string name="bir_kac_dk_once">bir kaç dk önce</string>
     <string name="simdi">şimdi</string>
-    <string name="dk_once">dk önce</string>
-    <string name="bir_saat_once">1 saat önce</string>
-    <string name="saat_once">saat önce</string>
-    <string name="dun">dün</string>
-    <string name="gun_once">gün önce</string>
+    <string name="dk_once">" "dk önce</string>
+    <string name="bir_saat_once">" "1 saat önce</string>
+    <string name="saat_once">" "saat önce</string>
+    <string name="dun">" "dün</string>
+    <string name="gun_once">" "gün önce</string>
     <string name="yeterince_eslesmen_var">Yeterince Eşleşmen Var</string>
     <string name="resim_yukleniyor">RESİM YUKLENİYOR</string>
     <string name="lutfen_bekleniyiz">Lütfen Bekleyiniz</string>

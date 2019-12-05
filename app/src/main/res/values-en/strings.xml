@@ -109,11 +109,11 @@
 
  <string name="bir_kac_dk_once">a few minutes ago</string>
  <string name="simdi">now</string>
- <string name="dk_once">minute ago</string>
+ <string name="dk_once">" "minutes ago</string>
  <string name="bir_saat_once">1 hour ago</string>
- <string name="saat_once">hour ago</string>
+ <string name="saat_once">" "hours ago</string>
  <string name="dun">yesterday</string>
- <string name="gun_once">days ago</string>
+ <string name="gun_once">" "days ago</string>
  <string name="yeterince_eslesmen_var">You Have Enough Matches</string>
  <string name="resim_yukleniyor">Image Is Uploading</string>
  <string name="lutfen_bekleniyiz">Please Wait!</string>

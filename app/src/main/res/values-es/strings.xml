@@ -109,13 +109,13 @@
 
 
 
-    <string name="bir_kac_dk_once">Hace pocos minutos</string>
-    <string name="simdi">ahora</string>
-    <string name="dk_once">hace un minuto</string>
-    <string name="bir_saat_once">1 hora antes</string>
-    <string name="saat_once">hora antes</string>
-    <string name="dun">ayer</string>
-    <string name="gun_once">hace días</string>
+    <string name="bir_kac_dk_once">" "Hace pocos minutos</string>
+    <string name="simdi">" "ahora</string>
+    <string name="dk_once">" "hace un minuto</string>
+    <string name="bir_saat_once">" "1 hora antes</string>
+    <string name="saat_once">" "hora antes</string>
+    <string name="dun">" "ayer</string>
+    <string name="gun_once">" "hace días</string>
     <string name="gizlikik_politikasi">Política de Privacidad</string>Privacy Policy.
 
 

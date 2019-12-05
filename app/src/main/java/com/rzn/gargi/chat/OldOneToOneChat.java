@@ -179,12 +179,14 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
             @Override
             public void onTick(long l) {
                 if (l<=2000){
+                    downTimer.cancel();
                     deleteChat(getIntent().getStringExtra("userId"),auth.getUid());
                     deleteChat(auth.getUid(),getIntent().getStringExtra("userId"));
                     deleteOnOldList();
                     finish();
 
                 }
+
                 updateTimeTV(_timer,l);
             }
 
@@ -237,6 +239,53 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
                 .collection(getIntent().getStringExtra("userId"))
                 .document(auth.getUid())
                 .delete();
+        db.collection("msg")
+                .document(auth.getUid())
+                .collection(getIntent().getStringExtra("userId"))
+                .get().addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() ){
+                            if (task.getResult()!=null){
+                                for (DocumentSnapshot dc : task.getResult().getDocuments()){
+                                    removeChat(dc.getId(),getIntent().getStringExtra("userId"));
+                                }
+                            }
+                        }
+                    }
+                });
+        db.collection("msg")
+                .document(getIntent().getStringExtra("userId"))
+                .collection(auth.getUid())
+                .get().addOnCompleteListener(OldOneToOneChat.this, new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() ){
+                    if (task.getResult()!=null){
+                        for (DocumentSnapshot dc : task.getResult().getDocuments()){
+                            removeChatCu(dc.getId(),getIntent().getStringExtra("userId"));
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+    private void removeChat(String id,String userId){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("msg")
+                .document(auth.getUid())
+                .collection(userId)
+                .document(id).delete();
+
+    }
+    private void removeChatCu(String id,String userId){
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("msg")
+                .document(userId)
+                .collection(auth.getUid())
+                .document(id).delete();
+
     }
     private void setTimer(long time,TextView _timer){
         Date date = Timestamp.now().toDate();
@@ -305,8 +354,7 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
                                 .placeholder(R.drawable.upload_place_holder)
                                 .into(image, new Callback() {
                                     @Override
-                                    public void onSuccess() {
-
+                                    public void onSuccess(){
                                     }
 
                                     @Override
@@ -332,7 +380,6 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
             options.setEnabled(false);
         }else
             verified.setVisibility(View.GONE);
-
         toolbar.setNavigationIcon(R.drawable.msg_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,78 +392,7 @@ FirebaseFirestore dbTime =FirebaseFirestore.getInstance();
             }
         });
 
-
-        options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog_options.show();
-                Button cancel = (Button)dialog_options.findViewById(R.id.cancel);
-                final TextView removeMatch=(TextView)dialog_options.findViewById(R.id.removeMatch);
-                TextView report =(TextView)dialog_options.findViewById(R.id.report);
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog_options.dismiss();
-                    }
-                });
-
-
-                removeMatch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        clickDeleteMatch(_timeLeft);
-                    }
-                });
-
-                report.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v)
-                    {
-
-                        report_dilaog.show();
-                        dialog_options.dismiss();
-
-                        TextView sahteHesap = (TextView)report_dilaog.findViewById(R.id.sahteHesap);
-                        TextView kufur = (TextView)report_dilaog.findViewById(R.id.kufur);
-                        TextView ciplaklik = (TextView)report_dilaog.findViewById(R.id.ciplaklik);
-                        Button cancel = (Button)report_dilaog.findViewById(R.id.cancel);
-
-                        sahteHesap.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-
-
-                        kufur.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-
-
-                        ciplaklik.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        });
-
-
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                report_dilaog.dismiss();
-                                dialog_options.show();
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        options.setVisibility(View.INVISIBLE);
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
