@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
@@ -287,7 +288,7 @@ public class OneToOneChat extends AppCompatActivity {
         dialog =new Dialog(this);
         dialog.setContentView(R.layout.wait_dialog);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("allUser")
                 .document(userId)
                 .get().addOnSuccessListener(OneToOneChat.this, new OnSuccessListener<DocumentSnapshot>() {
@@ -387,6 +388,26 @@ public class OneToOneChat extends AppCompatActivity {
                         sahteHesap.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                dialog.show();
+
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("type","sahteHesap");
+                                map.put("reporter",auth.getUid());
+                                map.put("time", FieldValue.serverTimestamp());
+                                db.collection("report")
+                                        .document("sahteHesap")
+                                        .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                        , new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                    report_dilaog.dismiss();
+                                                    dialog.dismiss();
+
+                                                }
+                                            }
+                                        });
 
                             }
                         });
@@ -395,7 +416,26 @@ public class OneToOneChat extends AppCompatActivity {
                         kufur.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                dialog.show();
 
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("type","küfür");
+                                map.put("reporter",auth.getUid());
+                                map.put("time", FieldValue.serverTimestamp());
+                                db.collection("report")
+                                        .document("kufur")
+                                        .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                        , new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                    report_dilaog.dismiss();
+                                                    dialog.dismiss();
+
+                                                }
+                                            }
+                                        });
                             }
                         });
 
@@ -403,7 +443,24 @@ public class OneToOneChat extends AppCompatActivity {
                         ciplaklik.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                dialog.show();
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("type","ciplaklik");
+                                map.put("reporter",auth.getUid());
+                                map.put("time", FieldValue.serverTimestamp());
+                                db.collection("report")
+                                        .document("ciplaklik")
+                                        .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                        , new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                    Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                    report_dilaog.dismiss();
+                                                    dialog.dismiss();
+                                                }
+                                            }
+                                        });
                             }
                         });
 
@@ -907,6 +964,7 @@ public class OneToOneChat extends AppCompatActivity {
 
 
     }
+    FirebaseFirestore dbReport = FirebaseFirestore.getInstance();
     private void clickDeleteMatch(long _leftTime){
         if (_timeLeft>=(27*60000)){
             time_dialog.show();
@@ -925,7 +983,26 @@ public class OneToOneChat extends AppCompatActivity {
                     sahteHesap.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog.show();
 
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("type","sahteHesap");
+                            map.put("reporter",auth.getUid());
+                            map.put("time", FieldValue.serverTimestamp());
+                            dbReport.collection("report")
+                                    .document("sahteHesap")
+                                    .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                    , new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                report_dilaog.dismiss();
+                                                dialog.dismiss();
+
+                                            }
+                                        }
+                                    });
                         }
                     });
 
@@ -933,7 +1010,26 @@ public class OneToOneChat extends AppCompatActivity {
                     kufur.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            dialog.show();
 
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("type","küfür");
+                            map.put("reporter",auth.getUid());
+                            map.put("time", FieldValue.serverTimestamp());
+                            dbReport.collection("report")
+                                    .document("kufur")
+                                    .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                    , new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                report_dilaog.dismiss();
+                                                dialog.dismiss();
+
+                                            }
+                                        }
+                                    });
                         }
                     });
 
@@ -942,6 +1038,24 @@ public class OneToOneChat extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
 
+                            dialog.show();
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("type","ciplaklik");
+                            map.put("reporter",auth.getUid());
+                            map.put("time", FieldValue.serverTimestamp());
+                            dbReport.collection("report")
+                                    .document("ciplaklik")
+                                    .collection(getIntent().getStringExtra("userId")).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(OneToOneChat.this
+                                    , new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(OneToOneChat.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                                report_dilaog.dismiss();
+                                                dialog.dismiss();
+                                            }
+                                        }
+                                    });
                         }
                     });
 

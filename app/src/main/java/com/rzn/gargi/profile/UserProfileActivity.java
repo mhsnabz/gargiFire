@@ -3,10 +3,17 @@ package com.rzn.gargi.profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.graphics.drawable.AnimatedStateListDrawableCompat;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimatedStateListDrawable;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -14,10 +21,12 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionButton;
@@ -31,6 +40,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
@@ -69,7 +79,8 @@ public class UserProfileActivity extends AppCompatActivity {
     ArrayList<String> _images;
     private ImageView horoscope;
     private  ViewPager pager_image;
-    private Dialog dialogReport,report_dialog;
+    private Dialog dialogReport,report_dilaog;
+    Dialog check_mark;
     private Dialog dialog;
     private String userId ;
     private long _oldRate,_totalRate;
@@ -95,6 +106,12 @@ public class UserProfileActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        report_dilaog = new Dialog(this);;
+        check_mark =new Dialog(this);
+        report_dilaog.setContentView(R.layout.report_dialog);
+        report_dilaog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        check_mark.setContentView(R.layout.dialog_check);
+        check_mark.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog= new Dialog(this);
         rel_rate=(RelativeLayout)findViewById(R.id.relLay_rate);
         userId= getIntent().getStringExtra("userId");
@@ -747,6 +764,101 @@ public class UserProfileActivity extends AppCompatActivity {
                         });
                     }
                 }
+            }
+        });
+
+
+    }
+    FirebaseFirestore dbReport = FirebaseFirestore.getInstance();
+    private void setKufurReport(String userId){
+
+    }
+
+    public void report(View view)
+    {
+        report_dilaog.show();
+
+
+        TextView sahteHesap = (TextView)report_dilaog.findViewById(R.id.sahteHesap);
+        TextView kufur = (TextView)report_dilaog.findViewById(R.id.kufur);
+        TextView ciplaklik = (TextView)report_dilaog.findViewById(R.id.ciplaklik);
+        Button cancel = (Button)report_dilaog.findViewById(R.id.cancel);
+        final ImageView done =(ImageView)check_mark.findViewById(R.id.done);
+        sahteHesap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("type","sahteHesap");
+                map.put("reporter",auth.getUid());
+                map.put("time", FieldValue.serverTimestamp());
+                dbReport.collection("report")
+                        .document("sahteHesap")
+                        .collection(userId).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(UserProfileActivity.this
+                        , new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(UserProfileActivity.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                    report_dilaog.dismiss();
+                                }
+                            }
+                        });
+
+            }
+        });
+
+
+        kufur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("type","küfür");
+                map.put("reporter",auth.getUid());
+                map.put("time", FieldValue.serverTimestamp());
+                dbReport.collection("report")
+                        .document("kufur")
+                        .collection(userId).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(UserProfileActivity.this
+                        , new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(UserProfileActivity.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                    report_dilaog.dismiss();
+                                }
+                            }
+                        });
+            }
+        });
+
+
+        ciplaklik.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("type","ciplaklik");
+                map.put("reporter",auth.getUid());
+                map.put("time", FieldValue.serverTimestamp());
+                dbReport.collection("report")
+                        .document("ciplaklik")
+                        .collection(userId).document(auth.getUid()).set(map,SetOptions.merge()).addOnCompleteListener(UserProfileActivity.this
+                        , new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(UserProfileActivity.this,"Geri Bildiriminiz İçin Teşekürler" ,Toast.LENGTH_LONG).show();
+                                    report_dilaog.dismiss();
+                                }
+                            }
+                        });
+            }
+        });
+
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                report_dilaog.dismiss();
+
             }
         });
 

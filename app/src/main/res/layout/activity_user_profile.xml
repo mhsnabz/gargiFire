@@ -350,45 +350,25 @@
 
                             />
                     </LinearLayout>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:onClick="report"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginRight="35dp"
-                    android:layout_below="@id/relLay_social"
-                    android:id="@+id/report"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/report_button"
 
-                    >
-                    <ImageView
-                        android:layout_marginLeft="20dp"
-                        android:id="@+id/repot_image"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-
-                        android:src="@drawable/report_icon"
-                        />
-                    <Button
-                        android:onClick="report"
-                        android:layout_centerVertical="true"
-                        android:layout_width="wrap_content"
-                        android:layout_height="35dp"
-                        android:layout_toEndOf="@id/repot_image"
-                        android:background="@android:color/transparent"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/sikayet_et"
-                        android:textColor="#C5CBD8"
-                        android:layout_marginLeft="8dp"
-                        />
                 </RelativeLayout>
+               <Button
+                   android:onClick="report"
+                   android:layout_centerHorizontal="true"
+                   android:paddingEnd="16dp"
+                   android:paddingStart="16dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="40dp"
+                   android:layout_below="@id/relLay_social"
+                   android:textAlignment="center"
+                   android:text="@string/sikayet_et"
+                   android:layout_margin="20dp"
+                   android:textSize="18dp"
+                   android:fontFamily="@font/nunito_sans_semibold"
+                   android:textStyle="bold"
+                   android:textColor="@color/colorAccent"
+                   android:background="@drawable/report_button"
+                   ></Button>
 
             </RelativeLayout>
 
