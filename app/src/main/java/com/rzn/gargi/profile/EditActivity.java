@@ -60,6 +60,7 @@ public class EditActivity extends AppCompatActivity {
     Dialog wating;
     ArrayList<String> _images;
     TextView [] mDots;
+    TextView loaction ;
     RelativeLayout relSocial,relAbout,relJobSchool;
 
 
@@ -68,6 +69,7 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         _images= new ArrayList<>();
+        loaction=(TextView)findViewById(R.id.location);
         gender=getIntent().getStringExtra("gender");
         dots=(LinearLayout)findViewById(R.id.dots);
         horoscope=(ImageView)findViewById(R.id.horoscope);
@@ -187,32 +189,16 @@ public class EditActivity extends AppCompatActivity {
                         }
                         calculateRate(info.getCount(),info.getTotalRate());
 
-                       /* if (info.getInsta() != null) {
-                            insta.setVisibility(View.VISIBLE);
-                            instaUrl = instaUrl + info.getInsta();
-                        } else insta.setVisibility(View.GONE);
-                        if (info.getTwitter() != null) {
-                            twitter.setVisibility(View.VISIBLE);
-                            twitterUrl = twitterUrl + info.getTwitter();
-                        } else twitter.setVisibility(View.GONE);
-                        if (info.getFace() != null) {
-                            facebook.setVisibility(View.VISIBLE);
-                            facebookUrl = facebookUrl + info.getFace();
-                        } else facebook.setVisibility(View.GONE);
-                        if (info.getSnap() != null) {
-                            snap.setVisibility(View.VISIBLE);
-                            snapchatUrl = snapchatUrl + info.getSnap();
-                        } else snap.setVisibility(View.GONE);*/
                         if (info.getJob() != null) {
                             job.setText(info.getJob());
-                        }
+                        }else job.setVisibility(View.GONE);
                         if (info.getSchool() != null) {
                             school.setText(info.getSchool());
 
-                        }
+                        }else school.setVisibility(View.GONE);
                         if (info.getAbout() != null) {
                             about.setText(info.getAbout());
-                        }
+                        }else about.setVisibility(View.GONE);
                         age.setText(convert(info.getAge()));
                         if (info.getBurc()!=null){
                             getHoroscope(burc,info.getBurc());

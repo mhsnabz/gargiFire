@@ -84,8 +84,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             configureIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channel);
             builder.setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.notification_logo);
+
             builder.setWhen(System.currentTimeMillis());
-            builder.setSmallIcon(R.mipmap.notification_logo);
             builder.setContentTitle(type);
             builder.setContentText(body);
             builder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.sound));
@@ -105,7 +106,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this,channel);
             builder.setAutoCancel(true);
             builder.setWhen(System.currentTimeMillis());
-            builder.setSmallIcon(R.mipmap.notification_logo);
+            builder.setSmallIcon(R.drawable.notification_logo);
             builder.setContentTitle(type);
             builder.setContentText(body);
             //  builder.setDefaults(Notification.DEFAULT_VIBRATE);

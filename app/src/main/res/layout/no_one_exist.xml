@@ -25,7 +25,7 @@
             android:layout_marginRight="20dp"
             ></TextView>
         <TextView
-
+            android:id="@+id/emoji"
             android:text="🙄"
             android:textSize="40dp"
             android:layout_marginBottom="8dp"
@@ -33,5 +33,17 @@
             android:layout_below="@id/txt1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TextView>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel"
+            android:layout_below="@id/emoji"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_back"
+            android:textColor="@color/white"
+            android:fontFamily="@font/nunito_sans_semibold"
+            android:text="@string/tamam"
+            ></Button>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

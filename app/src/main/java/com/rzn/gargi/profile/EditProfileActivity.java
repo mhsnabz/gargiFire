@@ -7,10 +7,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,6 +68,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int camera_pick_request =800;
     String cameraPermission[];
     String storagePermission[];
+    Dialog dialog ;
     Uri image;
     ProgressDialog progressDialog;
     private StorageReference imageStorage;
@@ -80,6 +84,9 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.wait_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         gender=getIntent().getStringExtra("gender");
         imageStorage= FirebaseStorage.getInstance().getReference();
         cameraPermission= new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -472,18 +479,9 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
     public void back(View view){
-        //  setUserInfo(about,school,job);
-        // setUserSocial(twitter_id,insta_id,facebook_id,snachat_id);
-        Intent i = new Intent(EditProfileActivity.this, EditActivity.class);
-        setUserInfo(about,school,job,twitter_id,insta_id,facebook_id,snachat_id);
-        // setUserSocial(twitter_id,insta_id,facebook_id,snachat_id);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.putExtra("gender",gender);
 
-        startActivity(i);
-        finish();
-        overridePendingTransition(R.anim.slide_in_left,0);
+        setUserInfo(about,school,job,twitter_id,insta_id,facebook_id,snachat_id);
+
 
     }
 
@@ -650,6 +648,9 @@ public class EditProfileActivity extends AppCompatActivity {
     }
     Task<Void> taskUserInfo;
     private void setUserInfo(EditText _about, EditText _school, EditText _job, EditText _twitter_id, EditText _insta_id, EditText _facebook_id, EditText _snachat_id) {
+        final Intent i = new Intent(EditProfileActivity.this, EditActivity.class);
+
+        dialog.show();;
         final Map<String,Object> map = new HashMap<>();
 
         String job =_job.getText().toString();
@@ -661,19 +662,22 @@ public class EditProfileActivity extends AppCompatActivity {
         String snap =_snachat_id.getText().toString();
         if (!job.isEmpty()){
             map.put("job",job);
+        }else {
+            map.put("job","");
         }
         if (!about.isEmpty())
         map.put("about",about);
+        else   map.put("about","");
         if (!school.isEmpty())
-            map.put("school",school);
+            map.put("school",school);else  map.put("school","");
         if (!twitter.isEmpty())
-            map.put("twitter",twitter);
+            map.put("twitter",twitter);else  map.put("twitter","");
         if (!insta.isEmpty())
-            map.put("insta",insta);
+            map.put("insta",insta);else  map.put("insta","");
         if (!face.isEmpty())
-            map.put("face",face);
+            map.put("face",face);else      map.put("face","");
         if (!snap.isEmpty())
-            map.put("snap",snap);
+            map.put("snap",snap);else    map.put("snap","");
         final FirebaseFirestore db  =FirebaseFirestore.getInstance();
        db.collection("allUser").document(auth.getUid())
                 .set(map, SetOptions.merge())
@@ -686,6 +690,16 @@ public class EditProfileActivity extends AppCompatActivity {
                                     .addOnCompleteListener(EditProfileActivity.this, new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                dialog.dismiss();
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                i.putExtra("gender",gender);
+
+                                                startActivity(i);
+                                                finish();
+                                                overridePendingTransition(R.anim.slide_in_left,0);
+                                            }
                                             Log.d("Bio", "onComplete: " + "succes");
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {

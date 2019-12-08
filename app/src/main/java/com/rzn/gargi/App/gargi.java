@@ -61,7 +61,7 @@ public class gargi extends Application {
         final FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         Map<String, Object> remoteConfigDefaults = new HashMap();
         remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_REQUIRED, true);
-        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.9");
+        remoteConfigDefaults.put(ForceUpdateChecker.KEY_CURRENT_VERSION, "1.0.11");
         remoteConfigDefaults.put(ForceUpdateChecker.KEY_UPDATE_URL,
                 "https://play.google.com/store/apps/details?id=com.rzn.gargi");
         firebaseRemoteConfig.setDefaults(remoteConfigDefaults);

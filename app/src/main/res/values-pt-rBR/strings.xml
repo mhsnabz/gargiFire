@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="giris_yap">Entrar </string>
+    <string name="hesap_olustur">Livro </string>
+    <string name="sifre">Senha</string>
+    <string name="sifremi_unuttum">Esqueceu A Senha </string>
+    <string name="e_mail_adresiniz">Endereço De E-mail </string>
+    <string name="app_name">Gargii </string>
+    <string name="adiniz">Nome </string>
+    <string name="sifrenizi_tekrar_giriniz">Redigite Sua Senha </string>
+    <string name="yasiniz">Sua Idade </string>
+    <string name="erkek">CARA </string>
+    <string name="kadin">MULHER </string>
+    <string name="ana_sayfa">Casa </string>
+    <string name="top_yuz">Face Superior</string>
+    <string name="sohbet">Papo </string>
+    <string name="profil">Perfil </string>
+    <string name="anladim">COMPREENDO </string>
+    <string name="profilini_duzenle">Editar Perfil </string>
+    <string name="kendinden_bahset_bize">Conte Nos Sobre Você </string>
+    <string name="okudugun_okul">Escola </string>
+    <string name="belki_arkadaslarinla_karsilasirsin">Talvez você encontre seus amigos </string>
+    <string name="ne_is_yapiyorsun">Qual é o seu trabalho? </string>
+    <string name="bu_devirde_onemli_bir_kriter">Um critério importante nesse período </string>
+    <string name="sosyal_medya_kullanici_adlarin">Nomes de usuário de mídia social </string>
+    <string name="belki_biri_hikayene_yanit_veriri">Talvez alguém responda à sua história </string>
+    <string name="tekrar_oynatilabilen_snaplar_alirsin">Talvez obtenha instantâneos reproduzíveis </string>
+    <string name="evet_hala_kullaniliyor">Sim ainda usado</string>
+    <string name="karakter_hala_cok_az">280 caracteres ainda muito menos </string>
+    <string name="sorun_nedir">Qual é o problema ? </string>
+    <string name="gonder">MANDAR </string>
+    <string name="ayarlar">Configurações </string>
+    <string name="mesajlar">MENSAGENS </string>
+    <string name="yeni_bir_mesaj_var">Você tem uma nova mensagem </string>
+    <string name="yeni_arkadas">NEW JOGO </string>
+    <string name="yeni_bir_eslesmen_var">Nova partida </string>
+    <string name="goruntulenme">Visualizações </string>
+    <string name="oy_verenler">Eleitor(e-a)s</string>
+    <string name="kisi_goruntuledi">Pessoas Visualizadas</string>
+    <string name="e_posta_ayarlari">Configurações De Email </string>
+    <string name="onaylamak_icin_buraya_tiklayiniz">Clique aqui para confirmar </string>
+    <string name="sifre_ayarlari">Configurações de Senha </string>
+    <string name="sifremi_degistir">Mudar Senha</string>
+
+    <string name="bildirim_ayarlari">Configurações de Notificação</string>
+    <string name="anlik_bildirimler">Notificações Instantâneas</string>
+    <string name="bize_ulas">Contate Nos</string>
+    <string name="sorun_bildirin">Reportar um Problema!</string>
+    <string name="bizi_degerlendirin">Nos Avalie</string>
+    <string name="yasal">Legal </string>
+    <string name="lisanslar">Licenciamento</string>
+    <string name="hizmet_kosullari">Termos de Serviço </string>
+    <string name="hakkinda">Sobre </string>
+    <string name="cikis">Sair</string>
+    <string name="sifrenizi_giriniz">Coloque Sua Senha</string>
+    <string name="yeni_sifresinizi_giriniz">Digite Sua Nova Senha</string>
+    <string name="yeni_sifrenizi_tekrar_giriniz">Digite novamente sua nova senha </string>
+    <string name="yeni_bir_mesaj_yaz">Escreva uma nova mensagem </string>
+    <string name="degerlendir">Avalie </string>
+    <string name="sosyal_medya_hesaplarim">Minhas Contas de Mídia Social </string>
+    <string name="sikayet_et">Relatório </string>
+    <string name="bu_sohbeti_bitirmek_istiyor_musunuz">Deseja Terminar o Chat? </string>
+    <string name="evet">SIM </string>
+    <string name="hayir">NÃO </string>
+    <string name="secenekler">OPÇÕES </string>
+    <string name="eslesmeyi_kaldir">Remover Match </string>
+    <string name="vazgec">CANCELAR </string>
+    <string name="aktif_sohbetler">Bate Papo Ativo </string>
+    <string name="eski_sohbetler">Bate Papo antigo </string>
+    <string name="lutfen_internet_baglantinizi_kontrol_edin">POR FAVOR, VERIFIQUE SUA CONEXÃO À INTERNET </string>
+    <string name="onayla">Aprovar </string>
+    <string name="dk_sonra_eslesmeyi_kaldirabilirsiniz">YVocê Pode Remover Após Min </string>
+    <string name="sikayetiniz_degerlendirmeye_alinmisitir">Sua Reclamação Foi Avaliada </string>
+    <string name="tamam">OK </string>
+    <string name="uygunsuz_ciplaklik">Inadequado - Nudez</string>
+    <string name="hakaret_ve_kufur">Insulto - Palavrões </string>
+    <string name="sahte_hesap">Conta Falsa </string>
+    <string name="diger">Other </string>
+    <string name="sikayet_etme_nedenizi_seciniz">Selecione O Motivo da Reclamação </string>
+    <string name="gunluk_eslesme_limitiniz_doldurdunuz">Você Preencheu Seu Limite de Correspondência Diária </string>
+    <string name="saat_sonra_tekrar_eslebilirsiniz">Você Pode Combinar Novamente Depois de Horas </string>
+
+
+    <string name="en_cok_puan_alan_kullanicilar">Usuários Mais Votados </string>
+    <string name="rastgele_kullanici">Usuários Aleatórios </string>
+    <string name="en_pupuler_kullanicilar">Usuário Mais Popular</string>
+    <string name="konum_bilgisi_yok">Nenhuma Informação de Localização</string>
+
+
+    <string name="en_populer">Mais Popular</string>
+    <string name="top_yuzz">Top 100</string>
+    <string name="karistir">Misturar</string>
+
+
+    <string name="lutfen_gecerli_bir_email_adresi_giriniz">Por favor insira um endereço de e-mail válido</string>
+    <string name="lutfen_eposta_adresinizi_giriniz">Por favor, indique o seu endereço de e-mail</string>
+    <string name="lutfen_sifrenizi_giriniz">Por favor, insira sua senha</string>
+    <string name="lutfen_bekleyiniz">Por favor, Sspere</string>
+    <string name="giris_yapiliyor">Entrar</string>
+    <string name="eposta_yada_sifre_hatali">E-mail ou senha está incorreto</string>
+
+    <string name="onsekiz_yasindan_buyuk_olmanız_gerekmeketedir">Você deve ter mais de 18 anos</string>
+    <string name="lutfen_adinizi_giriniz">Por favor, insira seu nome</string>
+    <string name="lutfen_sifreinizi_belirleyin">Defina sua senha</string>
+    <string name="sifreler_ayni_degil">senhas nao sao as mesmas</string>
+    <string name="lutfen_yasinizi_giriniz">Por favor coloque sua idade</string>
+    <string name="lutfen_cinisinizyetiniz_giriniz">Digite seu sexo</string>
+
+    <string name="bir_kac_dk_once">a few minutes ago</string>
+    <string name="simdi">now</string>
+    <string name="dk_once">" "minutes ago</string>
+    <string name="bir_saat_once">1 hour ago</string>
+    <string name="saat_once">" "hours ago</string>
+    <string name="dun">yesterday</string>
+    <string name="gun_once">" "days ago</string>
+    <string name="yeterince_eslesmen_var">You Have Enough Matches</string>
+    <string name="resim_yukleniyor">Image Is Uploading</string>
+    <string name="lutfen_bekleniyiz">Please Wait!</string>
+    <string name="nev">New</string>
+    <string name="yeni_bir_eslesmen_var_">You Have New Match</string>
+    <string name="mesaj_gonder">Send A Msg</string>
+    <string name="kapat">Close</string>
+    <string name="devam_et">Continue</string>
+    <string name="sana_yeni_bir_mesaj_gonderdi">Sent You a New Message</string>
+    <string name="bir_beyefendi_size">A Gentleman Gave You </string>
+    <string name="puan_verdi">Points</string>
+    <string name="bir_hanımefendi_size">A Lady Gave You</string>
+    <string name="rate">Someone Voted You</string>
+    <string name="en_yakin">Most Nearby</string>
+    <string name="oy">Someone Voted You</string>
+    <string name="gizlikik_politikasi">Privacy Policy</string>
+    <string name="kullanici_sana_oy_verdi">Users Voted For You</string>
+    <string name="size">Gave You</string>
+    <string name="bir_tane_daha_eslesme">"   "+1 Match</string>
+    <string name="kere_profilini_goruntuledi">Times Viewed Your Profile </string>
+    <string name="guncelle">Update</string>
+    <string name="hayır_tsk">No,Thanks</string>
+    <string name="uygulamaniz_güncel_degil">You Need to Update Gargii</string>
+    <string name="bir_reklam_seyret">Watch an Ad</string>
+    <string name="kullanıcı_profilinizi_goruntuledi">Users Viewed Your Profile</string>
+    <string name="bu_bilgilere_ihtiyacimiz_var">We Need These Information</string>
+    <string name="eslebilecegin_kimse_yok">Unfortunately, No One Exist To Can Match</string>
+
+</resources>

@@ -414,7 +414,6 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="4dp"
-                    android:textStyle="italic"
                     />
                 <RelativeLayout
                     android:layout_margin="8dp"
@@ -439,7 +438,6 @@
                         android:hint="@string/kendinden_bahset_bize"
                         android:textSize="14dp"
                         android:fontFamily="@font/nunito_sans_semibold"
-                        android:textStyle="italic"
                         android:textColor="@color/black"
                         android:layout_marginRight="8dp"
                         />
@@ -458,7 +456,6 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="4dp"
-                android:textStyle="italic"
                 />
             <RelativeLayout
                 android:id="@+id/rel2"
@@ -469,7 +466,6 @@
                 android:background="@drawable/edit_background">
                 <EditText
                     android:id="@+id/school"
-
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@null"
@@ -478,7 +474,6 @@
                     android:textSize="14dp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
@@ -496,7 +491,6 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="4dp"
-                android:textStyle="italic"
                 android:layout_below="@id/rel2"
                 />
             <RelativeLayout
@@ -521,7 +515,6 @@
                     android:hint="@string/bu_devirde_onemli_bir_kriter"
                     android:textSize="14dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     />
 
             </RelativeLayout>
@@ -535,7 +528,6 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="4dp"
-                android:textStyle="italic"
                 android:layout_below="@id/rel3"
                 />
             <RelativeLayout
@@ -569,7 +561,6 @@
                     android:hint="@string/belki_biri_hikayene_yanit_veriri"
                     android:textSize="14dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     android:id="@+id/instagram"
                     />
 
@@ -607,7 +598,6 @@
                     android:hint="@string/tekrar_oynatilabilen_snaplar_alirsin"
                     android:textSize="14dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     />
 
             </RelativeLayout>
@@ -644,7 +634,6 @@
                     android:hint="@string/evet_hala_kullaniliyor"
                     android:textSize="14dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     />
 
             </RelativeLayout>
@@ -681,7 +670,6 @@
                     android:hint="@string/karakter_hala_cok_az"
                     android:textSize="14dp"
                     android:fontFamily="@font/nunito_sans_semibold"
-                    android:textStyle="italic"
                     />
 
             </RelativeLayout>

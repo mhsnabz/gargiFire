@@ -169,24 +169,27 @@ public class Messege extends Fragment {
             }
 
             public void getInfo(String uid){
-                final CircleImageView thumb_image = (CircleImageView)view.findViewById(R.id.profile_image);
-                final TextView name =(TextView)view.findViewById(R.id.name);
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("allUser")
-                        .document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String image = documentSnapshot.getString("thumb_image");
-                        String _name = documentSnapshot.getString("name");
-                        if (!image.isEmpty()){
-                            Picasso.get().load(image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.upload_place_holder).resize(128,128)
-                                    .memoryPolicy(MemoryPolicy.NO_STORE)
-                                    .into(thumb_image);
-                        }else thumb_image.setImageResource(R.drawable.upload_place_holder);
+                if (uid.isEmpty()||uid!=null){
+                    final CircleImageView thumb_image = (CircleImageView)view.findViewById(R.id.profile_image);
+                    final TextView name =(TextView)view.findViewById(R.id.name);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("allUser")
+                            .document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String image = documentSnapshot.getString("thumb_image");
+                            String _name = documentSnapshot.getString("name");
+                            if (!image.isEmpty()){
+                                Picasso.get().load(image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.upload_place_holder).resize(128,128)
+                                        .memoryPolicy(MemoryPolicy.NO_STORE)
+                                        .into(thumb_image);
+                            }else thumb_image.setImageResource(R.drawable.upload_place_holder);
 
-                        name.setText(_name);
-                    }
-                });
+                            name.setText(_name);
+                        }
+                    });
+                }
+
 
             }
             public void setTime(){

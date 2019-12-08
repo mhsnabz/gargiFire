@@ -132,5 +132,6 @@
     <string name="hayır_tsk">Hayır,Teşekürler</string>
     <string name="uygulamaniz_güncel_degil">Uygulamanız Güncel Değil</string>
     <string name="telefon_numarasi_ayarlari">Telefon Numarası Ayarları</string>
+    <string name="yukleniyor">loading...</string>
 
 </resources>

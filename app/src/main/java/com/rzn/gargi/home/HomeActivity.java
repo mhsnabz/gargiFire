@@ -1096,21 +1096,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
     }
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = HomeActivity.this.getAssets().open("woman.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
+
 
     @Override
     protected void onDestroy() {
@@ -1153,12 +1139,13 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onStart() {
 
         super.onStart();
+      //  getAvaibleUserCount(getIntent().getStringExtra("gender"),auth.getUid());
         deleteOneLimit();
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
 
-        setList();
+//        setList();
         getBadgeCount();
         final RelativeLayout rippleBackground =(RelativeLayout)findViewById(R.id.rippleBackground);
         final RelativeLayout relLayList =(RelativeLayout)findViewById(R.id.listRel);
@@ -1190,45 +1177,17 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
               noOneIsExist.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
               noOneIsExist.setCanceledOnTouchOutside(false);
               noOneIsExist.show();
+              Button cancel =(Button)noOneIsExist.findViewById(R.id.cancel);
+              cancel.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                      noOneIsExist.dismiss();
+                  }
+              });
           }
 
           @Override
           public void returnTrue(Boolean _true) {
-              FirebaseFirestore db = FirebaseFirestore.getInstance();
-              CollectionReference ref = db.collection("msgList")
-                      .document(currentUser).collection(currentUser);
-              ref.get().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<QuerySnapshot>() {
-                  @Override
-                  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                      long size = queryDocumentSnapshots.getDocuments().size();
-                      if (gender.equals("MAN")){
-                          if (size>=2){
-                              rippleBackground.setVisibility(View.GONE);
-                              relLayList.setVisibility(View.VISIBLE);
-
-                          }else {
-                              rippleBackground.setVisibility(View.VISIBLE);
-                              relLayList.setVisibility(View.GONE);
-
-                          }
-                      }
-                      else if (gender.equals("WOMAN")){
-                          if (size>=6){
-                              rippleBackground.setVisibility(View.GONE);
-                              relLayList.setVisibility(View.VISIBLE);
-                          }else {
-                              rippleBackground.setVisibility(View.VISIBLE);
-                              relLayList.setVisibility(View.GONE);
-
-                          }
-                      }
-                  }
-              }).addOnFailureListener(HomeActivity.this, new OnFailureListener() {
-                  @Override
-                  public void onFailure(@NonNull Exception e) {
-
-                  }
-              });
 
           }
 
@@ -1262,6 +1221,69 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
    macthList adapter ;
+    private void getAvaibleUserCount(String gender , final String userId){
+        final FirebaseFirestore dbAvaible = FirebaseFirestore.getInstance();
+
+        if (gender.equals("MAN")){
+            dbAvaible.collection("WOMANmatch")
+                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        if (task.getResult()!=null){
+                            final long size = task.getResult().getDocuments().size();
+                            Log.d("avaibleSize", "onComplete: "+size);
+                            dbAvaible.collection("oldList")
+                                    .document(auth.getUid())
+                                    .collection(auth.getUid())
+                                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        if (task.getResult()!=null){
+                                            long oldSize = task.getResult().size();
+                                            long a  = size-(manSize+oldSize);
+                                            Log.d("avaibleSize", "onComplete: " +a);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }else if (gender.equals("WOMAN")){
+            dbAvaible.collection("MANmatch")
+                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()){
+                        if (task.getResult()!=null){
+                            final long size = task.getResult().getDocuments().size();
+                            Log.d("avaibleSize", "onComplete: "+size);
+                            dbAvaible.collection("oldList")
+                                    .document(auth.getUid())
+                                    .collection(auth.getUid())
+                                    .get().addOnCompleteListener(HomeActivity.this, new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        if (task.getResult()!=null){
+                                            long oldSize = task.getResult().size();
+                                            long a  = size-(womanSize+oldSize);
+                                            Log.d("avaibleSize", "onComplete: " +a);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+    }
+
 
    private  void setList()
    {

@@ -30,7 +30,9 @@ exports.sendNotification =functions.firestore.document("/notification/{user_id}/
         //const to_name = result[1].name;
         console.log(result[0] +":  "+result[1]+":   " + type);
         const payload = {
-         
+                notification:{
+                    icon : 'notification_logo'
+                },
             data : {
             
             "userID" : user_id,

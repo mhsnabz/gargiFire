@@ -293,13 +293,13 @@ public class ProfileActivity extends AppCompatActivity {
                         String _job = task.getResult().getString("job");
                         job.setText(_job);
                     }else {
-                        relJob.setVisibility(View.GONE);
+                        job.setVisibility(View.GONE);
                     }
                     if (task.getResult().getLong("age")!=null)
                     {
                         age.setText(convert(task.getResult().getLong("age")));
                     }
-                    if (task.getResult().getString("school")!=null && task.getResult().getString("school").isEmpty()){
+                    if (task.getResult().getString("school")!=null && !task.getResult().getString("school").isEmpty()){
                         school.setText(task.getResult().getString("school"));
                     }else {
                         school.setVisibility(View.GONE);

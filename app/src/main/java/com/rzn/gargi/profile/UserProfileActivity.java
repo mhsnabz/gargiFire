@@ -770,9 +770,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
     FirebaseFirestore dbReport = FirebaseFirestore.getInstance();
-    private void setKufurReport(String userId){
-
-    }
 
     public void report(View view)
     {
